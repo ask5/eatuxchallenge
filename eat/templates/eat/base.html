@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% load staticfiles %}
+    <title>My E.A.T App {% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/site.css">
+    {% block css %}{% endblock %}
+</head>
+<body role="document" class="homepage">
+<nav class="navbar navbar-inverse navbar-fixed-top" style="background-image: url('/static/img/USDA-lunch-bkgd.gif')">
+    <div class="container-fluid" >
+        <div class="navbar-header">
+           <a class="navbar-brand" href="{% url 'eat.views.index' %}">USDA E.A.T School Lunch UX Challenge</a>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    {% block base_content %}#{% endblock %}
+</div>
+<footer class="footer">
+  <div class="container">
+    <a href="{% url 'eat.views.non_discrimination' %}">USDA Non-Discrimination Statement</a> |
+      <a href="{% url 'eat.views.use_of_information' %}">Use of Information Statement</a>
+  </div>
+</footer>
+<script src="/static/js/jquery-2.1.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous">
+</script>
+<script src="/static/js/app.js"></script>
+{% block js %}{% endblock %}
+</body>
+</html>

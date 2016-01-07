@@ -1,0 +1,16 @@
+{% extends "eat/base.html" %}
+{% load staticfiles %}
+{% block base_content %}
+    <h2>User Profile</h2>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <td>{{ user.first_name }} {{ user.last_name }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ user.email }}</td>
+        </tr>
+    </table>
+{% endblock %}
+
