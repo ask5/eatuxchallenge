@@ -65,23 +65,27 @@ def login_view(request):
 
 @login_required
 def application_home(request):
-    template = "eat/application/start.html"
-    result = dict()
     app = Application.objects.filter(user = request.user.id)
     count = app.count()
     if count > 0:
-        template = "eat/application/home.html"
-        app = app[0]
-    elif count <= 0 and request.POST:
+        args = dict()
+        args['app'] = app[0]
+        result = render(request, "eat/application/home.html", args)
+    else:
+        result = redirect('application_start')
+
+    return result
+
+@login_required
+def application_start(request):
+    result = render(request, "eat/application/start.html")
+    if request.POST:
         app = Application(
                 user = request.user,
                 status=1,
                 create_date= datetime.now()
         )
         app.save()
-        template = "eat/application/home.html"
-    else:
-        template = "eat/application/start.html"
+        result = redirect('application_home')
+    return result
 
-    result['app'] = app
-    return render(request, template, result)

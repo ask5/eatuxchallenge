@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^non_discrimination', views.non_discrimination, name="non_discrimination"),
     url(r'^use-of-information', views.use_of_information, name="use_of_information"),
     url(r'^app/home', views.application_home, name='application_home'),
+    url(r'^app/start', views.application_start, name='application_start'),
 ]
