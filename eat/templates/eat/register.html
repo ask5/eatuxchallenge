@@ -6,6 +6,9 @@
         <div class="panel-heading">
             <span class="glyphicon glyphicon-file" aria-hidden="true"></span> Create an Account
         </div>
+        <small>Creating an account with us allows you to save your application at anytime, leave the website and return
+            and complete it at your convinience
+        </small>
         <div class="panel-body">
             <form method="post" action="{% url 'register' %}">
                 {% csrf_token %}

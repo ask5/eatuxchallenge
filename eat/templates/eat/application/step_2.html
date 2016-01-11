@@ -1,0 +1,36 @@
+{% extends "eat/application/base.html" %}
+{% load staticfiles %}
+{% block application_content_main %}
+    <form class="form-horizontal" action="{% url 'eat.views.step_2' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        {{ form.non_field_errors }}
+        <div>
+            <div>Do any household members (including you) currently participate in one or more of the following assistance
+                programs: SNAP, TANF, OR FDPIR?</div>
+            <div class="fieldWrapper">
+                {{ form.assistanceProgram.errors }}
+                {{ form.assistanceProgram }}
+            </div>
+        </div>
+        <div>
+            <div>
+                If you answered Yes then please provide a case number for SNAP, TANF, or FDPIR
+            </div>
+            <div class="fieldWrapper">
+                {{ form.caseNumber.errors }}
+                <label for="{{ form.caseNumber.id_for_label }}">Case Number:</label>
+                {{ form.caseNumber }}
+            </div>
+            <div>
+                You only need to write one case number. If you participate in one of these programs and do not know your
+                case number, contact: [State/local agency contacts here]. You must provide a case number on your
+                application if you circled “YES”
+            </div>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-default">Continue</button>
+        </div>
+    </form>
+{% endblock %}
+

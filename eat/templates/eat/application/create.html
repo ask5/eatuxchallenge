@@ -6,13 +6,12 @@
         Please take a moment to read the USDA Non-Discrimination Statement and the Use of Information Statement
         displayed below before starting the application.
     </p>
-    <form method="post" action="{% url 'eat.views.application_start' %}">
+    <form method="post" action="{% url 'eat.views.application_create' %}">
         {% csrf_token %}
         <p>
-            <input type="submit" value="Start My Application" class="btn btn-primary"/>
+            <input type="submit" value="Start my application" class="btn btn-primary"/>
         </p>
     </form>
-
     <div class="statements">
         <h4>USDA Non-Discrimination Statement</h4>
         <div>

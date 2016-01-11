@@ -1,0 +1,61 @@
+{% extends "eat/application/base.html" %}
+{% load staticfiles %}
+{% block application_content_main %}
+    <h3>Add a household member</h3>
+    <small>The member can be either infant, child or a student upto and including grade 12</small>
+    <form class="form-horizontal" action="{% url 'eat.views.add_child' %}" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-5">
+                <label for="firstName">First Name</label><br>
+                <input type="text" class="form-control" id="firstName">
+            </div>
+            <div class="col-lg-2">
+                <label for="middleName">Middle Initial</label><br>
+                <input type="text" class="form-control" id="middleName">
+            </div>
+            <div class="col-lg-5">
+                <label for="lastName">Last Name</label><br>
+                <input type="text" class="form-control" id="lastName">
+            </div>
+        </div>
+        <div>
+            <div>Is this child Student?</div>
+            <div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="optionsStudent" id="optionsRadios1" value="yes">
+                    Yes
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="optionsStudent" id="optionsRadios2" value="no">
+                    No
+                  </label>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div>Is this a foster child or homeless, migrant or runaway? <br><small>Check all that apply</small></div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" value="foster">
+                Foster
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" value="hmr">
+                Homeless, Migrant, Runaway
+              </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">Sign in</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+

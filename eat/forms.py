@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-
+from eat.models import Application
 
 class RegistrationForm(UserCreationForm):
     class Meta:
@@ -25,3 +25,25 @@ class RegistrationForm(UserCreationForm):
             raise forms.ValidationError('That email address is already in use')
         else:
             return self.cleaned_data['email']
+
+
+class Step2Form(forms.Form):
+    CHOICES = (
+        ('yes', 'Yes',),
+        ('no', 'No',)
+    )
+    assistanceProgram = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
+    caseNumber = forms.CharField(max_length=50, required=False)
+
+    def clean_caseNumber(self):
+        if self.cleaned_data['assistanceProgram'] == 'yes' and self.cleaned_data['caseNumber'] == '':
+            raise forms.ValidationError('Case number is mandatory if you are currently participating in an assistance'
+                                        ' program')
+        else:
+            return self.cleaned_data['caseNumber']
+
+
+class StepForm(forms.Form):
+    class Meta:
+        model = Application
+        fields = ['assistance_program', 'case_number']

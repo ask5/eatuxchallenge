@@ -1,0 +1,14 @@
+{% extends "eat/application/base.html" %}
+{% load staticfiles %}
+{% block application_content_main %}
+    {{ user.first_name }}, Welcome back!
+    <div>We have saved all your information so far, we can start where you left off.</div>
+
+    <form method="post" action="{% url 'eat.views.application_welcome_back' %}">
+        {% csrf_token %}
+        <p>
+            <input type="submit" value="Start where I left" class="btn btn-primary"/>
+        </p>
+    </form>
+{% endblock %}
+
