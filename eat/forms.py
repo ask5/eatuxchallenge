@@ -30,7 +30,7 @@ class RegistrationForm(UserCreationForm):
 
 class StepForm(ModelForm):
     def clean_case_number(self):
-        if self.cleaned_data['assistanceProgram'] and self.cleaned_data['case_number'] == '':
+        if self.cleaned_data['assistance_program'] and self.cleaned_data['case_number'] == '':
             raise forms.ValidationError('Case number is mandatory if you are currently participating in an assistance'
                                         ' program')
         else:
@@ -44,4 +44,7 @@ class StepForm(ModelForm):
         }
         labels = {
             'assistance_program': "Participate in any Assistance Program?"
+        }
+        help_texts = {
+            'case_number': "If <em>yes</em>, then enter the case number"
         }

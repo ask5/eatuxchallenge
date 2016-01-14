@@ -128,16 +128,11 @@ def step_2(request):
     if request.method == 'POST':
         form = StepForm(request.POST)
         if form.is_valid():
-            assistance_program = form.cleaned_data['assistanceProgram']
-            case_number = form.cleaned_data['caseNumber']
-            app = Application.objects.get(user=request.user.id)
-            app.assistance_program = assistance_program
-            if assistance_program:
-                app.case_number = case_number
-            else:
-                app.case_number = ''
+            app = form.save()
     else:
-        form = StepForm()
+        app = Application.objects.filter(user=request.user.id)
+        inst = Application.objects.get(pk=app.id)
+        form = StepForm(instance=inst)
     result = dict()
     result['form'] = form
     return render(request, "eat/application/step_2.html", result)
