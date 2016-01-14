@@ -122,6 +122,7 @@ def application_welcome_back(request):
         result = redirect('step-2')
     return result
 
+
 @login_required
 def step_2(request):
     if request.method == 'POST':
@@ -130,16 +131,16 @@ def step_2(request):
             assistance_program = form.cleaned_data['assistanceProgram']
             case_number = form.cleaned_data['caseNumber']
             app = Application.objects.get(user=request.user.id)
-            if assistance_program == "yes":
-                app.assistance_program = True
+            app.assistance_program = assistance_program
+            if assistance_program:
                 app.case_number = case_number
             else:
-                app.assistanceProgram = False
                 app.case_number = ''
     else:
         form = StepForm()
-
-    return render(request, "eat/application/step_2.html", {'form': form})
+    result = dict()
+    result['form'] = form
+    return render(request, "eat/application/step_2.html", result)
 
 @login_required
 def add_child(request):

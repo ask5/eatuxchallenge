@@ -19,6 +19,10 @@ ETHNICITIES = (
     ('Not Hispanic or Latino', 'Not Hispanic or Latino'),
 )
 
+YES_NO = (
+    (True, 'Yes',),
+    (False, 'No',)
+)
 
 class Application(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -31,17 +35,16 @@ class Application(models.Model):
                                                   help_text='Total household members including children and adults',
                                                   blank=True, null=True)
 
-    assistance_program = models.NullBooleanField(verbose_name='Assistance Program',
-                                 help_text='Do any Household Members (including you) currently participate in one or '
-                                           'more of the following assistance programs: SNAP, TANF, or FDPIR?',
-                                             blank=True, null=True)
+    assistance_program = models.BooleanField(verbose_name='Participate in Assistance Program', choices=YES_NO, default=False)
     ssn_four_digit = models.CharField(max_length=4,
                                       verbose_name='Last 4 digits of SSN',
-                                      help_text='Last four digits of the Social Security number of an adult household member',
-                                      blank=True, null=True)
+                                      help_text='Last four digits of the Social Security number of an '
+                                                'adult household member',
+                                      blank=True,
+                                      null=True)
     no_ssn = models.BooleanField(verbose_name='Check if No SSN', default=False)
     case_number = models.CharField(max_length=50,
-                                   verbose_name='Assistance Program Case Number', blank=True, null=True)
+                                   verbose_name='Case Number', blank=True, null=True)
 
     first_name = models.CharField(max_length=25,
                                   verbose_name='First Name', blank=True, null=True)
@@ -70,12 +73,11 @@ class Application(models.Model):
                              verbose_name='Email', blank=True, null=True),
     ethnicity = models.CharField(max_length=25, choices=ETHNICITIES,
                                  verbose_name='Ethnicity', blank=True, null=True)
-    is_american_indian = models.NullBooleanField(verbose_name='Is American Indian or Alaskan Native', blank=True,
-                                                 null=True)
-    is_asian = models.NullBooleanField(verbose_name='Is Asian', blank=True, null=True)
-    is_black = models.NullBooleanField(verbose_name='Is Black or African American', blank=True, null=True)
-    is_hawaiian = models.NullBooleanField(verbose_name='Is Hawaiian or Other Pacific Islander', blank=True, null=True)
-    is_white = models.NullBooleanField(verbose_name='Is White', blank=True, null=True)
+    is_american_indian = models.BooleanField(verbose_name='Is American Indian or Alaskan Native')
+    is_asian = models.BooleanField(verbose_name='Is Asian')
+    is_black = models.BooleanField(verbose_name='Is Black or African American')
+    is_hawaiian = models.BooleanField(verbose_name='Is Hawaiian or Other Pacific Islander')
+    is_white = models.BooleanField(verbose_name='Is White')
 
 
 class Child(models.Model):
@@ -520,13 +522,13 @@ class Adult(models.Model):
                                                      help_text='How often are earnings received',
                                                      blank=True,
                                                      null=True)
-    prize_winings = models.DecimalField(verbose_name='Prize Winings',
+    prize_winnings = models.DecimalField(verbose_name='Prize Winnings',
                                         decimal_places=2,
                                         max_digits=8,
                                         blank=True,
                                         null=True)
-    prize_winings_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                  verbose_name='Frequency Of Prize Winings',
+    prize_winnings_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
+                                                  verbose_name='Frequency Of Prize Winnings',
                                                   help_text='How often are earnings received',
                                                   blank=True,
                                                   null=True)
