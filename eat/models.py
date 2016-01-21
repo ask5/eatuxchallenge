@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 APPLICATION_STATUSES = (
     (0, 'Start'),
@@ -24,7 +25,10 @@ YES_NO = (
     (False, 'No',)
 )
 
+
 class Application(models.Model):
+
+    applications = models.Manager()
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     status = models.IntegerField(choices=APPLICATION_STATUSES, verbose_name='Application Status',
                                  help_text='Application Status', default=0)
@@ -73,14 +77,19 @@ class Application(models.Model):
                              verbose_name='Email', blank=True, null=True),
     ethnicity = models.CharField(max_length=25, choices=ETHNICITIES,
                                  verbose_name='Ethnicity', blank=True, null=True)
-    is_american_indian = models.BooleanField(verbose_name='Is American Indian or Alaskan Native')
-    is_asian = models.BooleanField(verbose_name='Is Asian')
-    is_black = models.BooleanField(verbose_name='Is Black or African American')
-    is_hawaiian = models.BooleanField(verbose_name='Is Hawaiian or Other Pacific Islander')
-    is_white = models.BooleanField(verbose_name='Is White')
+    is_american_indian = models.NullBooleanField(verbose_name='Is American Indian or Alaskan Native')
+    is_asian = models.NullBooleanField(verbose_name='Is Asian')
+    is_black = models.NullBooleanField(verbose_name='Is Black or African American')
+    is_hawaiian = models.NullBooleanField(verbose_name='Is Hawaiian or Other Pacific Islander')
+    is_white = models.NullBooleanField(verbose_name='Is White')
 
+    def set_status(self, status):
+        if self.status < status:
+            self.status = status
+            self.save()
 
 class Child(models.Model):
+    children = models.Manager()
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=25,
                                   verbose_name='First Name')
@@ -191,6 +200,7 @@ class Child(models.Model):
 
 
 class Adult(models.Model):
+    adults = models.Manager()
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=25,
                                   verbose_name='First Name')

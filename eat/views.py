@@ -2,30 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from eat.forms import RegistrationForm, StepForm
+from eat.forms import RegistrationForm, Step2Form
 from django.http import HttpResponseRedirect
 from eat.models import Application
+from eat.util import App
 from datetime import datetime
 
 
 # Create your views here.
-def index(request):
-    """
-    This the home page of the website
-    :param request:
-    :return:
-    """
-    return render(request, "eat/index.html")
-
-
-def non_discrimination(request):
-    return render(request, "eat/non_discrimination.html")
-
-
-def use_of_information(request):
-    return render(request, "eat/use_of_information.html")
-
-
 def register(request):
     """
     User registration page
@@ -78,9 +62,10 @@ def login_view(request):
                     result = redirect(next_page)
                 else:
                     # check if the user has created an application.
-                    app = Application.objects.filter(user=request.user.id)
+                    app = App.get_by_user(user=request.user)
                     # if application is found, redirect to the welcome page
                     if app.count() > 0:
+                        request.session['app_id'] = app[0].id
                         args = dict()
                         args['app'] = app[0]
                         result = redirect('application_welcome_back')
@@ -106,6 +91,7 @@ def application_create(request):
             create_date=datetime.now()
         )
         app.save()
+        request.session['app_id'] = app.id
         result = redirect('step-2')
     return result
 
@@ -125,17 +111,19 @@ def application_welcome_back(request):
 
 @login_required
 def step_2(request):
+    args = dict()
+    app = App.get(request.session.get('app_id'))
     if request.method == 'POST':
-        form = StepForm(request.POST)
+        form = Step2Form(request.POST, instance=app)
         if form.is_valid():
             app = form.save()
+            app.set_status(status=2)
+            return redirect('add_child')
     else:
-        app = Application.objects.filter(user=request.user.id)
-        inst = Application.objects.get(pk=app.id)
-        form = StepForm(instance=inst)
-    result = dict()
-    result['form'] = form
-    return render(request, "eat/application/step_2.html", result)
+        form = Step2Form(instance=app)
+    args['form'] = form
+    return render(request, "eat/application/step_2.html", args)
+
 
 @login_required
 def add_child(request):
