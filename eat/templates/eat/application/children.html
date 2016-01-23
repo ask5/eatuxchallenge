@@ -1,0 +1,59 @@
+{% extends "eat/application/base.html" %}
+{% load staticfiles %}
+{% block application_content_main %}
+    <p class="lead">
+        {% if not children %}Alright, let's add all {% endif %}Household Members who are infants, children and students
+        up to and including grade 12.
+    </p>
+    {% if children %}
+        <table class="table">
+        {% for child in children %}
+            <tr>
+                <th>{{ child.first_name }} {{ child.last_name }}</th>
+                <td>
+                    {% if child.is_student %} Student, {% endif %}
+                    {% if child.foster_child %} Foster Child, {% endif %}
+                    {% if child.hmr %} Homeless, Migrant, Runaway {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% endif %}
+    <a class="btn btn-primary" role="button" href="{% url 'eat.views.add_child' %}">Add new Child</a>
+        <div>
+            <a class="btn btn-default pull-left" role="button"
+               href="{% url 'eat.views.application_welcome_back' %}">Back</a>
+
+                <a class="btn btn-default pull-right" role="button"
+                   {% if not app.assistance_program %}
+                        href="{% url 'eat.views.adults' %}"
+                   {% else %}
+                        href="{% url 'eat.views.contact' %}"
+                   {% endif %}
+                   >Continue
+                </a>
+        </div>
+{% endblock %}
+
+{% block application_content_right %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Tips
+        </div>
+        <div class="panel-body">
+            Definition of Household
+            Member: “Anyone who is
+            living with you and shares
+            income and expenses, even
+            if not related.”
+            Children in Foster care and
+            children who meet the
+            denition of Homeless,
+            Migrant or Runaway are
+            eligible for free meals. Read
+            How to Apply for Free and
+            Reduced Price School
+            Meals for more information
+        </div>
+    </div>
+{% endblock %}

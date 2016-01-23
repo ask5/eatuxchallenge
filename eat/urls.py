@@ -17,6 +17,9 @@ urlpatterns = [
     url(r'^app/welcome', views.application_welcome_back, name='application_welcome_back'),
     url(r'^app/create', views.application_create, name='application_create'),
     url(r'^app/step2', views.step_2, name='step-2'),
+    url(r'^app/children', views.children, name='children'),
     url(r'^app/add_child', views.add_child, name='add_child'),
+    url(r'^app/adults', views.adults, name='adults'),
+    url(r'^app/add_adult', views.add_adult, name='add_adult'),
     url(r'^app/contact', views.contact, name='contact'),
 ]

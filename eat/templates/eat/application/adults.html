@@ -1,0 +1,45 @@
+{% extends "eat/application/base.html" %}
+{% load staticfiles %}
+{% block application_content_main %}
+    <p class="lead">
+        Let's add all Adult Household Members, including yourself.
+    </p>
+    {% if children %}
+        <table class="table">
+        {% for child in children %}
+            <tr>
+                <th>{{ child.first_name }} {{ child.last_name }}</th>
+                <td>
+                    {% if child.is_student %} Student, {% endif %}
+                    {% if child.foster_child %} Foster Child, {% endif %}
+                    {% if child.hmr %} Homeless, Migrant, Runaway {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% endif %}
+    <a class="btn btn-primary" role="button" href="{% url 'eat.views.add_adult' %}">Add new Adult</a>
+        <div>
+            <a class="btn btn-default pull-left" role="button"
+               href="{% url 'eat.views.children' %}">Back</a>
+
+            {% if app.assistance_program %}
+                <a class="btn btn-default pull-right" role="button"
+                   href="{% url 'eat.views.application_welcome_back' %}">Continue</a>
+            {% else %}
+                <a class="btn btn-default pull-right" role="button"
+                   href="{% url 'eat.views.contact' %}">Continue</a>
+            {% endif %}
+        </div>
+{% endblock %}
+
+{% block application_content_right %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Tips
+        </div>
+        <div class="panel-body">
+            List all Household Members not listed as child (including yourself) even if they do not receive income.
+        </div>
+    </div>
+{% endblock %}

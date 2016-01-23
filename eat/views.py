@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from eat.forms import RegistrationForm, Step2Form
 from django.http import HttpResponseRedirect
-from eat.models import Application
+from eat.models import Application, Child, Adult
 from eat.util import App
 from datetime import datetime
 
@@ -118,7 +118,7 @@ def step_2(request):
         if form.is_valid():
             app = form.save()
             app.set_status(status=2)
-            return redirect('add_child')
+            return redirect('children')
     else:
         form = Step2Form(instance=app)
     args['form'] = form
@@ -126,8 +126,32 @@ def step_2(request):
 
 
 @login_required
+def children(request):
+    args = dict()
+    app = App.get_by_user(user=request.user)
+    c = Child.children.filter(application=app)
+    args['app'] = app[0]
+    args['children'] = c
+    return render(request,"eat/application/children.html", args)
+
+
+@login_required
 def add_child(request):
-    return render(request,"eat/application/add_child.html")
+    return render(request, "eat/application/child_add.html")
+
+
+@login_required
+def adults(request):
+    args = dict()
+    app = App.get_by_user(user=request.user)
+    a = Adult.adults.filter(application=app)
+    args['app'] = app[0]
+    args['adults'] = a
+    return render(request,"eat/application/adults.html", args)
+
+@login_required
+def add_adult(request):
+    return render(request, "eat/application/adult_add.html")
 
 @login_required
 def contact(request):

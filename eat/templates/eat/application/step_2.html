@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% block application_content_main %}
     <p class="lead">
-        Do any household members (including you) currently participate in one or more of the following assistance
+        {{ user.first_name }}, do any household members, including you, currently participate in one or more of the following assistance
         programs: SNAP, TANF OR FDPIR?
     </p>
     <div>
