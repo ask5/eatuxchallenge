@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from eat.forms import RegistrationForm, Step2Form
+from eat.forms import RegistrationForm, Step2Form, AddChild
 from django.http import HttpResponseRedirect
 from eat.models import Application, Child, Adult
-from eat.util import App
+from eat.util import AppUtil
 from datetime import datetime
 
 
@@ -47,29 +47,25 @@ def login_view(request):
     :return:
     """
     msg = dict()
-    result = render(request, "eat/login.html")
+    if request.GET.get('next') is not None:
+        msg['next'] = request.GET.get('next')
+    result = render(request, "eat/login.html", msg)
     if request.POST:
         username = request.POST.get('username')
         password = request.POST.get('password')
         next_page = request.POST.get('next')
-        # do authentication
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
                 login(request, user)
-                # if page url is passed in the next page parameter, redirect to it.
                 if next_page:
                     result = redirect(next_page)
                 else:
-                    # check if the user has created an application.
-                    app = App.get_by_user(user=request.user)
-                    # if application is found, redirect to the welcome page
+                    app = AppUtil.get_by_user(user=request.user)
                     if app.count() > 0:
-                        request.session['app_id'] = app[0].id
                         args = dict()
                         args['app'] = app[0]
                         result = redirect('application_welcome_back')
-                    # otherwise ask the user to create the application.
                     else:
                         result = redirect('application_create')
             else:
@@ -98,61 +94,78 @@ def application_create(request):
 
 @login_required
 def application_welcome_back(request):
-    """
-    The welcome back screen, this is the screen from where user can jump to the place where he left off
-    :param request:
-    :return:
-    """
     result = render(request, "eat/application/welcome_back.html")
     if request.POST:
-        result = redirect('step-2')
+        app = AppUtil.get_by_user(user=request.user)
+        if app[0].last_page:
+            result = redirect(app[0].last_page)
+        else:
+            result = redirect('step-2')
+
     return result
 
 
 @login_required
 def step_2(request):
     args = dict()
-    app = App.get(request.session.get('app_id'))
+    app = AppUtil.get_by_user(user=request.user)
     if request.method == 'POST':
-        form = Step2Form(request.POST, instance=app)
+        form = Step2Form(request.POST, instance=app[0])
         if form.is_valid():
-            app = form.save()
-            app.set_status(status=2)
+            form.save()
             return redirect('children')
     else:
-        form = Step2Form(instance=app)
+        form = Step2Form(instance=app[0])
     args['form'] = form
+    AppUtil.set_last_page(app[0], request.path_info)
     return render(request, "eat/application/step_2.html", args)
 
 
 @login_required
 def children(request):
     args = dict()
-    app = App.get_by_user(user=request.user)
-    c = Child.children.filter(application=app)
+    app = AppUtil.get_by_user(user=request.user)
+    c = Child.children.filter(application=app[0])
     args['app'] = app[0]
     args['children'] = c
-    return render(request,"eat/application/children.html", args)
+    AppUtil.set_last_page(app[0], request.path_info)
+    return render(request, "eat/application/children.html", args)
 
 
 @login_required
 def add_child(request):
-    return render(request, "eat/application/child_add.html")
+    args = dict()
+    app = AppUtil.get_by_user(user=request.user)
+    if request.method == 'POST':
+        form = AddChild(request.POST)
+        if form.is_valid():
+            child = form.save(commit=False)
+            child.application = app[0]
+            child.save()
+            return redirect('children')
+    else:
+        form = AddChild()
+    args['form'] = form
+    return render(request, "eat/application/child_add.html", args)
 
 
 @login_required
 def adults(request):
     args = dict()
-    app = App.get_by_user(user=request.user)
-    a = Adult.adults.filter(application=app)
+    app = AppUtil.get_by_user(user=request.user)
+    a = Adult.adults.filter(application=app[0])
     args['app'] = app[0]
     args['adults'] = a
+    AppUtil.set_last_page(app[0], request.path_info)
     return render(request,"eat/application/adults.html", args)
 
 @login_required
 def add_adult(request):
+    app = AppUtil.get_by_user(user=request.user)
     return render(request, "eat/application/adult_add.html")
 
 @login_required
 def contact(request):
+    app = AppUtil.get_by_user(user=request.user)
+    AppUtil.set_last_page(app[0], request.path_info)
     return render(request,"eat/application/contact.html")

@@ -5,57 +5,58 @@
     <small>The member can be either infant, child or a student upto and including grade 12</small>
     <form class="form-horizontal" action="{% url 'eat.views.add_child' %}" method="post">
         {% csrf_token %}
-        <div class="row">
-            <div class="col-lg-5">
-                <label for="firstName">First Name</label><br>
-                <input type="text" class="form-control" id="firstName">
-            </div>
-            <div class="col-lg-2">
-                <label for="middleName">Middle Initial</label><br>
-                <input type="text" class="form-control" id="middleName">
-            </div>
-            <div class="col-lg-5">
-                <label for="lastName">Last Name</label><br>
-                <input type="text" class="form-control" id="lastName">
+            {{ form.non_field_errors }}
+        <div class="form-group">
+            {{ form.first_name.errors }}
+            <label for="{{ form.first_name.id_for_label }}" class="col-sm-2 control-label">First Name</label>
+            <div class="col-sm-10">
+                {{ form.first_name }}
             </div>
         </div>
-        <div>
-            <div>Is this child Student?</div>
-            <div>
-                <div class="radio">
-                  <label>
-                    <input type="radio" name="optionsStudent" id="optionsRadios1" value="yes">
-                    Yes
-                  </label>
-                </div>
-                <div class="radio">
-                  <label>
-                    <input type="radio" name="optionsStudent" id="optionsRadios2" value="no">
-                    No
-                  </label>
-                </div>
+        <div class="form-group">
+            {{ form.middle_name.errors }}
+            <label for="{{ form.middle_name.id_for_label }}" class="col-sm-2 control-label">Middle Name</label>
+            <div class="col-sm-10">
+                {{ form.middle_name }}
             </div>
         </div>
-        <div>
-            <div>Is this a foster child or homeless, migrant or runaway? <br><small>Check all that apply</small></div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" value="foster">
-                Foster
-              </label>
+        <div class="form-group">
+            {{ form.last_name.errors }}
+            <label for="{{ form.last_name.id_for_label }}" class="col-sm-2 control-label">Last Name</label>
+            <div class="col-sm-10">
+                {{ form.last_name }}
             </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" value="hmr">
-                Homeless, Migrant, Runaway
-              </label>
+        </div>
+        <div class="form-group">
+            {{ form.is_student.errors }}
+            <label for="{{ form.is_student.id_for_label }}" class="col-sm-2 control-label">
+                Is this child a student?
+            </label>
+            <div class="col-sm-10">
+                {{ form.is_student }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form.foster_child.errors }}
+            <label for="{{ form.foster_child.id_for_label }}" class="col-sm-2 control-label">
+                Is this a foster child?
+            </label>
+            <div class="col-sm-10">
+                {{ form.foster_child }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form.hmr.errors }}
+            <label for="{{ form.hmr.id_for_label }}" class="col-sm-2 control-label">
+                Is this child Homeless, Migrant or Runaway?
+            </label>
+            <div class="col-sm-10">
+                {{ form.hmr }}
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-danger">Delete</button>
-                <button type="submit" class="btn btn-primary">Save and Add Another</button>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary">Continue</button>
                 <a class="btn btn-default" role="button"href="{% url 'eat.views.children' %}">Cancel</a>
             </div>
         </div>

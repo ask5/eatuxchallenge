@@ -2,8 +2,7 @@
 {% load staticfiles %}
 {% block application_content_main %}
     <p class="lead">
-        {% if not children %}Alright, let's add all {% endif %}Household Members who are infants, children and students
-        up to and including grade 12.
+        Household Members who are infants, children and students up to and including grade 12.
     </p>
     {% if children %}
         <table class="table">
@@ -41,19 +40,13 @@
             Tips
         </div>
         <div class="panel-body">
-            Definition of Household
-            Member: “Anyone who is
-            living with you and shares
-            income and expenses, even
-            if not related.”
-            Children in Foster care and
-            children who meet the
-            denition of Homeless,
-            Migrant or Runaway are
-            eligible for free meals. Read
-            How to Apply for Free and
-            Reduced Price School
-            Meals for more information
+            <strong>Who should I list here?</strong>
+            When filling out this section, please include all members in your household who are:
+            <ul>
+                <li>Children age 18 or under and are supported with the household’s income</li>
+                <li>In your care under a foster arrangement, or qualify as homeless, migrant, or runaway youth</li>
+                <li>Students attending [school/school system here], regardless of age</li>
+            </ul>
         </div>
     </div>
 {% endblock %}

@@ -1,8 +1,8 @@
 from eat.models import Application
-import datetime
+from django.core.urlresolvers import resolve
 
 
-class App(object):
+class AppUtil(object):
 
     @classmethod
     def get(self, id):
@@ -10,4 +10,10 @@ class App(object):
 
     @classmethod
     def get_by_user(self, user):
-        return Application.applications.filter(user=user.id)
+        app = Application.applications.filter(user=user.id)
+        return app
+
+    @classmethod
+    def set_last_page(cls, app, path):
+        app.last_page = resolve(path).url_name
+        app.save()

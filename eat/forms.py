@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from eat.models import Application
+from eat.models import Application, Child, Adult
 from django.forms import ModelForm
 
 class RegistrationForm(UserCreationForm):
@@ -47,4 +47,22 @@ class Step2Form(ModelForm):
         }
         help_texts = {
             'case_number': "Provide case number if you participate."
+        }
+
+
+class AddChild(ModelForm):
+
+    class Meta:
+        model = Child
+        fields = ['first_name', 'middle_name', 'last_name', 'is_student', 'foster_child', 'hmr']
+        exclude = ("application",)
+        widgets = {
+            'is_student': forms.CheckboxInput,
+            'foster_child': forms.CheckboxInput,
+            'hmr': forms.CheckboxInput
+        }
+        labels = {
+            'is_student': "Is this child a student?",
+            'foster_child': "Is this a foster child?",
+            'hmr': "Is the child Homeless, Migrant or Runaway?",
         }

@@ -32,6 +32,7 @@ class Application(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     status = models.IntegerField(choices=APPLICATION_STATUSES, verbose_name='Application Status',
                                  help_text='Application Status', default=0)
+    last_page = models.CharField(max_length=50, verbose_name='Last Page', blank=True, null=True)
     enabled = models.BooleanField(verbose_name='Enabled', default=True)
     create_date = models.DateField(verbose_name='Create date')
     modified_date = models.DateField(verbose_name='Last modified date', blank=True, null=True)
@@ -39,7 +40,8 @@ class Application(models.Model):
                                                   help_text='Total household members including children and adults',
                                                   blank=True, null=True)
 
-    assistance_program = models.BooleanField(verbose_name='Participate in Assistance Program', choices=YES_NO, default=False)
+    assistance_program = models.BooleanField(verbose_name='Participate in Assistance Program', choices=YES_NO,
+                                             default=False)
     ssn_four_digit = models.CharField(max_length=4,
                                       verbose_name='Last 4 digits of SSN',
                                       help_text='Last four digits of the Social Security number of an '
@@ -87,6 +89,7 @@ class Application(models.Model):
         if self.status < status:
             self.status = status
             self.save()
+
 
 class Child(models.Model):
     children = models.Manager()
