@@ -172,6 +172,7 @@ def child_salary(request, child_id):
         form = ChildSalaryForm(instance=child)
     args['form'] = form
     args['child'] = child
+    AppUtil.set_last_page(child.application, request.path_info)
     return render(request, "eat/application/child/salary.html", args)
 
 
@@ -188,6 +189,7 @@ def child_social_security_income(request, child_id):
         form = ChildSocialSecurityForm(instance=child)
     args['form'] = form
     args['child'] = child
+    AppUtil.set_last_page(child.application, request.path_info)
     return render(request, "eat/application/child/social_security_income.html", args)
 
 
@@ -204,6 +206,7 @@ def parent_social_security_income(request, child_id):
         form = ParentSocialSecurityForm(instance=child)
     args['form'] = form
     args['child'] = child
+    AppUtil.set_last_page(child.application, request.path_info)
     return render(request, "eat/application/child/parent_social_security_income.html", args)
 
 
@@ -220,6 +223,7 @@ def spending_money_income(request, child_id):
         form = ChildSpendingMoneyForm(instance=child)
     args['form'] = form
     args['child'] = child
+    AppUtil.set_last_page(child.application, request.path_info)
     return render(request, "eat/application/child/spending_money.html", args)
 
 
@@ -236,6 +240,7 @@ def other_friend_income(request, child_id):
         form = ChildOtherFriendIncomeForm(instance=child)
     args['form'] = form
     args['child'] = child
+    AppUtil.set_last_page(child.application, request.path_info)
     return render(request, "eat/application/child/other_friend_income.html", args)
 
 
@@ -252,6 +257,7 @@ def pension_income(request, child_id):
         form = ChildPensionIncomeForm(instance=child)
     args['form'] = form
     args['child'] = child
+    AppUtil.set_last_page(child.application, request.path_info)
     return render(request, "eat/application/child/pension_income.html", args)
 
 
@@ -268,6 +274,7 @@ def annuity_income(request, child_id):
         form = ChildAnnuityIncomeForm(instance=child)
     args['form'] = form
     args['child'] = child
+    AppUtil.set_last_page(child.application, request.path_info)
     return render(request, "eat/application/child/annuity_income.html", args)
 
 
@@ -284,6 +291,7 @@ def trust_income(request, child_id):
         form = ChildTrustIncomeForm(instance=child)
     args['form'] = form
     args['child'] = child
+    AppUtil.set_last_page(child.application, request.path_info)
     return render(request, "eat/application/child/trust_income.html", args)
 
 
@@ -300,6 +308,7 @@ def other_income(request, child_id):
         form = ChildOtherIncomeForm(instance=child)
     args['form'] = form
     args['child'] = child
+    AppUtil.set_last_page(child.application, request.path_info)
     return render(request, "eat/application/child/other_income.html", args)
 
 

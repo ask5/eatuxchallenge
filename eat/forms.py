@@ -70,6 +70,15 @@ class AddChildForm(ModelForm):
 
 class ChildSalaryForm(ModelForm):
 
+    def save(self, commit=True):
+        instance = super(ChildSalaryForm, self).save(commit=False)
+        if not instance.salary:
+            instance.salary = 0
+            instance.salary_frequency = None
+        if commit:
+            instance.save()
+        return instance
+
     class Meta:
         model = Child
         fields = ['salary', 'salary_frequency']
@@ -83,6 +92,15 @@ class ChildSalaryForm(ModelForm):
 
 
 class ChildSocialSecurityForm(ModelForm):
+
+    def save(self, commit=True):
+        instance = super(ChildSocialSecurityForm, self).save(commit=False)
+        if not instance.ssi_disability:
+            instance.ssi_disability = 0
+            instance.ssi_disability_frequency = None
+        if commit:
+            instance.save()
+        return instance
 
     class Meta:
         model = Child
@@ -98,6 +116,15 @@ class ChildSocialSecurityForm(ModelForm):
 
 class ParentSocialSecurityForm(ModelForm):
 
+    def save(self, commit=True):
+        instance = super(ParentSocialSecurityForm, self).save(commit=False)
+        if not instance.ssi_parent_disability:
+            instance.ssi_parent_disability = 0
+            instance.ssi_parent_disability_frequency = None
+        if commit:
+            instance.save()
+        return instance
+
     class Meta:
         model = Child
         fields = ['ssi_parent_disability', 'ssi_parent_disability_frequency']
@@ -111,6 +138,15 @@ class ParentSocialSecurityForm(ModelForm):
 
 
 class ChildSpendingMoneyForm(ModelForm):
+
+    def save(self, commit=True):
+        instance = super(ChildSpendingMoneyForm, self).save(commit=False)
+        if not instance.spending_money_income:
+            instance.spending_money_income = 0
+            instance.spending_money_income_frequency = None
+        if commit:
+            instance.save()
+        return instance
 
     class Meta:
         model = Child
@@ -126,6 +162,15 @@ class ChildSpendingMoneyForm(ModelForm):
 
 class ChildOtherFriendIncomeForm(ModelForm):
 
+    def save(self, commit=True):
+        instance = super(ChildOtherFriendIncomeForm, self).save(commit=False)
+        if not instance.other_friend_income:
+            instance.other_friend_income = 0
+            instance.other_friend_income_frequency = None
+        if commit:
+            instance.save()
+        return instance
+
     class Meta:
         model = Child
         fields = ['other_friend_income', 'other_friend_income_frequency']
@@ -137,7 +182,17 @@ class ChildOtherFriendIncomeForm(ModelForm):
             'other_friend_income_frequency': "How often?"
         }
 
+
 class ChildPensionIncomeForm(ModelForm):
+
+    def save(self, commit=True):
+        instance = super(ChildPensionIncomeForm, self).save(commit=False)
+        if not instance.pension_income:
+            instance.pension_income = 0
+            instance.pension_income_frequency = None
+        if commit:
+            instance.save()
+        return instance
 
     class Meta:
         model = Child
@@ -153,6 +208,15 @@ class ChildPensionIncomeForm(ModelForm):
 
 class ChildAnnuityIncomeForm(ModelForm):
 
+    def save(self, commit=True):
+        instance = super(ChildAnnuityIncomeForm, self).save(commit=False)
+        if not instance.annuity_income:
+            instance.annuity_income = 0
+            instance.annuity_income_frequency = None
+        if commit:
+            instance.save()
+        return instance
+
     class Meta:
         model = Child
         fields = ['annuity_income', 'annuity_income_frequency']
@@ -167,6 +231,15 @@ class ChildAnnuityIncomeForm(ModelForm):
 
 class ChildTrustIncomeForm(ModelForm):
 
+    def save(self, commit=True):
+        instance = super(ChildTrustIncomeForm, self).save(commit=False)
+        if not instance.trust_income:
+            instance.trust_income = 0
+            instance.trust_income_frequency = None
+        if commit:
+            instance.save()
+        return instance
+
     class Meta:
         model = Child
         fields = ['trust_income', 'trust_income_frequency']
@@ -180,6 +253,15 @@ class ChildTrustIncomeForm(ModelForm):
 
 
 class ChildOtherIncomeForm(ModelForm):
+
+    def save(self, commit=True):
+        instance = super(ChildOtherIncomeForm, self).save(commit=False)
+        if not instance.other_income:
+            instance.other_income = 0
+            instance.other_income_frequency = None
+        if commit:
+            instance.save()
+        return instance
 
     class Meta:
         model = Child
