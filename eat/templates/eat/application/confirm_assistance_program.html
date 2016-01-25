@@ -1,0 +1,40 @@
+{% extends "eat/application/base.html" %}
+{% load staticfiles %}
+{% block application_content_main %}
+    <p class="lead">
+        {% if app.assistance_program %}
+            You said that one of your household members participates in assistance programs and
+            your Case Number is <strong>{{ app.case_number }}</strong>
+            <p>
+                That's a good news {{ user.first_name }}, it will cut down bulk of the application process and
+                you will be done soon!
+            </p>
+        {% else %}
+            {{ user.first_name }}, since none of your household members participates in any assistance program,
+            we'll ask you some questions later about your household income which will help us determine
+            your eligibility!
+        {% endif %}
+    </p>
+    <div>
+        Click continue if you think the above information is accurate, or you can go back and change it.
+        <a class="btn btn-default pull-left" role="button" href="{% url 'eat.views.assistance_program' %}">Back</a>
+        <a class="btn btn-default pull-left" role="button" href="{% url 'eat.views.children' %}">Continue</a>
+    </div>
+{% endblock %}
+
+{% block application_content_right %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Tips
+        </div>
+        <div class="panel-body">
+            If anyone in your household participates in the assistance programs listed below,
+            your children are <strong>eligible</strong> for free school meals:
+            <ul>
+                <li>The Supplemental Nutrition Assistance Program (SNAP) or [insert State SNAP here]</li>
+                <li>Temporary Assistance for Needy Families (TANF) or [insert State TANF here]</li>
+                <li>The Food Distribution Program on Indian Reservations (FDPIR)</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

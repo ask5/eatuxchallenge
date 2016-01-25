@@ -15,13 +15,37 @@
                     {% if child.hmr %} Homeless, Migrant, Runaway {% endif %}
                 </td>
             </tr>
+            {% if not child.application.assistance_program %}
+                <tr class="active">
+                    <th>Salary</th>
+                    <td>
+                        {% if child.salary %}
+                            ${{ child.salary }}, {{ child.get_salary_frequency_display }}
+                            <a href="{% url 'eat.views.child_salary'  child_id=child.id %}">Change</a>
+                            {% else %}
+                            <a href="{% url 'eat.views.child_salary'  child_id=child.id %}">Add</a>
+                         {% endif %}
+                    </td>
+                </tr>
+                <tr class="active">
+                    <th>Social Security income</th>
+                    <td>
+                        {% if child.ssi_disability %}
+                            ${{ child.ssi_disability }}, {{ child.get_ssi_disability_frequency_display }}
+                            <a href="{% url 'eat.views.child_social_security_income'  child_id=child.id %}">Change</a>
+                            {% else %}
+                            <a href="{% url 'eat.views.child_social_security_income'  child_id=child.id %}">Add</a>
+                         {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
         {% endfor %}
         </table>
     {% endif %}
     <a class="btn btn-primary" role="button" href="{% url 'eat.views.add_child' %}">Add new Child</a>
         <div>
             <a class="btn btn-default pull-left" role="button"
-               href="{% url 'eat.views.application_welcome_back' %}">Back</a>
+               href="{% url 'eat.views.assistance_program' %}">Back</a>
 
                 <a class="btn btn-default pull-right" role="button"
                    {% if not app.assistance_program %}

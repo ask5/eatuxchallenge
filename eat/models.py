@@ -116,18 +116,18 @@ class Child(models.Model):
                                            help_text='How often are earnings received',
                                            blank=True,
                                            null=True)
-    ssi_disability = models.DecimalField(verbose_name='Social Security Income for Disabilty',
+    ssi_disability = models.DecimalField(verbose_name='Social Security Income for Disability',
                                          decimal_places=2,
                                          max_digits=8,
                                          help_text='Social security income for childs blindness or disability',
                                          blank=True,
                                          null=True)
     ssi_disability_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                   verbose_name='Frequency Of Social Security Income for Disabilty',
+                                                   verbose_name='Frequency Of Social Security Income for Disability',
                                                    help_text='How often are earnings received',
                                                    blank=True,
                                                    null=True)
-    ssi_parent_disability = models.DecimalField(verbose_name='Social Security Income for Parents Disabilty',
+    ssi_parent_disability = models.DecimalField(verbose_name='Social Security Income for Parents Disability',
                                                 decimal_places=2,
                                                 max_digits=8,
                                                 help_text='Social security income received if parent is disabled/retired/deceased',

@@ -28,7 +28,7 @@ class RegistrationForm(UserCreationForm):
             return self.cleaned_data['email']
 
 
-class Step2Form(ModelForm):
+class AssistanceProgramForm(ModelForm):
     def clean_case_number(self):
         if self.cleaned_data['assistance_program'] and self.cleaned_data['case_number'] == '':
             raise forms.ValidationError('Case number is mandatory if you are currently participating in an assistance'
@@ -50,7 +50,7 @@ class Step2Form(ModelForm):
         }
 
 
-class AddChild(ModelForm):
+class AddChildForm(ModelForm):
 
     class Meta:
         model = Child
@@ -65,4 +65,46 @@ class AddChild(ModelForm):
             'is_student': "Is this child a student?",
             'foster_child': "Is this a foster child?",
             'hmr': "Is the child Homeless, Migrant or Runaway?",
+        }
+
+
+class ChildSalaryForm(ModelForm):
+
+    class Meta:
+        model = Child
+        fields = ['salary', 'salary_frequency']
+        widgets = {
+            'salary_frequency': forms.RadioSelect
+        }
+        labels = {
+            'salary': "Earnings $",
+            'salary_frequency': "How often?"
+        }
+
+
+class ChildSocialSecurityForm(ModelForm):
+
+    class Meta:
+        model = Child
+        fields = ['ssi_disability', 'ssi_disability_frequency']
+        widgets = {
+            'ssi_disability_frequency': forms.RadioSelect
+        }
+        labels = {
+            'ssi_disability': "Earnings $",
+            'ssi_disability_frequency': "How often?"
+        }
+
+
+class ParentSocialSecurityForm(ModelForm):
+
+    class Meta:
+        model = Child
+        fields = ['ssi_parent_disability', 'ssi_parent_disability_frequency']
+        widgets = {
+            'ssi_parent_disability_frequency': forms.RadioSelect
+        }
+        labels = {
+            'ssi_parent_disability': "Earnings $",
+            'ssi_parent_disability_frequency': "How often?"
         }
