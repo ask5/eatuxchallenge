@@ -2,8 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from eat.forms import RegistrationForm, AssistanceProgramForm, AddChildForm, ChildSalaryForm, \
-    ChildSocialSecurityForm
+from eat.forms import *
 from django.http import HttpResponseRedirect
 from eat.models import Application, Child, Adult
 from eat.util import AppUtil
@@ -184,11 +183,124 @@ def child_social_security_income(request, child_id):
         form = ChildSocialSecurityForm(request.POST, instance=child)
         if form.is_valid():
             form.save()
+            return redirect('parent_social_security_income', child_id=child.id)
     else:
         form = ChildSocialSecurityForm(instance=child)
     args['form'] = form
     args['child'] = child
     return render(request, "eat/application/child/social_security_income.html", args)
+
+
+@login_required
+def parent_social_security_income(request, child_id):
+    args = dict()
+    child = Child.children.get(pk=child_id)
+    if request.method == 'POST':
+        form = ParentSocialSecurityForm(request.POST, instance=child)
+        if form.is_valid():
+            form.save()
+            return redirect('spending_money_income', child_id=child.id)
+    else:
+        form = ParentSocialSecurityForm(instance=child)
+    args['form'] = form
+    args['child'] = child
+    return render(request, "eat/application/child/parent_social_security_income.html", args)
+
+
+@login_required
+def spending_money_income(request, child_id):
+    args = dict()
+    child = Child.children.get(pk=child_id)
+    if request.method == 'POST':
+        form = ChildSpendingMoneyForm(request.POST, instance=child)
+        if form.is_valid():
+            form.save()
+            return redirect('other_friend_income', child_id=child.id)
+    else:
+        form = ChildSpendingMoneyForm(instance=child)
+    args['form'] = form
+    args['child'] = child
+    return render(request, "eat/application/child/spending_money.html", args)
+
+
+@login_required
+def other_friend_income(request, child_id):
+    args = dict()
+    child = Child.children.get(pk=child_id)
+    if request.method == 'POST':
+        form = ChildOtherFriendIncomeForm(request.POST, instance=child)
+        if form.is_valid():
+            form.save()
+            return redirect('pension_income', child_id=child.id)
+    else:
+        form = ChildOtherFriendIncomeForm(instance=child)
+    args['form'] = form
+    args['child'] = child
+    return render(request, "eat/application/child/other_friend_income.html", args)
+
+
+@login_required
+def pension_income(request, child_id):
+    args = dict()
+    child = Child.children.get(pk=child_id)
+    if request.method == 'POST':
+        form = ChildPensionIncomeForm(request.POST, instance=child)
+        if form.is_valid():
+            form.save()
+            return redirect('annuity_income', child_id=child.id)
+    else:
+        form = ChildPensionIncomeForm(instance=child)
+    args['form'] = form
+    args['child'] = child
+    return render(request, "eat/application/child/pension_income.html", args)
+
+
+@login_required
+def annuity_income(request, child_id):
+    args = dict()
+    child = Child.children.get(pk=child_id)
+    if request.method == 'POST':
+        form = ChildAnnuityIncomeForm(request.POST, instance=child)
+        if form.is_valid():
+            form.save()
+            return redirect('trust_income', child_id=child.id)
+    else:
+        form = ChildAnnuityIncomeForm(instance=child)
+    args['form'] = form
+    args['child'] = child
+    return render(request, "eat/application/child/annuity_income.html", args)
+
+
+@login_required
+def trust_income(request, child_id):
+    args = dict()
+    child = Child.children.get(pk=child_id)
+    if request.method == 'POST':
+        form = ChildTrustIncomeForm(request.POST, instance=child)
+        if form.is_valid():
+            form.save()
+            return redirect('other_income', child_id=child.id)
+    else:
+        form = ChildTrustIncomeForm(instance=child)
+    args['form'] = form
+    args['child'] = child
+    return render(request, "eat/application/child/trust_income.html", args)
+
+
+@login_required
+def other_income(request, child_id):
+    args = dict()
+    child = Child.children.get(pk=child_id)
+    if request.method == 'POST':
+        form = ChildOtherIncomeForm(request.POST, instance=child)
+        if form.is_valid():
+            form.save()
+            return redirect('children')
+    else:
+        form = ChildOtherIncomeForm(instance=child)
+    args['form'] = form
+    args['child'] = child
+    return render(request, "eat/application/child/other_income.html", args)
 
 
 @login_required

@@ -21,20 +21,31 @@
                     <td>
                         {% if child.salary %}
                             ${{ child.salary }}, {{ child.get_salary_frequency_display }}
-                            <a href="{% url 'eat.views.child_salary'  child_id=child.id %}">Change</a>
+                            <a class="btn btn-default pull-right" href="{% url 'eat.views.child_salary'  child_id=child.id %}">Change</a>
                             {% else %}
-                            <a href="{% url 'eat.views.child_salary'  child_id=child.id %}">Add</a>
+                            <a class="btn btn-primary pull-right" href="{% url 'eat.views.child_salary'  child_id=child.id %}">Add</a>
                          {% endif %}
                     </td>
                 </tr>
                 <tr class="active">
-                    <th>Social Security income</th>
+                    <th>Social Security Income</th>
                     <td>
                         {% if child.ssi_disability %}
                             ${{ child.ssi_disability }}, {{ child.get_ssi_disability_frequency_display }}
-                            <a href="{% url 'eat.views.child_social_security_income'  child_id=child.id %}">Change</a>
+                            <a class="btn btn-default pull-right" href="{% url 'eat.views.child_social_security_income'  child_id=child.id %}">Change</a>
                             {% else %}
-                            <a href="{% url 'eat.views.child_social_security_income'  child_id=child.id %}">Add</a>
+                            <a class="btn btn-primary pull-right" href="{% url 'eat.views.child_social_security_income'  child_id=child.id %}">Add</a>
+                         {% endif %}
+                    </td>
+                </tr>
+                <tr class="active">
+                    <th>Social Security Survivor’s Benefits</th>
+                    <td>
+                        {% if child.ssi_parent_disability %}
+                            ${{ child.ssi_parent_disability }}, {{ child.get_ssi_parent_disability_frequency_display }}
+                            <a class="btn btn-default pull-right" href="{% url 'eat.views.parent_social_security_income'  child_id=child.id %}">Change</a>
+                            {% else %}
+                            <a class="btn btn-primary pull-right" href="{% url 'eat.views.parent_social_security_income'  child_id=child.id %}">Add</a>
                          {% endif %}
                     </td>
                 </tr>

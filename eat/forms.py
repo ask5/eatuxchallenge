@@ -108,3 +108,86 @@ class ParentSocialSecurityForm(ModelForm):
             'ssi_parent_disability': "Earnings $",
             'ssi_parent_disability_frequency': "How often?"
         }
+
+
+class ChildSpendingMoneyForm(ModelForm):
+
+    class Meta:
+        model = Child
+        fields = ['spending_money_income', 'spending_money_income_frequency']
+        widgets = {
+            'spending_money_income_frequency': forms.RadioSelect
+        }
+        labels = {
+            'spending_money_income': "Earnings $",
+            'spending_money_income_frequency': "How often?"
+        }
+
+
+class ChildOtherFriendIncomeForm(ModelForm):
+
+    class Meta:
+        model = Child
+        fields = ['other_friend_income', 'other_friend_income_frequency']
+        widgets = {
+            'other_friend_income_frequency': forms.RadioSelect
+        }
+        labels = {
+            'other_friend_income': "Earnings $",
+            'other_friend_income_frequency': "How often?"
+        }
+
+class ChildPensionIncomeForm(ModelForm):
+
+    class Meta:
+        model = Child
+        fields = ['pension_income', 'pension_income_frequency']
+        widgets = {
+            'pension_income_frequency': forms.RadioSelect
+        }
+        labels = {
+            'pension_income': "Earnings $",
+            'pension_income_frequency': "How often?"
+        }
+
+
+class ChildAnnuityIncomeForm(ModelForm):
+
+    class Meta:
+        model = Child
+        fields = ['annuity_income', 'annuity_income_frequency']
+        widgets = {
+            'annuity_income_frequency': forms.RadioSelect
+        }
+        labels = {
+            'annuity_income': "Earnings $",
+            'annuity_income_frequency': "How often?"
+        }
+
+
+class ChildTrustIncomeForm(ModelForm):
+
+    class Meta:
+        model = Child
+        fields = ['trust_income', 'trust_income_frequency']
+        widgets = {
+            'trust_income_frequency': forms.RadioSelect
+        }
+        labels = {
+            'trust_income': "Earnings $",
+            'trust_income_frequency': "How often?"
+        }
+
+
+class ChildOtherIncomeForm(ModelForm):
+
+    class Meta:
+        model = Child
+        fields = ['other_income', 'other_income_frequency']
+        widgets = {
+            'other_income_frequency': forms.RadioSelect
+        }
+        labels = {
+            'other_income': "Earnings $",
+            'other_income_frequency': "How often?"
+        }
