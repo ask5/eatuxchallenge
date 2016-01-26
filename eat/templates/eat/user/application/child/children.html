@@ -17,10 +17,13 @@
                         {% if child.foster_child %} Foster Child, {% endif %}
                         {% if child.hmr %} Homeless, Migrant, Runaway {% endif %}
                     </td>
+                    <td>
+                        <a class="btn btn-primary" role="button" href="{% url 'eat.views.edit_child' child_id=child.id %}">Edit</a>
+                    </td>
                 </tr>
                 {% if not child.application.assistance_program %}
                     <tr>
-                        <td colspan="2">
+                        <td colspan="3">
                             <table class="table table-condensed">
                                 {% for category in earnings_categories %}
                                     <tr>

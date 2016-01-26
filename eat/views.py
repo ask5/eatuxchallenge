@@ -168,7 +168,22 @@ def add_child(request):
     else:
         form = AddChildForm()
     args['form'] = form
-    return render(request, "eat/user/application/child/add.html", args)
+    return render(request, "eat/user/application/child/add_edit.html", args)
+
+
+@login_required
+def edit_child(request, child_id):
+    args = dict()
+    child = Child.children.get(pk=child_id)
+    if request.method == 'POST':
+        form = AddChildForm(request.POST, instance=child)
+        if form.is_valid():
+            form.save()
+            return redirect('children')
+    else:
+        form = AddChildForm(instance=child)
+    args['form'] = form
+    return render(request, "eat/user/application/child/add_edit.html", args)
 
 
 @login_required

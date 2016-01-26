@@ -3,7 +3,7 @@
 {% block application_content_main %}
     <h3>Add a household member</h3>
     <small>The member can be either infant, child or a student upto and including grade 12</small>
-    <form class="form-horizontal" action="{% url 'eat.views.add_child' %}" method="post">
+    <form class="form-horizontal" method="post">
         {% csrf_token %}
             {{ form.non_field_errors }}
         <div class="form-group">
