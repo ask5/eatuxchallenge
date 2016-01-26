@@ -187,6 +187,16 @@ def edit_child(request, child_id):
 
 
 @login_required
+def delete_child(request, child_id):
+    args = dict()
+    child = Child.children.get(pk=child_id)
+    if request.method == 'POST':
+        child.delete()
+        return redirect('children')
+    args['child'] = child
+    return render(request, "eat/user/application/child/delete.html", args)
+
+@login_required
 def child_earnings(request, child_id):
     args = dict()
     direct = False
