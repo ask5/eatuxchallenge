@@ -5,10 +5,15 @@ from django.contrib.auth.models import User
 from eat.forms import *
 from django.http import HttpResponseRedirect
 from eat.models import Application, Child, Adult
-from eat.util import AppUtil
+from eat.util import AppUtil, EarningsForms
 from datetime import datetime
+from os.path import split
+from urllib import parse
+from django.core.urlresolvers import reverse, resolve
+from . import child_earnings_workflow
+import operator
 
-
+#TODO Child edit mode
 # Create your views here.
 def register(request):
     """
@@ -79,7 +84,7 @@ def login_view(request):
 
 @login_required
 def application_create(request):
-    result = render(request, "eat/application/create.html")
+    result = render(request, "eat/user/application/create.html")
     if request.POST:
         app = Application(
             user=request.user,
@@ -94,7 +99,7 @@ def application_create(request):
 
 @login_required
 def application_welcome_back(request):
-    result = render(request, "eat/application/welcome_back.html")
+    result = render(request, "eat/user/application/welcome_back.html")
     if request.POST:
         app = AppUtil.get_by_user(user=request.user)
         if app[0].last_page:
@@ -117,8 +122,8 @@ def assistance_program(request):
     else:
         form = AssistanceProgramForm(instance=app[0])
     args['form'] = form
-    AppUtil.set_last_page(app[0], request.path_info)
-    return render(request, "eat/application/assistance_program.html", args)
+    AppUtil.set_last_page(app[0], request.get_full_path())
+    return render(request, "eat/user/application/assistance_program.html", args)
 
 
 @login_required
@@ -126,7 +131,8 @@ def confirm_assistance_program(request):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     args['app'] = app[0]
-    return render(request, "eat/application/confirm_assistance_program.html", args)
+    return render(request, "eat/user/application/confirm_assistance_program.html", args)
+
 
 @login_required
 def children(request):
@@ -135,8 +141,14 @@ def children(request):
     c = Child.children.filter(application=app[0])
     args['app'] = app[0]
     args['children'] = c
-    AppUtil.set_last_page(app[0], request.path_info)
-    return render(request, "eat/application/child/children.html", args)
+
+    earnings_categories = list()
+    for k, v in child_earnings_workflow.items():
+        earnings_categories.append(v)
+
+    args['earnings_categories'] = sorted(earnings_categories, key=lambda category: (category['order']))
+    AppUtil.set_last_page(app[0], request.get_full_path())
+    return render(request, "eat/user/application/child/children.html", args)
 
 
 @login_required
@@ -156,160 +168,48 @@ def add_child(request):
     else:
         form = AddChildForm()
     args['form'] = form
-    return render(request, "eat/application/child/add.html", args)
+    return render(request, "eat/user/application/child/add.html", args)
 
 
 @login_required
-def child_salary(request, child_id):
+def child_earnings(request, child_id):
     args = dict()
+    direct = False
+    page_name = resolve(request.path_info).url_name
+
+    page = child_earnings_workflow[page_name]
+
+    if request.META.get('HTTP_REFERER'):
+        if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('children'):
+            direct = True
+
     child = Child.children.get(pk=child_id)
+
     if request.method == 'POST':
-        form = ChildSalaryForm(request.POST, instance=child)
+        form = EarningsForms.get_form(page_name, child, request.POST)
+        is_direct = request.POST.get('is_direct')
         if form.is_valid():
             form.save()
-            return redirect('child_social_security_income', child_id=child.id)
+            if is_direct == 'True':
+                return redirect('children')
+            else:
+                next_page = page['next_page']
+                if next_page['has_child_id']:
+                    return redirect(next_page['name'], child_id=child.id)
+                else:
+                    return redirect(next_page['name'])
+
     else:
-        form = ChildSalaryForm(instance=child)
+        form = EarningsForms.get_form(page_name=page_name, instance=child)
+
     args['form'] = form
-    args['child'] = child
-    AppUtil.set_last_page(child.application, request.path_info)
-    return render(request, "eat/application/child/salary.html", args)
-
-
-@login_required
-def child_social_security_income(request, child_id):
-    args = dict()
-    child = Child.children.get(pk=child_id)
-    if request.method == 'POST':
-        form = ChildSocialSecurityForm(request.POST, instance=child)
-        if form.is_valid():
-            form.save()
-            return redirect('parent_social_security_income', child_id=child.id)
-    else:
-        form = ChildSocialSecurityForm(instance=child)
-    args['form'] = form
-    args['child'] = child
-    AppUtil.set_last_page(child.application, request.path_info)
-    return render(request, "eat/application/child/social_security_income.html", args)
-
-
-@login_required
-def parent_social_security_income(request, child_id):
-    args = dict()
-    child = Child.children.get(pk=child_id)
-    if request.method == 'POST':
-        form = ParentSocialSecurityForm(request.POST, instance=child)
-        if form.is_valid():
-            form.save()
-            return redirect('spending_money_income', child_id=child.id)
-    else:
-        form = ParentSocialSecurityForm(instance=child)
-    args['form'] = form
-    args['child'] = child
-    AppUtil.set_last_page(child.application, request.path_info)
-    return render(request, "eat/application/child/parent_social_security_income.html", args)
-
-
-@login_required
-def spending_money_income(request, child_id):
-    args = dict()
-    child = Child.children.get(pk=child_id)
-    if request.method == 'POST':
-        form = ChildSpendingMoneyForm(request.POST, instance=child)
-        if form.is_valid():
-            form.save()
-            return redirect('other_friend_income', child_id=child.id)
-    else:
-        form = ChildSpendingMoneyForm(instance=child)
-    args['form'] = form
-    args['child'] = child
-    AppUtil.set_last_page(child.application, request.path_info)
-    return render(request, "eat/application/child/spending_money.html", args)
-
-
-@login_required
-def other_friend_income(request, child_id):
-    args = dict()
-    child = Child.children.get(pk=child_id)
-    if request.method == 'POST':
-        form = ChildOtherFriendIncomeForm(request.POST, instance=child)
-        if form.is_valid():
-            form.save()
-            return redirect('pension_income', child_id=child.id)
-    else:
-        form = ChildOtherFriendIncomeForm(instance=child)
-    args['form'] = form
-    args['child'] = child
-    AppUtil.set_last_page(child.application, request.path_info)
-    return render(request, "eat/application/child/other_friend_income.html", args)
-
-
-@login_required
-def pension_income(request, child_id):
-    args = dict()
-    child = Child.children.get(pk=child_id)
-    if request.method == 'POST':
-        form = ChildPensionIncomeForm(request.POST, instance=child)
-        if form.is_valid():
-            form.save()
-            return redirect('annuity_income', child_id=child.id)
-    else:
-        form = ChildPensionIncomeForm(instance=child)
-    args['form'] = form
-    args['child'] = child
-    AppUtil.set_last_page(child.application, request.path_info)
-    return render(request, "eat/application/child/pension_income.html", args)
-
-
-@login_required
-def annuity_income(request, child_id):
-    args = dict()
-    child = Child.children.get(pk=child_id)
-    if request.method == 'POST':
-        form = ChildAnnuityIncomeForm(request.POST, instance=child)
-        if form.is_valid():
-            form.save()
-            return redirect('trust_income', child_id=child.id)
-    else:
-        form = ChildAnnuityIncomeForm(instance=child)
-    args['form'] = form
-    args['child'] = child
-    AppUtil.set_last_page(child.application, request.path_info)
-    return render(request, "eat/application/child/annuity_income.html", args)
-
-
-@login_required
-def trust_income(request, child_id):
-    args = dict()
-    child = Child.children.get(pk=child_id)
-    if request.method == 'POST':
-        form = ChildTrustIncomeForm(request.POST, instance=child)
-        if form.is_valid():
-            form.save()
-            return redirect('other_income', child_id=child.id)
-    else:
-        form = ChildTrustIncomeForm(instance=child)
-    args['form'] = form
-    args['child'] = child
-    AppUtil.set_last_page(child.application, request.path_info)
-    return render(request, "eat/application/child/trust_income.html", args)
-
-
-@login_required
-def other_income(request, child_id):
-    args = dict()
-    child = Child.children.get(pk=child_id)
-    if request.method == 'POST':
-        form = ChildOtherIncomeForm(request.POST, instance=child)
-        if form.is_valid():
-            form.save()
-            return redirect('children')
-    else:
-        form = ChildOtherIncomeForm(instance=child)
-    args['form'] = form
-    args['child'] = child
-    AppUtil.set_last_page(child.application, request.path_info)
-    return render(request, "eat/application/child/other_income.html", args)
+    args['direct'] = direct
+    args['child_id'] = child.id
+    args['previous_page'] = page['previous_page']
+    args['heading'] = page['headline'].format(child.first_name)
+    args['tip'] = page['help_tip']
+    AppUtil.set_last_page(child.application, request.get_full_path())
+    return render(request, page['template'], args)
 
 
 @login_required
@@ -319,16 +219,16 @@ def adults(request):
     a = Adult.adults.filter(application=app[0])
     args['app'] = app[0]
     args['adults'] = a
-    AppUtil.set_last_page(app[0], request.path_info)
-    return render(request, "eat/application/adult/adults.html", args)
+    AppUtil.set_last_page(app[0], request.get_full_path())
+    return render(request, "eat/user/application/adult/adults.html", args)
 
 @login_required
 def add_adult(request):
     app = AppUtil.get_by_user(user=request.user)
-    return render(request, "eat/application/adult/add.html")
+    return render(request, "eat/user/application/adult/add.html")
 
 @login_required
 def contact(request):
     app = AppUtil.get_by_user(user=request.user)
-    AppUtil.set_last_page(app[0], request.path_info)
-    return render(request,"eat/application/contact.html")
+    AppUtil.set_last_page(app[0], request.get_full_path())
+    return render(request, "eat/user/application/contact.html")

@@ -1,0 +1,84 @@
+{% extends "eat/user/application/base.html" %}
+{% load staticfiles %}
+{% load humanize %}
+{% load tags %}
+{% block application_content_main %}
+    <p class="lead">
+        Household Members who are infants, children and students up to and including grade 12.
+    </p>
+    <a class="btn btn-primary" role="button" href="{% url 'eat.views.add_child' %}">Add new Child</a>
+    {% if children %}
+        <table class="table">
+            {% for child in children %}
+                <tr class="info">
+                    <th>{{ child.first_name }} {{ child.last_name }}</th>
+                    <td>
+                        {% if child.is_student %} Student, {% endif %}
+                        {% if child.foster_child %} Foster Child, {% endif %}
+                        {% if child.hmr %} Homeless, Migrant, Runaway {% endif %}
+                    </td>
+                </tr>
+                {% if not child.application.assistance_program %}
+                    <tr>
+                        <td colspan="2">
+                            <table class="table table-condensed">
+                                {% for category in earnings_categories %}
+                                    <tr>
+                                        <th>{{ category.title }}</th>
+                                        <td>
+                                            {% if child|getvalue:category.value_field %}
+                                                $ {{ child|getvalue:category.value_field|intcomma }} -
+                                                {{ child|getvalue:category.frequency_field|frequencylabel }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-default pull-right"
+                                               href="{% url category.name  child_id=child.id %}">
+                                                {% if child|getvalue:category.value_field %}
+                                                    Change
+                                                {% else %}
+                                                    Add
+                                                {% endif %}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% endif %}
+    <a class="btn btn-primary" role="button" href="{% url 'eat.views.add_child' %}">Add new Child</a>
+    <div>
+        <a class="btn btn-default pull-left" role="button"
+           href="{% url 'eat.views.assistance_program' %}">Back</a>
+
+        <a class="btn btn-default pull-right" role="button"
+                {% if not app.assistance_program %}
+           href="{% url 'eat.views.adults' %}"
+                {% else %}
+           href="{% url 'eat.views.contact' %}"
+                {% endif %}
+        >Continue
+        </a>
+    </div>
+{% endblock %}
+
+{% block application_content_right %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Tips
+        </div>
+        <div class="panel-body">
+            <strong>Who should I list here?</strong>
+            When filling out this section, please include all members in your household who are:
+            <ul>
+                <li>Children age 18 or under and are supported with the household’s income</li>
+                <li>In your care under a foster arrangement, or qualify as homeless, migrant, or runaway youth</li>
+                <li>Students attending [school/school system here], regardless of age</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
