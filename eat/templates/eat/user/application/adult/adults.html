@@ -1,5 +1,7 @@
 {% extends "eat/user/application/base.html" %}
 {% load staticfiles %}
+{% load humanize %}
+{% load tags %}
 {% block application_content_main %}
     <p class="lead">
         Let's add all Adult Household Members, including yourself.
@@ -14,6 +16,33 @@
                     <a class="btn btn-danger" role="button" href="{% url 'eat.views.delete_adult' adult_id=adult.id %}">Delete</a>
                 </td>
             </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table class="table table-condensed">
+                                {% for category in earnings_categories %}
+                                    <tr>
+                                        <th>{{ category.title }}</th>
+                                        <td>
+                                            {% if adult|getvalue:category.value_field %}
+                                                $ {{ adult|getvalue:category.value_field|intcomma }} -
+                                                {{ adult|getvalue:category.frequency_field|frequencylabel }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-default pull-right"
+                                               href="{% url category.name  adult_id=adult.id %}">
+                                                {% if adult|getvalue:category.value_field %}
+                                                    Change
+                                                {% else %}
+                                                    Add
+                                                {% endif %}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </td>
+                    </tr>
         {% endfor %}
         </table>
     {% endif %}

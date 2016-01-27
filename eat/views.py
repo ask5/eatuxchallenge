@@ -5,15 +5,14 @@ from django.contrib.auth.models import User
 from eat.forms import *
 from django.http import HttpResponseRedirect
 from eat.models import Application, Child, Adult
-from eat.util import AppUtil, EarningsForms
+from eat.util import *
 from datetime import datetime
 from os.path import split
 from urllib import parse
 from django.core.urlresolvers import reverse, resolve
-from . import child_earnings_workflow
+from . import child_earnings_workflow, adult_earnings_workflow
 import operator
 
-#TODO Child edit mode
 # Create your views here.
 def register(request):
     """
@@ -212,7 +211,7 @@ def child_earnings(request, child_id):
     child = Child.children.get(pk=child_id)
 
     if request.method == 'POST':
-        form = EarningsForms.get_form(page_name, child, request.POST)
+        form = ChildEarningsFormsFactory.get_form(page_name, child, request.POST)
         is_direct = request.POST.get('is_direct')
         if form.is_valid():
             form.save()
@@ -226,7 +225,7 @@ def child_earnings(request, child_id):
                     return redirect(next_page['name'])
 
     else:
-        form = EarningsForms.get_form(page_name=page_name, instance=child)
+        form = ChildEarningsFormsFactory.get_form(page_name=page_name, instance=child)
 
     args['form'] = form
     args['direct'] = direct
@@ -245,10 +244,16 @@ def adults(request):
     a = Adult.adults.filter(application=app[0])
     args['app'] = app[0]
     args['adults'] = a
+    earnings_categories = list()
+    for k, v in adult_earnings_workflow.items():
+        earnings_categories.append(v)
+
+    args['earnings_categories'] = sorted(earnings_categories, key=lambda category: (category['order']))
+
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/adult/adults.html", args)
 
-#TODO redirect to adult earnings page after saving
+
 @login_required
 def add_adult(request):
     args = dict()
@@ -259,7 +264,7 @@ def add_adult(request):
             adult = form.save(commit=False)
             adult.application = app[0]
             adult.save()
-            return redirect('adults')
+            return redirect('adult_salary', adult_id=adult.id)
     else:
         form = AddAdultForm()
     args['form'] = form
@@ -290,6 +295,47 @@ def delete_adult(request, adult_id):
         return redirect('adults')
     args['adult'] = adult
     return render(request, "eat/user/application/adult/delete.html", args)
+
+
+@login_required
+def adult_earnings(request, adult_id):
+    args = dict()
+    direct = False
+    page_name = resolve(request.path_info).url_name
+
+    page = adult_earnings_workflow[page_name]
+
+    if request.META.get('HTTP_REFERER'):
+        if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('adults'):
+            direct = True
+
+    adult = Adult.adults.get(pk=adult_id)
+
+    if request.method == 'POST':
+        form = AdultEarningsFormsFactory.get_form(page_name, adult, request.POST)
+        is_direct = request.POST.get('is_direct')
+        if form.is_valid():
+            form.save()
+            if is_direct == 'True':
+                return redirect('adults')
+            else:
+                next_page = page['next_page']
+                if next_page['has_adult_id']:
+                    return redirect(next_page['name'], adult_id=adult.id)
+                else:
+                    return redirect(next_page['name'])
+
+    else:
+        form = AdultEarningsFormsFactory.get_form(page_name=page_name, instance=adult)
+
+    args['form'] = form
+    args['direct'] = direct
+    args['adult_id'] = adult.id
+    args['previous_page'] = page['previous_page']
+    args['heading'] = page['headline'].format(adult.first_name)
+    args['tip'] = page['help_tip']
+    AppUtil.set_last_page(adult.application, request.get_full_path())
+    return render(request, page['template'], args)
 
 
 @login_required

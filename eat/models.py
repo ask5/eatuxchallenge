@@ -9,10 +9,10 @@ APPLICATION_STATUSES = (
 )
 
 PAY_FREQUENCIES = (
-    (0, 'Weekly'),
-    (1, 'Bi-Weekly'),
-    (2, '2x Month'),
-    (3, 'Monthly')
+    (1, 'Weekly'),
+    (2, 'Bi-Weekly'),
+    (3, '2x Month'),
+    (4, 'Monthly')
 )
 
 ETHNICITIES = (
@@ -299,7 +299,7 @@ class Adult(models.Model):
                                          max_digits=8,
                                          blank=True,
                                          null=True)
-    military_bonus_pay_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
+    military_bonus_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
                                                        verbose_name='Frequency Of Military Bonus',
                                                        help_text='How often are earnings received',
                                                        blank=True,
