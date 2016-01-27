@@ -30,6 +30,30 @@
     </div>
 </nav>
 <div class="container">
+    <div>
+        <ul class="nav nav-pills">
+            <li>
+                <a href="{% url 'eat.views.assistance_program' %}">
+                    Assistance Program
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'eat.views.children' %}">
+                    Child information
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'eat.views.adults' %}">
+                    Adult information
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'eat.views.contact' %}">
+                    Contact information
+                </a>
+            </li>
+        </ul>
+    </div>
     <div class="row">
         <div class="col-lg-9">
             {% block application_content_main %}{% endblock %}

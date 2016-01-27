@@ -196,6 +196,7 @@ def delete_child(request, child_id):
     args['child'] = child
     return render(request, "eat/user/application/child/delete.html", args)
 
+
 @login_required
 def child_earnings(request, child_id):
     args = dict()
@@ -247,10 +248,49 @@ def adults(request):
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/adult/adults.html", args)
 
+#TODO redirect to adult earnings page after saving
 @login_required
 def add_adult(request):
+    args = dict()
     app = AppUtil.get_by_user(user=request.user)
-    return render(request, "eat/user/application/adult/add.html")
+    if request.method == 'POST':
+        form = AddAdultForm(request.POST)
+        if form.is_valid():
+            adult = form.save(commit=False)
+            adult.application = app[0]
+            adult.save()
+            return redirect('adults')
+    else:
+        form = AddAdultForm()
+    args['form'] = form
+    return render(request, "eat/user/application/adult/add_edit.html", args)
+
+
+@login_required
+def edit_adult(request, adult_id):
+    args = dict()
+    adult = Adult.adults.get(pk=adult_id)
+    if request.method == 'POST':
+        form = AddAdultForm(request.POST, instance=adult)
+        if form.is_valid():
+            form.save()
+            return redirect('adults')
+    else:
+        form = AddAdultForm(instance=adult)
+    args['form'] = form
+    return render(request, "eat/user/application/adult/add_edit.html", args)
+
+
+@login_required
+def delete_adult(request, adult_id):
+    args = dict()
+    adult = Adult.adults.get(pk=adult_id)
+    if request.method == 'POST':
+        adult.delete()
+        return redirect('adults')
+    args['adult'] = adult
+    return render(request, "eat/user/application/adult/delete.html", args)
+
 
 @login_required
 def contact(request):

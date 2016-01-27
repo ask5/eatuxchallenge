@@ -4,15 +4,14 @@
     <p class="lead">
         Let's add all Adult Household Members, including yourself.
     </p>
-    {% if children %}
+    {% if adults %}
         <table class="table">
-        {% for child in children %}
+        {% for adult in adults %}
             <tr>
-                <th>{{ child.first_name }} {{ child.last_name }}</th>
+                <th>{{ adult.first_name }} {{ adult.last_name }}</th>
                 <td>
-                    {% if child.is_student %} Student, {% endif %}
-                    {% if child.foster_child %} Foster Child, {% endif %}
-                    {% if child.hmr %} Homeless, Migrant, Runaway {% endif %}
+                    <a class="btn btn-primary" role="button" href="{% url 'eat.views.edit_adult' adult_id=adult.id %}">Edit</a>
+                    <a class="btn btn-danger" role="button" href="{% url 'eat.views.delete_adult' adult_id=adult.id %}">Delete</a>
                 </td>
             </tr>
         {% endfor %}

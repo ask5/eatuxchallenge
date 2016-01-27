@@ -1,0 +1,37 @@
+{% extends "eat/user/application/base.html" %}
+{% load staticfiles %}
+{% block application_content_main %}
+    <h3>Add an Adult Household Member</h3>
+    <form class="form-horizontal" method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-group">
+            {{ form.first_name.errors }}
+            <label for="{{ form.first_name.id_for_label }}" class="col-sm-2 control-label">First Name</label>
+            <div class="col-sm-10">
+                {{ form.first_name }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form.middle_name.errors }}
+            <label for="{{ form.middle_name.id_for_label }}" class="col-sm-2 control-label">Middle Name</label>
+            <div class="col-sm-10">
+                {{ form.middle_name }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form.last_name.errors }}
+            <label for="{{ form.last_name.id_for_label }}" class="col-sm-2 control-label">Last Name</label>
+            <div class="col-sm-10">
+                {{ form.last_name }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Continue</button>
+                <a class="btn btn-default" role="button"href="{% url 'eat.views.adults' %}">Cancel</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+

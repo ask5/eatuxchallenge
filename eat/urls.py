@@ -41,5 +41,7 @@ urlpatterns = [
         name='other_income'),
     url(r'^app/adults/$', views.adults, name='adults'),
     url(r'^app/adults/add/$', views.add_adult, name='add_adult'),
+    url(r'^app/adults/(?P<adult_id>[0-9]+)/edit', views.edit_adult, name='edit_adult'),
+    url(r'^app/adults/(?P<adult_id>[0-9]+)/delete', views.delete_adult, name='delete_adult'),
     url(r'^app/contact', views.contact, name='contact'),
 ]

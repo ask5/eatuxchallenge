@@ -208,7 +208,7 @@ class Adult(models.Model):
     first_name = models.CharField(max_length=25,
                                   verbose_name='First Name')
     middle_name = models.CharField(max_length=25,
-                                   verbose_name='Middle Name')
+                                   verbose_name='Middle Name', blank=True, null=True)
     last_name = models.CharField(max_length=25,
                                  verbose_name='Last Name')
     salary = models.DecimalField(verbose_name='Salary',

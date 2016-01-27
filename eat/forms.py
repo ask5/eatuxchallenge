@@ -273,3 +273,10 @@ class ChildOtherIncomeForm(ModelForm):
             'other_income': "Earnings $",
             'other_income_frequency': "How often?"
         }
+
+class AddAdultForm(ModelForm):
+
+    class Meta:
+        model = Adult
+        fields = ['first_name', 'middle_name', 'last_name']
+        exclude = ("application",)

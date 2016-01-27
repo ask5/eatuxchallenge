@@ -53,8 +53,8 @@
                 {% endif %}
             {% endfor %}
         </table>
+        <a class="btn btn-primary" role="button" href="{% url 'eat.views.add_child' %}">Add new Child</a>
     {% endif %}
-    <a class="btn btn-primary" role="button" href="{% url 'eat.views.add_child' %}">Add new Child</a>
     <div>
         <a class="btn btn-default pull-left" role="button"
            href="{% url 'eat.views.assistance_program' %}">Back</a>
