@@ -2,16 +2,17 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from eat.forms import *
 from django.http import HttpResponseRedirect
-from eat.models import Application, Child, Adult
-from eat.util import *
 from datetime import datetime
 from os.path import split
 from urllib import parse
 from django.core.urlresolvers import reverse, resolve
-from . import child_earnings_workflow, adult_earnings_workflow
+from eat.models import *
+from eat.forms import *
+from eat.util import *
+from . import *
 import operator
+
 
 # Create your views here.
 def register(request):
@@ -142,7 +143,7 @@ def children(request):
     args['children'] = c
 
     earnings_categories = list()
-    for k, v in child_earnings_workflow.items():
+    for k, v in child_earnings_meta_data.items():
         earnings_categories.append(v)
 
     args['earnings_categories'] = sorted(earnings_categories, key=lambda category: (category['order']))
@@ -173,7 +174,8 @@ def add_child(request):
 @login_required
 def edit_child(request, child_id):
     args = dict()
-    child = Child.children.get(pk=child_id)
+    app = AppUtil.get_by_user(user=request.user)
+    child = Child.children.get(pk=child_id, application=app[0])
     if request.method == 'POST':
         form = AddChildForm(request.POST, instance=child)
         if form.is_valid():
@@ -188,7 +190,8 @@ def edit_child(request, child_id):
 @login_required
 def delete_child(request, child_id):
     args = dict()
-    child = Child.children.get(pk=child_id)
+    app = AppUtil.get_by_user(user=request.user)
+    child = Child.children.get(pk=child_id, application=app[0])
     if request.method == 'POST':
         child.delete()
         return redirect('children')
@@ -200,41 +203,47 @@ def delete_child(request, child_id):
 def child_earnings(request, child_id):
     args = dict()
     direct = False
-    page_name = resolve(request.path_info).url_name
-
-    page = child_earnings_workflow[page_name]
-
+    app = AppUtil.get_by_user(user=request.user)
+    url = resolve(request.path_info).url_name
+    meta = child_earnings_meta_data[url]
     if request.META.get('HTTP_REFERER'):
         if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('children'):
             direct = True
 
-    child = Child.children.get(pk=child_id)
+    child = Child.children.get(pk=child_id, application=app[0])
 
     if request.method == 'POST':
-        form = ChildEarningsFormsFactory.get_form(page_name, child, request.POST)
-        is_direct = request.POST.get('is_direct')
+        form = EarningsForm(request.POST)
         if form.is_valid():
-            form.save()
+            earning = form.cleaned_data['earning']
+            frequency = form.cleaned_data['frequency']
+            is_direct = request.POST.get('is_direct')
+            setattr(child, meta['value_field'], earning)
+            setattr(child, meta['frequency_field'], frequency)
+            child.save()
             if is_direct == 'True':
                 return redirect('children')
             else:
-                next_page = page['next_page']
+                next_page = meta['next_page']
                 if next_page['has_child_id']:
                     return redirect(next_page['name'], child_id=child.id)
                 else:
                     return redirect(next_page['name'])
-
     else:
-        form = ChildEarningsFormsFactory.get_form(page_name=page_name, instance=child)
+        data = {
+            'earning': getattr(child, meta['value_field']),
+            'frequency': getattr(child, meta['frequency_field'])
+        }
+        form = EarningsForm(initial=data)
 
     args['form'] = form
     args['direct'] = direct
     args['child_id'] = child.id
-    args['previous_page'] = page['previous_page']
-    args['heading'] = page['headline'].format(child.first_name)
-    args['tip'] = page['help_tip']
+    args['previous_page'] = meta['previous_page']
+    args['heading'] = meta['headline'].format(child.first_name)
+    args['tip'] = meta['help_tip']
     AppUtil.set_last_page(child.application, request.get_full_path())
-    return render(request, page['template'], args)
+    return render(request, meta['template'], args)
 
 
 @login_required
@@ -245,7 +254,7 @@ def adults(request):
     args['app'] = app[0]
     args['adults'] = a
     earnings_categories = list()
-    for k, v in adult_earnings_workflow.items():
+    for k, v in adult_earnings_meta_data.items():
         earnings_categories.append(v)
 
     args['earnings_categories'] = sorted(earnings_categories, key=lambda category: (category['order']))
@@ -274,7 +283,9 @@ def add_adult(request):
 @login_required
 def edit_adult(request, adult_id):
     args = dict()
-    adult = Adult.adults.get(pk=adult_id)
+    app = AppUtil.get_by_user(user=request.user)
+    adult = Adult.adults.get(pk=adult_id, application=app[0])
+
     if request.method == 'POST':
         form = AddAdultForm(request.POST, instance=adult)
         if form.is_valid():
@@ -289,7 +300,8 @@ def edit_adult(request, adult_id):
 @login_required
 def delete_adult(request, adult_id):
     args = dict()
-    adult = Adult.adults.get(pk=adult_id)
+    app = AppUtil.get_by_user(user=request.user)
+    adult = Adult.adults.get(pk=adult_id, application=app[0])
     if request.method == 'POST':
         adult.delete()
         return redirect('adults')
@@ -301,41 +313,47 @@ def delete_adult(request, adult_id):
 def adult_earnings(request, adult_id):
     args = dict()
     direct = False
-    page_name = resolve(request.path_info).url_name
-
-    page = adult_earnings_workflow[page_name]
-
+    url = resolve(request.path_info).url_name
+    meta = adult_earnings_meta_data[url]
     if request.META.get('HTTP_REFERER'):
         if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('adults'):
             direct = True
-
-    adult = Adult.adults.get(pk=adult_id)
+    app = AppUtil.get_by_user(user=request.user)
+    adult = Adult.adults.get(pk=adult_id, application=app[0])
 
     if request.method == 'POST':
-        form = AdultEarningsFormsFactory.get_form(page_name, adult, request.POST)
-        is_direct = request.POST.get('is_direct')
+        form = EarningsForm(request.POST)
         if form.is_valid():
-            form.save()
+            earning = form.cleaned_data['earning']
+            frequency = form.cleaned_data['frequency']
+            setattr(adult, meta['value_field'], earning)
+            setattr(adult, meta['frequency_field'], frequency)
+            adult.save()
+
+            is_direct = request.POST.get('is_direct')
             if is_direct == 'True':
                 return redirect('adults')
             else:
-                next_page = page['next_page']
+                next_page = meta['next_page']
                 if next_page['has_adult_id']:
                     return redirect(next_page['name'], adult_id=adult.id)
                 else:
                     return redirect(next_page['name'])
-
     else:
-        form = AdultEarningsFormsFactory.get_form(page_name=page_name, instance=adult)
+        data = {
+            'earning': getattr(adult, meta['value_field']),
+            'frequency': getattr(adult, meta['frequency_field'])
+        }
+        form = EarningsForm(initial=data)
 
     args['form'] = form
     args['direct'] = direct
     args['adult_id'] = adult.id
-    args['previous_page'] = page['previous_page']
-    args['heading'] = page['headline'].format(adult.first_name)
-    args['tip'] = page['help_tip']
+    args['previous_page'] = meta['previous_page']
+    args['heading'] = meta['headline'].format(adult.first_name)
+    args['tip'] = meta['help_tip']
     AppUtil.set_last_page(adult.application, request.get_full_path())
-    return render(request, page['template'], args)
+    return render(request, meta['template'], args)
 
 
 @login_required

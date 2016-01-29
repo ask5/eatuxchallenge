@@ -1,4 +1,4 @@
-child_earnings_workflow = {
+child_earnings_meta_data = {
     'child_salary': {
         'name': 'child_salary',
         'order': 1,
@@ -23,7 +23,7 @@ child_earnings_workflow = {
         'title': 'Disability Payments',
         'value_field': 'ssi_disability',
         'frequency_field': 'ssi_disability_frequency',
-        'headline': 'Does {} earn a Social Security benefits for blindness or disability?',
+        'headline': 'Does {} earn Social Security benefits for blindness or disability?',
         'next_page': {
             'name': 'parent_social_security_income',
             'has_child_id': True
@@ -163,7 +163,7 @@ child_earnings_workflow = {
     }
 }
 
-adult_earnings_workflow = {
+adult_earnings_meta_data = {
     'adult_salary': {
         'name': 'adult_salary',
         'order': 1,
