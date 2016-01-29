@@ -12,7 +12,7 @@ from eat.forms import *
 from eat.util import *
 from . import *
 import operator
-
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 def register(request):
@@ -176,7 +176,7 @@ def add_child(request):
 def edit_child(request, child_id):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
-    child = Child.children.get(pk=child_id, application=app[0])
+    child = get_object_or_404(Child, pk=child_id, application=app[0])
     if request.method == 'POST':
         form = AddChildForm(request.POST, instance=child)
         if form.is_valid():
@@ -192,7 +192,7 @@ def edit_child(request, child_id):
 def delete_child(request, child_id):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
-    child = Child.children.get(pk=child_id, application=app[0])
+    child = get_object_or_404(Child, pk=child_id, application=app[0])
     if request.method == 'POST':
         child.delete()
         return redirect('children')
@@ -211,7 +211,7 @@ def child_earnings(request, child_id):
         if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('children'):
             direct = True
 
-    child = Child.children.get(pk=child_id, application=app[0])
+    child = get_object_or_404(Child, pk=child_id, application=app[0])
 
     if meta['type'] == 'earnings':
         if request.method == 'POST':
@@ -291,7 +291,7 @@ def add_adult(request):
 def edit_adult(request, adult_id):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
-    adult = Adult.adults.get(pk=adult_id, application=app[0])
+    adult = get_object_or_404(Adult, pk=adult_id, application=app[0])
 
     if request.method == 'POST':
         form = AddAdultForm(request.POST, instance=adult)
@@ -308,7 +308,7 @@ def edit_adult(request, adult_id):
 def delete_adult(request, adult_id):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
-    adult = Adult.adults.get(pk=adult_id, application=app[0])
+    adult = get_object_or_404(Adult, pk=adult_id, application=app[0])
     if request.method == 'POST':
         adult.delete()
         return redirect('adults')
@@ -326,7 +326,7 @@ def adult_earnings(request, adult_id):
         if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('adults'):
             direct = True
     app = AppUtil.get_by_user(user=request.user)
-    adult = Adult.adults.get(pk=adult_id, application=app[0])
+    adult = get_object_or_404(Adult, pk=adult_id, application=app[0])
 
     if meta['type'] == 'earnings':
         if request.method == 'POST':
