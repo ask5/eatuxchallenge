@@ -1,0 +1,19 @@
+{% extends "eat/user/application/base.html" %}
+{% load staticfiles %}
+{% block application_content_main %}
+    <p class="well-large">
+        <h2>{{ heading }}</h2>
+    </p>
+    <div>
+        {% if previous_page.has_adult_id %}
+            <a class="btn btn-default" role="button" href="{% url previous_page.name adult_id=adult_id %}">Back</a>
+        {% else %}
+            <a class="btn btn-default" role="button" href="{% url previous_page.name %}">Back</a>
+        {% endif %}
+        <a class="btn btn-default pull-right" role="button" href="{% url next_page.name adult_id=adult_id %}">Yes</a>
+        <a class="btn btn-default pull-right" role="button" href="{% url skip_to_page.name adult_id=adult_id %}">No</a>
+    </div>
+{% endblock %}
+
+{% block application_content_right %}
+{% endblock %}

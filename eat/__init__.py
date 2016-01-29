@@ -1,6 +1,7 @@
 child_earnings_meta_data = {
     'child_salary': {
         'name': 'child_salary',
+        'type': 'earnings',
         'order': 1,
         'title': 'Salary',
         'value_field': 'salary',
@@ -19,6 +20,7 @@ child_earnings_meta_data = {
     },
     'child_social_security_income': {
         'name': 'child_social_security_income',
+        'type': 'earnings',
         'order': 2,
         'title': 'Disability Payments',
         'value_field': 'ssi_disability',
@@ -37,6 +39,7 @@ child_earnings_meta_data = {
     },
     'parent_social_security_income': {
         'name': 'parent_social_security_income',
+        'type': 'earnings',
         'order': 3,
         'title': 'Survivor’s Benefits',
         'value_field': 'ssi_parent_disability',
@@ -55,6 +58,7 @@ child_earnings_meta_data = {
     },
     'spending_money_income': {
         'name': 'spending_money_income',
+        'type': 'earnings',
         'order': 4,
         'title': 'Spending Money',
         'value_field': 'spending_money_income',
@@ -73,6 +77,7 @@ child_earnings_meta_data = {
     },
     'other_friend_income': {
         'name': 'other_friend_income',
+        'type': 'earnings',
         'order': 5,
         'title': 'Other income from friends',
         'value_field': 'other_friend_income',
@@ -91,6 +96,7 @@ child_earnings_meta_data = {
     },
     'pension_income': {
         'name': 'pension_income',
+        'type': 'earnings',
         'order': 6,
         'title': 'Pension funds',
         'value_field': 'pension_income',
@@ -109,6 +115,7 @@ child_earnings_meta_data = {
     },
     'annuity_income': {
         'name': 'annuity_income',
+        'type': 'earnings',
         'order': 7,
         'title': 'Annuity',
         'value_field': 'annuity_income',
@@ -127,6 +134,7 @@ child_earnings_meta_data = {
     },
     'trust_income': {
         'name': 'trust_income',
+        'type': 'earnings',
         'order': 8,
         'title': 'Private Trust income',
         'value_field': 'trust_income',
@@ -145,6 +153,7 @@ child_earnings_meta_data = {
     },
     'other_income': {
         'name': 'other_income',
+        'type': 'earnings',
         'order': 9,
         'title': 'Any other income',
         'value_field': 'other_income',
@@ -166,6 +175,7 @@ child_earnings_meta_data = {
 adult_earnings_meta_data = {
     'adult_salary': {
         'name': 'adult_salary',
+        'type': 'earnings',
         'order': 1,
         'title': 'Salary',
         'value_field': 'salary',
@@ -184,6 +194,7 @@ adult_earnings_meta_data = {
     },
     'adult_wages': {
         'name': 'adult_wages',
+        'type': 'earnings',
         'order': 2,
         'title': 'Wages',
         'value_field': 'wages',
@@ -202,6 +213,7 @@ adult_earnings_meta_data = {
     },
     'cash_bonuses': {
         'name': 'cash_bonuses',
+        'type': 'earnings',
         'order': 3,
         'title': 'Cash Bonuses',
         'value_field': 'cash_bonuses',
@@ -220,6 +232,7 @@ adult_earnings_meta_data = {
     },
     'self_employment_income': {
         'name': 'self_employment_income',
+        'type': 'earnings',
         'order': 4,
         'title': 'Self employment',
         'value_field': 'self_employment_income',
@@ -238,6 +251,7 @@ adult_earnings_meta_data = {
     },
     'strike_benefits': {
         'name': 'strike_benefits',
+        'type': 'earnings',
         'order': 5,
         'title': 'Strike Benefits',
         'value_field': 'strike_benefits',
@@ -256,6 +270,7 @@ adult_earnings_meta_data = {
     },
     'unemployment_insurance': {
         'name': 'unemployment_insurance',
+        'type': 'earnings',
         'order': 6,
         'title': 'Unemployment Insurance',
         'value_field': 'unemployment_insurance',
@@ -274,13 +289,14 @@ adult_earnings_meta_data = {
     },
     'other_earned_income': {
         'name': 'other_earned_income',
+        'type': 'earnings',
         'order': 7,
         'title': 'Other earned income',
         'value_field': 'other_earned_income',
         'frequency_field': 'other_earned_income_frequency',
         'headline': 'Does {} have other earned income?',
         'next_page': {
-            'name': 'military_basic_pay',
+            'name': 'are_you_in_military',
             'has_adult_id': True
         },
         'previous_page': {
@@ -290,9 +306,31 @@ adult_earnings_meta_data = {
         'help_tip': "this is Other earned income page",
         'template': 'eat/user/application/adult/earnings.html'
     },
+    'are_you_in_military': {
+        'name': 'are_you_in_military',
+        'type': 'military_confirmation',
+        'order': 8,
+        'title': 'Are you in Military?',
+        'headline': 'Is {} in the Military, or have ever been in Military?',
+        'next_page': {
+            'name': 'military_basic_pay',
+            'has_adult_id': True
+        },
+        'previous_page': {
+            'name': 'other_earned_income',
+            'has_adult_id': True
+        },
+        'skip_to_page': {
+            'name': 'general_assistance',
+            'has_adult_id': True
+        },
+        'help_tip': "are_you_in_military",
+        'template': 'eat/user/application/adult/are_you_in_military.html'
+    },
     'military_basic_pay': {
         'name': 'military_basic_pay',
-        'order': 8,
+        'type': 'earnings',
+        'order': 9,
         'title': 'Military basic pay',
         'value_field': 'military_basic_pay',
         'frequency_field': 'military_basic_pay_frequency',
@@ -310,7 +348,8 @@ adult_earnings_meta_data = {
     },
     'military_bonus': {
         'name': 'military_bonus',
-        'order': 9,
+        'type': 'earnings',
+        'order': 10,
         'title': 'Military bonus',
         'value_field': 'military_bonus',
         'frequency_field': 'military_bonus_frequency',
@@ -328,7 +367,8 @@ adult_earnings_meta_data = {
     },
     'military_allowance': {
         'name': 'military_allowance',
-        'order': 10,
+        'type': 'earnings',
+        'order': 11,
         'title': 'Military allowance',
         'value_field': 'military_allowance',
         'frequency_field': 'military_allowance_frequency',
@@ -346,7 +386,8 @@ adult_earnings_meta_data = {
     },
     'military_food': {
         'name': 'military_food',
-        'order': 11,
+        'type': 'earnings',
+        'order': 12,
         'title': 'Military food',
         'value_field': 'military_food',
         'frequency_field': 'military_food_frequency',
@@ -364,7 +405,8 @@ adult_earnings_meta_data = {
     },
     'military_clothing': {
         'name': 'military_clothing',
-        'order': 12,
+        'type': 'earnings',
+        'order': 13,
         'title': 'Military clothing',
         'value_field': 'military_clothing',
         'frequency_field': 'military_clothing_frequency',
@@ -382,7 +424,8 @@ adult_earnings_meta_data = {
     },
     'general_assistance': {
         'name': 'general_assistance',
-        'order': 13,
+        'type': 'earnings',
+        'order': 14,
         'title': 'General Assistance',
         'value_field': 'general_assistance',
         'frequency_field': 'general_assistance_frequency',
@@ -400,7 +443,8 @@ adult_earnings_meta_data = {
     },
     'other_assistance': {
         'name': 'other_assistance',
-        'order': 14,
+        'type': 'earnings',
+        'order': 15,
         'title': 'Other Assistance',
         'value_field': 'other_assistance',
         'frequency_field': 'other_assistance_frequency',
@@ -418,7 +462,8 @@ adult_earnings_meta_data = {
     },
     'alimony': {
         'name': 'alimony',
-        'order': 15,
+        'type': 'earnings',
+        'order': 16,
         'title': 'Alimony',
         'value_field': 'alimony',
         'frequency_field': 'alimony_frequency',
@@ -436,7 +481,8 @@ adult_earnings_meta_data = {
     },
     'child_support': {
         'name': 'child_support',
-        'order': 16,
+        'type': 'earnings',
+        'order': 17,
         'title': 'Child Support',
         'value_field': 'child_support',
         'frequency_field': 'child_support_frequency',
@@ -454,7 +500,8 @@ adult_earnings_meta_data = {
     },
     'social_security_income': {
         'name': 'social_security_income',
-        'order': 17,
+        'type': 'earnings',
+        'order': 18,
         'title': 'Social Security Income',
         'value_field': 'social_security_income',
         'frequency_field': 'social_security_income_frequency',
@@ -472,7 +519,8 @@ adult_earnings_meta_data = {
     },
     'railroad_income': {
         'name': 'railroad_income',
-        'order': 18,
+        'type': 'earnings',
+        'order': 19,
         'title': 'Railroad Income',
         'value_field': 'railroad_income',
         'frequency_field': 'railroad_income_frequency',
@@ -490,7 +538,8 @@ adult_earnings_meta_data = {
     },
     'pension_income': {
         'name': 'pension_income',
-        'order': 19,
+        'type': 'earnings',
+        'order': 20,
         'title': 'Pension Income',
         'value_field': 'pension_income',
         'frequency_field': 'pension_income_frequency',
@@ -508,7 +557,8 @@ adult_earnings_meta_data = {
     },
     'annuity_income': {
         'name': 'annuity_income',
-        'order': 20,
+        'type': 'earnings',
+        'order': 21,
         'title': 'Annuity Income',
         'value_field': 'annuity_income',
         'frequency_field': 'annuity_income_frequency',
@@ -526,7 +576,8 @@ adult_earnings_meta_data = {
     },
     'survivors_benefits': {
         'name': 'survivors_benefits',
-        'order': 21,
+        'type': 'earnings',
+        'order': 22,
         'title': 'Survivors Benefits',
         'value_field': 'survivors_benefits',
         'frequency_field': 'survivors_benefits_frequency',
@@ -544,7 +595,8 @@ adult_earnings_meta_data = {
     },
     'ssi_disability_benefits': {
         'name': 'ssi_disability_benefits',
-        'order': 22,
+        'type': 'earnings',
+        'order': 23,
         'title': 'Disability Benefits From Supplemental Security Income',
         'value_field': 'ssi_disability_benefits',
         'frequency_field': 'ssi_disability_benefits_frequency',
@@ -562,7 +614,8 @@ adult_earnings_meta_data = {
     },
     'private_disability_benefits': {
         'name': 'private_disability_benefits',
-        'order': 23,
+        'type': 'earnings',
+        'order': 24,
         'title': 'Private Disability Benefits',
         'value_field': 'private_disability_benefits',
         'frequency_field': 'private_disability_benefits_frequency',
@@ -580,7 +633,8 @@ adult_earnings_meta_data = {
     },
     'black_lung_benefits': {
         'name': 'black_lung_benefits',
-        'order': 24,
+        'type': 'earnings',
+        'order': 25,
         'title': 'Black Lung Benefits',
         'value_field': 'black_lung_benefits',
         'frequency_field': 'black_lung_benefits_frequency',
@@ -598,7 +652,8 @@ adult_earnings_meta_data = {
     },
     'workers_compensation': {
         'name': 'workers_compensation',
-        'order': 25,
+        'type': 'earnings',
+        'order': 26,
         'title': 'Workers Compensation',
         'value_field': 'workers_compensation',
         'frequency_field': 'workers_compensation_frequency',
@@ -616,7 +671,8 @@ adult_earnings_meta_data = {
     },
     'veterans_benefits': {
         'name': 'veterans_benefits',
-        'order': 26,
+        'type': 'earnings',
+        'order': 27,
         'title': 'Veterans Benefits',
         'value_field': 'veterans_benefits',
         'frequency_field': 'veterans_benefits_frequency',
@@ -634,7 +690,8 @@ adult_earnings_meta_data = {
     },
     'other_retirement_sources': {
         'name': 'other_retirement_sources',
-        'order': 27,
+        'type': 'earnings',
+        'order': 28,
         'title': 'Other Retirement Sources',
         'value_field': 'other_retirement_sources',
         'frequency_field': 'other_retirement_sources_frequency',
@@ -652,7 +709,8 @@ adult_earnings_meta_data = {
     },
     'interest_income': {
         'name': 'interest_income',
-        'order': 28,
+        'type': 'earnings',
+        'order': 29,
         'title': 'Other Retirement Sources',
         'value_field': 'interest_income',
         'frequency_field': 'interest_income_frequency',
@@ -670,7 +728,8 @@ adult_earnings_meta_data = {
     },
     'dividends': {
         'name': 'dividends',
-        'order': 29,
+        'type': 'earnings',
+        'order': 30,
         'title': 'Dividends',
         'value_field': 'dividends',
         'frequency_field': 'dividends_frequency',
@@ -688,7 +747,8 @@ adult_earnings_meta_data = {
     },
     'trust_or_estates_income': {
         'name': 'trust_or_estates_income',
-        'order': 30,
+        'type': 'earnings',
+        'order': 31,
         'title': 'Trust or Estates Income',
         'value_field': 'trust_or_estates_income',
         'frequency_field': 'trust_or_estates_income_frequency',
@@ -706,7 +766,8 @@ adult_earnings_meta_data = {
     },
     'rental_income': {
         'name': 'rental_income',
-        'order': 31,
+        'type': 'earnings',
+        'order': 32,
         'title': 'Rental Income',
         'value_field': 'rental_income',
         'frequency_field': 'rental_income_frequency',
@@ -724,7 +785,8 @@ adult_earnings_meta_data = {
     },
     'royalties_income': {
         'name': 'royalties_income',
-        'order': 32,
+        'type': 'earnings',
+        'order': 33,
         'title': 'Royalties Income',
         'value_field': 'royalties_income',
         'frequency_field': 'royalties_income_frequency',
@@ -742,7 +804,8 @@ adult_earnings_meta_data = {
     },
     'prize_winnings': {
         'name': 'prize_winnings',
-        'order': 33,
+        'type': 'earnings',
+        'order': 34,
         'title': 'Prize Winnings',
         'value_field': 'prize_winnings',
         'frequency_field': 'prize_winnings_frequency',
@@ -760,7 +823,8 @@ adult_earnings_meta_data = {
     },
     'savings_withdrawn': {
         'name': 'savings_withdrawn',
-        'order': 34,
+        'type': 'earnings',
+        'order': 35,
         'title': 'Savings Withdrawn',
         'value_field': 'savings_withdrawn',
         'frequency_field': 'savings_withdrawn_frequency',
@@ -778,7 +842,8 @@ adult_earnings_meta_data = {
     },
     'cash_gifts': {
         'name': 'cash_gifts',
-        'order': 35,
+        'type': 'earnings',
+        'order': 36,
         'title': 'Cash Gifts',
         'value_field': 'cash_gifts',
         'frequency_field': 'cash_gifts_frequency',
@@ -794,5 +859,4 @@ adult_earnings_meta_data = {
         'help_tip': "this is cash gifts page",
         'template': 'eat/user/application/adult/earnings.html'
     }
-
 }

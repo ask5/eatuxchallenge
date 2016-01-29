@@ -59,6 +59,7 @@ urlpatterns = [
     url(r'^app/adults/(?P<adult_id>[0-9]+)/strike_benefits', views.adult_earnings, name='strike_benefits'),
     url(r'^app/adults/(?P<adult_id>[0-9]+)/unemployment_insurance', views.adult_earnings, name='unemployment_insurance'),
     url(r'^app/adults/(?P<adult_id>[0-9]+)/other_earned_income', views.adult_earnings, name='other_earned_income'),
+    url(r'^app/adults/(?P<adult_id>[0-9]+)/are_you_in_military', views.adult_earnings, name='are_you_in_military'),
     url(r'^app/adults/(?P<adult_id>[0-9]+)/military_basic_pay', views.adult_earnings, name='military_basic_pay'),
     url(r'^app/adults/(?P<adult_id>[0-9]+)/military_bonus', views.adult_earnings, name='military_bonus'),
     url(r'^app/adults/(?P<adult_id>[0-9]+)/military_allowance', views.adult_earnings, name='military_allowance'),

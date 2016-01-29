@@ -4,7 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 from eat.models import Application, Child, Adult
 from django.forms import ModelForm
 
-
 class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
@@ -69,12 +68,29 @@ class AddChildForm(ModelForm):
         }
 
 
+class AddAdultForm(ModelForm):
+
+    class Meta:
+        model = Adult
+        fields = ['first_name', 'middle_name', 'last_name']
+        exclude = ("application",)
+
+
 class EarningsForm(forms.Form):
+
     PAY_FREQUENCIES = (
         (1, 'Weekly'),
         (2, 'Bi-Weekly'),
         (3, '2x Month'),
         (4, 'Monthly')
     )
-    earning = forms.DecimalField(decimal_places=2, label="Earnings $")
-    frequency = forms.ChoiceField(choices=PAY_FREQUENCIES, label="How often?", widget=forms.RadioSelect)
+
+    earning = forms.IntegerField(label="Earnings $", required=False)
+    frequency = forms.ChoiceField(choices=PAY_FREQUENCIES, label="How often?", widget=forms.RadioSelect, required=False)
+
+    def clean_frequency(self):
+        if self.cleaned_data['earning'] is not None and self.cleaned_data['earning'] != 0\
+                and self.cleaned_data['frequency'] == "":
+            raise forms.ValidationError("Please specify how often you get the earnings")
+        else:
+            return self.cleaned_data['frequency']

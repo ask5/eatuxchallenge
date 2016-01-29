@@ -27,7 +27,6 @@ YES_NO = (
 
 
 class Application(models.Model):
-
     applications = models.Manager()
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     status = models.IntegerField(choices=APPLICATION_STATUSES, verbose_name='Application Status',
@@ -105,9 +104,7 @@ class Child(models.Model):
     is_student = models.BooleanField(verbose_name='Is Student')
     foster_child = models.BooleanField(verbose_name='Is Foster Child')
     hmr = models.BooleanField(verbose_name='Homeless, Migrant, Runaway')
-    salary = models.DecimalField(verbose_name='Salary',
-                                 decimal_places=2,
-                                 max_digits=8,
+    salary = models.IntegerField(verbose_name='Salary',
                                  help_text='Salary or Wages from a Job',
                                  blank=True,
                                  null=True)
@@ -116,9 +113,7 @@ class Child(models.Model):
                                            help_text='How often are earnings received',
                                            blank=True,
                                            null=True)
-    ssi_disability = models.DecimalField(verbose_name='Social Security Income for Disability',
-                                         decimal_places=2,
-                                         max_digits=8,
+    ssi_disability = models.IntegerField(verbose_name='Social Security Income for Disability',
                                          help_text='Social security income for childs blindness or disability',
                                          blank=True,
                                          null=True)
@@ -127,9 +122,7 @@ class Child(models.Model):
                                                    help_text='How often are earnings received',
                                                    blank=True,
                                                    null=True)
-    ssi_parent_disability = models.DecimalField(verbose_name='Social Security Income for Parents Disability',
-                                                decimal_places=2,
-                                                max_digits=8,
+    ssi_parent_disability = models.IntegerField(verbose_name='Social Security Income for Parents Disability',
                                                 help_text='Social security income received if parent is disabled/retired/deceased',
                                                 blank=True,
                                                 null=True)
@@ -138,9 +131,7 @@ class Child(models.Model):
                                                           help_text='How often are earnings received',
                                                           blank=True,
                                                           null=True)
-    spending_money_income = models.DecimalField(verbose_name='Spending Money Income',
-                                                decimal_places=2,
-                                                max_digits=8,
+    spending_money_income = models.IntegerField(verbose_name='Spending Money Income',
                                                 help_text='Spending money received from a person outside the household',
                                                 blank=True,
                                                 null=True)
@@ -149,9 +140,7 @@ class Child(models.Model):
                                                           help_text='How often are earnings received',
                                                           blank=True,
                                                           null=True)
-    other_friend_income = models.DecimalField(verbose_name='Other Regular Income From Friends',
-                                              decimal_places=2,
-                                              max_digits=8,
+    other_friend_income = models.IntegerField(verbose_name='Other Regular Income From Friends',
                                               blank=True,
                                               null=True)
     other_friend_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -159,9 +148,7 @@ class Child(models.Model):
                                                         help_text='How often are earnings received',
                                                         blank=True,
                                                         null=True)
-    pension_income = models.DecimalField(verbose_name='Pension Income',
-                                         decimal_places=2,
-                                         max_digits=8,
+    pension_income = models.IntegerField(verbose_name='Pension Income',
                                          blank=True,
                                          null=True)
     pension_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -169,9 +156,7 @@ class Child(models.Model):
                                                    help_text='How often are earnings received',
                                                    blank=True,
                                                    null=True)
-    annuity_income = models.DecimalField(verbose_name='Annuity Income',
-                                         decimal_places=2,
-                                         max_digits=8,
+    annuity_income = models.IntegerField(verbose_name='Annuity Income',
                                          blank=True,
                                          null=True)
     annuity_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -179,9 +164,7 @@ class Child(models.Model):
                                                    help_text='How often are earnings received',
                                                    blank=True,
                                                    null=True)
-    trust_income = models.DecimalField(verbose_name='Trust Income',
-                                       decimal_places=2,
-                                       max_digits=8,
+    trust_income = models.IntegerField(verbose_name='Trust Income',
                                        blank=True,
                                        null=True)
     trust_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -189,9 +172,7 @@ class Child(models.Model):
                                                  help_text='How often are earnings received',
                                                  blank=True,
                                                  null=True)
-    other_income = models.DecimalField(verbose_name='Other Income',
-                                       decimal_places=2,
-                                       max_digits=8,
+    other_income = models.IntegerField(verbose_name='Other Income',
                                        help_text='Any other income',
                                        blank=True,
                                        null=True)
@@ -211,9 +192,7 @@ class Adult(models.Model):
                                    verbose_name='Middle Name', blank=True, null=True)
     last_name = models.CharField(max_length=25,
                                  verbose_name='Last Name')
-    salary = models.DecimalField(verbose_name='Salary',
-                                 decimal_places=2,
-                                 max_digits=8,
+    salary = models.IntegerField(verbose_name='Salary',
                                  help_text='Salary from a Job',
                                  blank=True,
                                  null=True)
@@ -222,9 +201,7 @@ class Adult(models.Model):
                                            help_text='How often are earnings received',
                                            blank=True,
                                            null=True)
-    wages = models.DecimalField(verbose_name='Wages',
-                                decimal_places=2,
-                                max_digits=8,
+    wages = models.IntegerField(verbose_name='Wages',
                                 help_text='Wages from a Job',
                                 blank=True,
                                 null=True)
@@ -233,9 +210,7 @@ class Adult(models.Model):
                                           help_text='How often are earnings received',
                                           blank=True,
                                           null=True)
-    cash_bonuses = models.DecimalField(verbose_name='Cash Bonuses',
-                                       decimal_places=2,
-                                       max_digits=8,
+    cash_bonuses = models.IntegerField(verbose_name='Cash Bonuses',
                                        blank=True,
                                        null=True)
     cash_bonuses_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -243,9 +218,7 @@ class Adult(models.Model):
                                                  help_text='How often are earnings received',
                                                  blank=True,
                                                  null=True)
-    self_employment_income = models.DecimalField(verbose_name='Self Employment Income',
-                                                 decimal_places=2,
-                                                 max_digits=8,
+    self_employment_income = models.IntegerField(verbose_name='Self Employment Income',
                                                  help_text='Net income from self employment',
                                                  blank=True,
                                                  null=True)
@@ -254,9 +227,7 @@ class Adult(models.Model):
                                                            help_text='How often are earnings received',
                                                            blank=True,
                                                            null=True)
-    strike_benefits = models.DecimalField(verbose_name='Strike Benefits',
-                                          decimal_places=2,
-                                          max_digits=8,
+    strike_benefits = models.IntegerField(verbose_name='Strike Benefits',
                                           blank=True,
                                           null=True)
     strike_benefits_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -264,9 +235,7 @@ class Adult(models.Model):
                                                     help_text='How often are earnings received',
                                                     blank=True,
                                                     null=True)
-    unemployment_insurance = models.DecimalField(verbose_name='Unemployment Insurance',
-                                                 decimal_places=2,
-                                                 max_digits=8,
+    unemployment_insurance = models.IntegerField(verbose_name='Unemployment Insurance',
                                                  blank=True,
                                                  null=True)
     unemployment_insurance_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -274,9 +243,7 @@ class Adult(models.Model):
                                                            help_text='How often are earnings received',
                                                            blank=True,
                                                            null=True)
-    other_earned_income = models.DecimalField(verbose_name='Other Earned Income',
-                                              decimal_places=2,
-                                              max_digits=8,
+    other_earned_income = models.IntegerField(verbose_name='Other Earned Income',
                                               blank=True,
                                               null=True)
     other_earned_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -284,9 +251,7 @@ class Adult(models.Model):
                                                         help_text='How often are earnings received',
                                                         blank=True,
                                                         null=True)
-    military_basic_pay = models.DecimalField(verbose_name='Military Basic Pay',
-                                             decimal_places=2,
-                                             max_digits=8,
+    military_basic_pay = models.IntegerField(verbose_name='Military Basic Pay',
                                              blank=True,
                                              null=True)
     military_basic_pay_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -294,19 +259,15 @@ class Adult(models.Model):
                                                        help_text='How often are earnings received',
                                                        blank=True,
                                                        null=True)
-    military_bonus = models.DecimalField(verbose_name='Military Bonus',
-                                         decimal_places=2,
-                                         max_digits=8,
+    military_bonus = models.IntegerField(verbose_name='Military Bonus',
                                          blank=True,
                                          null=True)
     military_bonus_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                       verbose_name='Frequency Of Military Bonus',
-                                                       help_text='How often are earnings received',
-                                                       blank=True,
-                                                       null=True)
-    military_allowance = models.DecimalField(verbose_name='Military Allowance',
-                                             decimal_places=2,
-                                             max_digits=8,
+                                                   verbose_name='Frequency Of Military Bonus',
+                                                   help_text='How often are earnings received',
+                                                   blank=True,
+                                                   null=True)
+    military_allowance = models.IntegerField(verbose_name='Military Allowance',
                                              blank=True,
                                              null=True)
     military_allowance_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -314,9 +275,7 @@ class Adult(models.Model):
                                                        help_text='How often are earnings received',
                                                        blank=True,
                                                        null=True)
-    military_food = models.DecimalField(verbose_name='Military Food',
-                                        decimal_places=2,
-                                        max_digits=8,
+    military_food = models.IntegerField(verbose_name='Military Food',
                                         blank=True,
                                         null=True)
     military_food_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -324,9 +283,7 @@ class Adult(models.Model):
                                                   help_text='How often are earnings received',
                                                   blank=True,
                                                   null=True)
-    military_clothing = models.DecimalField(verbose_name='Military Clothing',
-                                            decimal_places=2,
-                                            max_digits=8,
+    military_clothing = models.IntegerField(verbose_name='Military Clothing',
                                             blank=True,
                                             null=True)
     military_clothing_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -334,9 +291,7 @@ class Adult(models.Model):
                                                       help_text='How often are earnings received',
                                                       blank=True,
                                                       null=True)
-    general_assistance = models.DecimalField(verbose_name='General Assistance',
-                                             decimal_places=2,
-                                             max_digits=8,
+    general_assistance = models.IntegerField(verbose_name='General Assistance',
                                              help_text='General assistance excluding SNAP or TANF',
                                              blank=True,
                                              null=True)
@@ -345,9 +300,7 @@ class Adult(models.Model):
                                                        help_text='How often are earnings received',
                                                        blank=True,
                                                        null=True)
-    other_assistance = models.DecimalField(verbose_name='Other Public Assistance',
-                                           decimal_places=2,
-                                           max_digits=8,
+    other_assistance = models.IntegerField(verbose_name='Other Public Assistance',
                                            blank=True,
                                            null=True)
     other_assistance_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -355,9 +308,7 @@ class Adult(models.Model):
                                                      help_text='How often are earnings received',
                                                      blank=True,
                                                      null=True)
-    alimony = models.DecimalField(verbose_name='Alimony Received',
-                                  decimal_places=2,
-                                  max_digits=8,
+    alimony = models.IntegerField(verbose_name='Alimony Received',
                                   blank=True,
                                   null=True)
     alimony_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -365,9 +316,7 @@ class Adult(models.Model):
                                             help_text='How often are earnings received',
                                             blank=True,
                                             null=True)
-    child_support = models.DecimalField(verbose_name='Child Support',
-                                        decimal_places=2,
-                                        max_digits=8,
+    child_support = models.IntegerField(verbose_name='Child Support',
                                         blank=True,
                                         null=True)
     child_support_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -375,9 +324,7 @@ class Adult(models.Model):
                                                   help_text='How often are earnings received',
                                                   blank=True,
                                                   null=True)
-    social_security_income = models.DecimalField(verbose_name='Social Security Income',
-                                                 decimal_places=2,
-                                                 max_digits=8,
+    social_security_income = models.IntegerField(verbose_name='Social Security Income',
                                                  blank=True,
                                                  null=True)
     social_security_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -385,9 +332,7 @@ class Adult(models.Model):
                                                            help_text='How often are earnings received',
                                                            blank=True,
                                                            null=True)
-    railroad_income = models.DecimalField(verbose_name='Railroad Retirement Income',
-                                          decimal_places=2,
-                                          max_digits=8,
+    railroad_income = models.IntegerField(verbose_name='Railroad Retirement Income',
                                           blank=True,
                                           null=True)
     railroad_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -395,9 +340,7 @@ class Adult(models.Model):
                                                     help_text='How often are earnings received',
                                                     blank=True,
                                                     null=True)
-    pension_income = models.DecimalField(verbose_name='Pension Income',
-                                         decimal_places=2,
-                                         max_digits=8,
+    pension_income = models.IntegerField(verbose_name='Pension Income',
                                          blank=True,
                                          null=True)
     pension_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -405,9 +348,7 @@ class Adult(models.Model):
                                                    help_text='How often are earnings received',
                                                    blank=True,
                                                    null=True)
-    annuity_income = models.DecimalField(verbose_name='Annuity Income',
-                                         decimal_places=2,
-                                         max_digits=8,
+    annuity_income = models.IntegerField(verbose_name='Annuity Income',
                                          blank=True,
                                          null=True)
     annuity_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -415,9 +356,7 @@ class Adult(models.Model):
                                                    help_text='How often are earnings received',
                                                    blank=True,
                                                    null=True)
-    survivors_benefits = models.DecimalField(verbose_name='Survivor''s Benefits',
-                                             decimal_places=2,
-                                             max_digits=8,
+    survivors_benefits = models.IntegerField(verbose_name='Survivor''s Benefits',
                                              blank=True,
                                              null=True)
     survivors_benefits_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -425,9 +364,7 @@ class Adult(models.Model):
                                                        help_text='How often are earnings received',
                                                        blank=True,
                                                        null=True)
-    ssi_disability_benefits = models.DecimalField(verbose_name='Disability Benefits From Supplemental Security Income',
-                                                  decimal_places=2,
-                                                  max_digits=8,
+    ssi_disability_benefits = models.IntegerField(verbose_name='Disability Benefits From Supplemental Security Income',
                                                   blank=True,
                                                   null=True)
     ssi_disability_benefits_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -435,9 +372,7 @@ class Adult(models.Model):
                                                             help_text='How often are earnings received',
                                                             blank=True,
                                                             null=True)
-    private_disability_benefits = models.DecimalField(verbose_name='Private Disability Benefits',
-                                                      decimal_places=2,
-                                                      max_digits=8,
+    private_disability_benefits = models.IntegerField(verbose_name='Private Disability Benefits',
                                                       blank=True,
                                                       null=True)
     private_disability_benefits_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -445,9 +380,7 @@ class Adult(models.Model):
                                                                 help_text='How often are earnings received',
                                                                 blank=True,
                                                                 null=True)
-    black_lung_benefits = models.DecimalField(verbose_name='Black Lung Benefits',
-                                              decimal_places=2,
-                                              max_digits=8,
+    black_lung_benefits = models.IntegerField(verbose_name='Black Lung Benefits',
                                               blank=True,
                                               null=True)
     black_lung_benefits_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -455,9 +388,7 @@ class Adult(models.Model):
                                                         help_text='How often are earnings received',
                                                         blank=True,
                                                         null=True)
-    workers_compensation = models.DecimalField(verbose_name='Worker''s Compensation',
-                                               decimal_places=2,
-                                               max_digits=8,
+    workers_compensation = models.IntegerField(verbose_name='Worker''s Compensation',
                                                blank=True,
                                                null=True)
     workers_compensation_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -465,9 +396,7 @@ class Adult(models.Model):
                                                          help_text='How often are earnings received',
                                                          blank=True,
                                                          null=True)
-    veterans_benefits = models.DecimalField(verbose_name='Veteran''s Benefits',
-                                            decimal_places=2,
-                                            max_digits=8,
+    veterans_benefits = models.IntegerField(verbose_name='Veteran''s Benefits',
                                             blank=True,
                                             null=True)
     veterans_benefits_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -475,9 +404,7 @@ class Adult(models.Model):
                                                       help_text='How often are earnings received',
                                                       blank=True,
                                                       null=True)
-    other_retirement_sources = models.DecimalField(verbose_name='Other Retirement Sources',
-                                                   decimal_places=2,
-                                                   max_digits=8,
+    other_retirement_sources = models.IntegerField(verbose_name='Other Retirement Sources',
                                                    blank=True,
                                                    null=True)
     other_retirement_sources_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -485,9 +412,7 @@ class Adult(models.Model):
                                                              help_text='How often are earnings received',
                                                              blank=True,
                                                              null=True)
-    interest_income = models.DecimalField(verbose_name='Interest Income',
-                                          decimal_places=2,
-                                          max_digits=8,
+    interest_income = models.IntegerField(verbose_name='Interest Income',
                                           blank=True,
                                           null=True)
     interest_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -495,9 +420,7 @@ class Adult(models.Model):
                                                     help_text='How often are earnings received',
                                                     blank=True,
                                                     null=True)
-    dividends = models.DecimalField(verbose_name='Dividends',
-                                    decimal_places=2,
-                                    max_digits=8,
+    dividends = models.IntegerField(verbose_name='Dividends',
                                     blank=True,
                                     null=True)
     dividends_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -505,9 +428,7 @@ class Adult(models.Model):
                                               help_text='How often are earnings received',
                                               blank=True,
                                               null=True)
-    trust_or_estates_income = models.DecimalField(verbose_name='Trust Or Estates Income',
-                                                  decimal_places=2,
-                                                  max_digits=8,
+    trust_or_estates_income = models.IntegerField(verbose_name='Trust Or Estates Income',
                                                   blank=True,
                                                   null=True)
     trust_or_estates_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -515,9 +436,7 @@ class Adult(models.Model):
                                                             help_text='How often are earnings received',
                                                             blank=True,
                                                             null=True)
-    rental_income = models.DecimalField(verbose_name='Rental Income',
-                                        decimal_places=2,
-                                        max_digits=8,
+    rental_income = models.IntegerField(verbose_name='Rental Income',
                                         blank=True,
                                         null=True)
     rental_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -525,9 +444,7 @@ class Adult(models.Model):
                                                   help_text='How often are earnings received',
                                                   blank=True,
                                                   null=True)
-    royalties_income = models.DecimalField(verbose_name='Royalties Income',
-                                           decimal_places=2,
-                                           max_digits=8,
+    royalties_income = models.IntegerField(verbose_name='Royalties Income',
                                            blank=True,
                                            null=True)
     royalties_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -535,19 +452,15 @@ class Adult(models.Model):
                                                      help_text='How often are earnings received',
                                                      blank=True,
                                                      null=True)
-    prize_winnings = models.DecimalField(verbose_name='Prize Winnings',
-                                        decimal_places=2,
-                                        max_digits=8,
-                                        blank=True,
-                                        null=True)
+    prize_winnings = models.IntegerField(verbose_name='Prize Winnings',
+                                         blank=True,
+                                         null=True)
     prize_winnings_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                  verbose_name='Frequency Of Prize Winnings',
-                                                  help_text='How often are earnings received',
-                                                  blank=True,
-                                                  null=True)
-    savings_withdrawn = models.DecimalField(verbose_name='Savings Withdrawn',
-                                            decimal_places=2,
-                                            max_digits=8,
+                                                   verbose_name='Frequency Of Prize Winnings',
+                                                   help_text='How often are earnings received',
+                                                   blank=True,
+                                                   null=True)
+    savings_withdrawn = models.IntegerField(verbose_name='Savings Withdrawn',
                                             blank=True,
                                             null=True)
     savings_withdrawn_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
@@ -555,9 +468,7 @@ class Adult(models.Model):
                                                       help_text='How often are earnings received',
                                                       blank=True,
                                                       null=True)
-    cash_gifts = models.DecimalField(verbose_name='Cash Gifts from Friends',
-                                     decimal_places=2,
-                                     max_digits=8,
+    cash_gifts = models.IntegerField(verbose_name='Cash Gifts from Friends',
                                      blank=True,
                                      null=True)
     cash_gifts_frequency = models.IntegerField(choices=PAY_FREQUENCIES,

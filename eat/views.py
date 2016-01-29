@@ -144,7 +144,8 @@ def children(request):
 
     earnings_categories = list()
     for k, v in child_earnings_meta_data.items():
-        earnings_categories.append(v)
+        if v['type'] == 'earnings':
+            earnings_categories.append(v)
 
     args['earnings_categories'] = sorted(earnings_categories, key=lambda category: (category['order']))
     AppUtil.set_last_page(app[0], request.get_full_path())
@@ -212,31 +213,36 @@ def child_earnings(request, child_id):
 
     child = Child.children.get(pk=child_id, application=app[0])
 
-    if request.method == 'POST':
-        form = EarningsForm(request.POST)
-        if form.is_valid():
-            earning = form.cleaned_data['earning']
-            frequency = form.cleaned_data['frequency']
-            is_direct = request.POST.get('is_direct')
-            setattr(child, meta['value_field'], earning)
-            setattr(child, meta['frequency_field'], frequency)
-            child.save()
-            if is_direct == 'True':
-                return redirect('children')
-            else:
-                next_page = meta['next_page']
-                if next_page['has_child_id']:
-                    return redirect(next_page['name'], child_id=child.id)
-                else:
-                    return redirect(next_page['name'])
-    else:
-        data = {
-            'earning': getattr(child, meta['value_field']),
-            'frequency': getattr(child, meta['frequency_field'])
-        }
-        form = EarningsForm(initial=data)
+    if meta['type'] == 'earnings':
+        if request.method == 'POST':
+            form = EarningsForm(request.POST)
+            if form.is_valid():
+                earning = form.cleaned_data['earning']
+                frequency = form.cleaned_data['frequency']
+                is_direct = request.POST.get('is_direct')
+                if earning == "" or earning is None or earning == 0:
+                    earning = 0
+                    frequency = None
+                setattr(child, meta['value_field'], earning)
+                setattr(child, meta['frequency_field'], frequency)
 
-    args['form'] = form
+                child.save()
+                if is_direct == 'True':
+                    return redirect('children')
+                else:
+                    next_page = meta['next_page']
+                    if next_page['has_child_id']:
+                        return redirect(next_page['name'], child_id=child.id)
+                    else:
+                        return redirect(next_page['name'])
+        else:
+            data = {
+                'earning': getattr(child, meta['value_field']),
+                'frequency': getattr(child, meta['frequency_field'])
+            }
+            form = EarningsForm(initial=data)
+        args['form'] = form
+
     args['direct'] = direct
     args['child_id'] = child.id
     args['previous_page'] = meta['previous_page']
@@ -255,7 +261,8 @@ def adults(request):
     args['adults'] = a
     earnings_categories = list()
     for k, v in adult_earnings_meta_data.items():
-        earnings_categories.append(v)
+        if v['type'] == 'earnings':
+            earnings_categories.append(v)
 
     args['earnings_categories'] = sorted(earnings_categories, key=lambda category: (category['order']))
 
@@ -321,35 +328,42 @@ def adult_earnings(request, adult_id):
     app = AppUtil.get_by_user(user=request.user)
     adult = Adult.adults.get(pk=adult_id, application=app[0])
 
-    if request.method == 'POST':
-        form = EarningsForm(request.POST)
-        if form.is_valid():
-            earning = form.cleaned_data['earning']
-            frequency = form.cleaned_data['frequency']
-            setattr(adult, meta['value_field'], earning)
-            setattr(adult, meta['frequency_field'], frequency)
-            adult.save()
+    if meta['type'] == 'earnings':
+        if request.method == 'POST':
+            form = EarningsForm(request.POST)
+            if form.is_valid():
+                earning = form.cleaned_data['earning']
+                frequency = form.cleaned_data['frequency']
+                if earning == "" or earning is None or earning == 0:
+                    earning = 0
+                    frequency = None
+                setattr(adult, meta['value_field'], earning)
+                setattr(adult, meta['frequency_field'], frequency)
+                adult.save()
 
-            is_direct = request.POST.get('is_direct')
-            if is_direct == 'True':
-                return redirect('adults')
-            else:
-                next_page = meta['next_page']
-                if next_page['has_adult_id']:
-                    return redirect(next_page['name'], adult_id=adult.id)
+                is_direct = request.POST.get('is_direct')
+                if is_direct == 'True':
+                    return redirect('adults')
                 else:
-                    return redirect(next_page['name'])
-    else:
-        data = {
-            'earning': getattr(adult, meta['value_field']),
-            'frequency': getattr(adult, meta['frequency_field'])
-        }
-        form = EarningsForm(initial=data)
+                    next_page = meta['next_page']
+                    if next_page['has_adult_id']:
+                        return redirect(next_page['name'], adult_id=adult.id)
+                    else:
+                        return redirect(next_page['name'])
+        else:
+            data = {
+                'earning': getattr(adult, meta['value_field']),
+                'frequency': getattr(adult, meta['frequency_field'])
+            }
+            form = EarningsForm(initial=data)
+        args['form'] = form
 
-    args['form'] = form
     args['direct'] = direct
     args['adult_id'] = adult.id
+    args['next_page'] = meta['next_page']
     args['previous_page'] = meta['previous_page']
+    if 'skip_to_page' in meta:
+        args['skip_to_page'] = meta['skip_to_page']
     args['heading'] = meta['headline'].format(adult.first_name)
     args['tip'] = meta['help_tip']
     AppUtil.set_last_page(adult.application, request.get_full_path())
