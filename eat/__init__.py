@@ -18,9 +18,17 @@ child_earning_sources = [
 ]
 
 child_earnings_meta_data = {
+    'children': {
+        'name': 'children',
+        'type': 'summary',
+        'source': 1,
+        'order': 1,
+        'title': 'Children',
+        'template': 'eat/user/application/child/children.html'
+    },
     'child_salary': {
         'name': 'child_salary',
-        'type': 'earnings',
+        'type': 'form',
         'source': 1,
         'order': 1,
         'title': 'Salary',
@@ -40,7 +48,7 @@ child_earnings_meta_data = {
     },
     'child_social_security_income': {
         'name': 'child_social_security_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 2,
         'order': 1,
         'title': 'Disability Payments',
@@ -60,7 +68,7 @@ child_earnings_meta_data = {
     },
     'parent_social_security_income': {
         'name': 'parent_social_security_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 2,
         'order': 2,
         'title': 'Survivor’s Benefits',
@@ -80,7 +88,7 @@ child_earnings_meta_data = {
     },
     'spending_money_income': {
         'name': 'spending_money_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 3,
         'order': 1,
         'title': 'Spending Money',
@@ -100,7 +108,7 @@ child_earnings_meta_data = {
     },
     'other_friend_income': {
         'name': 'other_friend_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 3,
         'order': 2,
         'title': 'Other income from friends',
@@ -120,7 +128,7 @@ child_earnings_meta_data = {
     },
     'pension_income': {
         'name': 'pension_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 1,
         'title': 'Pension funds',
@@ -140,7 +148,7 @@ child_earnings_meta_data = {
     },
     'annuity_income': {
         'name': 'annuity_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 2,
         'title': 'Annuity',
@@ -160,7 +168,7 @@ child_earnings_meta_data = {
     },
     'trust_income': {
         'name': 'trust_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 3,
         'title': 'Private Trust income',
@@ -180,7 +188,7 @@ child_earnings_meta_data = {
     },
     'other_income': {
         'name': 'other_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 4,
         'title': 'Any other income',
@@ -222,9 +230,17 @@ adult_earning_sources = [
 
 
 adult_earnings_meta_data = {
+    'adults': {
+        'name': 'adults',
+        'type': 'summary',
+        'source': 1,
+        'order': 1,
+        'title': 'Adults',
+        'template': 'eat/user/application/adult/adults.html'
+    },
     'adult_salary': {
         'name': 'adult_salary',
-        'type': 'earnings',
+        'type': 'form',
         'source': 1,
         'order': 1,
         'title': 'Salary',
@@ -244,7 +260,7 @@ adult_earnings_meta_data = {
     },
     'adult_wages': {
         'name': 'adult_wages',
-        'type': 'earnings',
+        'type': 'form',
         'source': 1,
         'order': 2,
         'title': 'Wages',
@@ -264,7 +280,7 @@ adult_earnings_meta_data = {
     },
     'cash_bonuses': {
         'name': 'cash_bonuses',
-        'type': 'earnings',
+        'type': 'form',
         'source': 1,
         'order': 3,
         'title': 'Cash Bonuses',
@@ -284,7 +300,7 @@ adult_earnings_meta_data = {
     },
     'self_employment_income': {
         'name': 'self_employment_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 1,
         'order': 4,
         'title': 'Self employment',
@@ -304,7 +320,7 @@ adult_earnings_meta_data = {
     },
     'strike_benefits': {
         'name': 'strike_benefits',
-        'type': 'earnings',
+        'type': 'form',
         'source': 1,
         'order': 5,
         'title': 'Strike Benefits',
@@ -324,7 +340,7 @@ adult_earnings_meta_data = {
     },
     'other_earned_income': {
         'name': 'other_earned_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 1,
         'order': 6,
         'title': 'Other earned income',
@@ -345,7 +361,7 @@ adult_earnings_meta_data = {
     'unemployment_insurance': {
         'name': 'unemployment_insurance',
         'source': 2,
-        'type': 'earnings',
+        'type': 'form',
         'order': 1,
         'title': 'Unemployment Insurance',
         'value_field': 'unemployment_insurance',
@@ -364,7 +380,7 @@ adult_earnings_meta_data = {
     },
     'general_assistance': {
         'name': 'general_assistance',
-        'type': 'earnings',
+        'type': 'form',
         'source': 2,
         'order': 2,
         'title': 'General Assistance',
@@ -385,7 +401,7 @@ adult_earnings_meta_data = {
     'other_assistance': {
         'name': 'other_assistance',
         'source': 2,
-        'type': 'earnings',
+        'type': 'form',
         'order': 3,
         'title': 'Other Assistance',
         'value_field': 'other_assistance',
@@ -405,7 +421,7 @@ adult_earnings_meta_data = {
     'alimony': {
         'name': 'alimony',
         'source': 2,
-        'type': 'earnings',
+        'type': 'form',
         'order': 4,
         'title': 'Alimony',
         'value_field': 'alimony',
@@ -424,7 +440,7 @@ adult_earnings_meta_data = {
     },
     'child_support': {
         'name': 'child_support',
-        'type': 'earnings',
+        'type': 'form',
         'source': 2,
         'order': 5,
         'title': 'Child Support',
@@ -444,7 +460,7 @@ adult_earnings_meta_data = {
     },
     'ssi_disability_benefits': {
         'name': 'ssi_disability_benefits',
-        'type': 'earnings',
+        'type': 'form',
         'source': 2,
         'order': 6,
         'title': 'Disability Benefits From Supplemental Security Income',
@@ -464,7 +480,7 @@ adult_earnings_meta_data = {
     },
     'workers_compensation': {
         'name': 'workers_compensation',
-        'type': 'earnings',
+        'type': 'form',
         'source': 2,
         'order': 7,
         'title': 'Workers Compensation',
@@ -484,7 +500,7 @@ adult_earnings_meta_data = {
     },
     'veterans_benefits': {
         'name': 'veterans_benefits',
-        'type': 'earnings',
+        'type': 'form',
         'order': 8,
         'source': 2,
         'title': 'Veterans Benefits',
@@ -525,7 +541,7 @@ adult_earnings_meta_data = {
     },
     'military_basic_pay': {
         'name': 'military_basic_pay',
-        'type': 'earnings',
+        'type': 'form',
         'source': 3,
         'order': 1,
         'title': 'Military basic pay',
@@ -545,7 +561,7 @@ adult_earnings_meta_data = {
     },
     'military_bonus': {
         'name': 'military_bonus',
-        'type': 'earnings',
+        'type': 'form',
         'source': 3,
         'order': 2,
         'title': 'Military bonus',
@@ -565,7 +581,7 @@ adult_earnings_meta_data = {
     },
     'military_allowance': {
         'name': 'military_allowance',
-        'type': 'earnings',
+        'type': 'form',
         'source': 3,
         'order': 3,
         'title': 'Military allowance',
@@ -585,7 +601,7 @@ adult_earnings_meta_data = {
     },
     'military_food': {
         'name': 'military_food',
-        'type': 'earnings',
+        'type': 'form',
         'source': 3,
         'order': 4,
         'title': 'Military food',
@@ -605,7 +621,7 @@ adult_earnings_meta_data = {
     },
     'military_clothing': {
         'name': 'military_clothing',
-        'type': 'earnings',
+        'type': 'form',
         'source': 3,
         'order': 5,
         'title': 'Military clothing',
@@ -625,7 +641,7 @@ adult_earnings_meta_data = {
     },
     'social_security_income': {
         'name': 'social_security_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 1,
         'title': 'Social Security Income',
@@ -645,7 +661,7 @@ adult_earnings_meta_data = {
     },
     'railroad_income': {
         'name': 'railroad_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 2,
         'title': 'Railroad Income',
@@ -665,7 +681,7 @@ adult_earnings_meta_data = {
     },
     'pension_income': {
         'name': 'pension_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 3,
         'title': 'Pension Income',
@@ -685,7 +701,7 @@ adult_earnings_meta_data = {
     },
     'annuity_income': {
         'name': 'annuity_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 4,
         'title': 'Annuity Income',
@@ -705,7 +721,7 @@ adult_earnings_meta_data = {
     },
     'survivors_benefits': {
         'name': 'survivors_benefits',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 5,
         'title': 'Survivors Benefits',
@@ -725,7 +741,7 @@ adult_earnings_meta_data = {
     },
     'private_disability_benefits': {
         'name': 'private_disability_benefits',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 6,
         'title': 'Private Disability Benefits',
@@ -745,7 +761,7 @@ adult_earnings_meta_data = {
     },
     'black_lung_benefits': {
         'name': 'black_lung_benefits',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 7,
         'title': 'Black Lung Benefits',
@@ -765,7 +781,7 @@ adult_earnings_meta_data = {
     },
     'other_retirement_sources': {
         'name': 'other_retirement_sources',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 28,
         'title': 'Other Retirement Sources',
@@ -785,7 +801,7 @@ adult_earnings_meta_data = {
     },
     'interest_income': {
         'name': 'interest_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 29,
         'title': 'Interest Income',
@@ -805,7 +821,7 @@ adult_earnings_meta_data = {
     },
     'dividends': {
         'name': 'dividends',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 30,
         'title': 'Dividends',
@@ -825,7 +841,7 @@ adult_earnings_meta_data = {
     },
     'trust_or_estates_income': {
         'name': 'trust_or_estates_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 31,
         'title': 'Trust or Estates Income',
@@ -845,7 +861,7 @@ adult_earnings_meta_data = {
     },
     'rental_income': {
         'name': 'rental_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 32,
         'title': 'Rental Income',
@@ -865,7 +881,7 @@ adult_earnings_meta_data = {
     },
     'royalties_income': {
         'name': 'royalties_income',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 33,
         'title': 'Royalties Income',
@@ -885,7 +901,7 @@ adult_earnings_meta_data = {
     },
     'prize_winnings': {
         'name': 'prize_winnings',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 34,
         'title': 'Prize Winnings',
@@ -905,7 +921,7 @@ adult_earnings_meta_data = {
     },
     'savings_withdrawn': {
         'name': 'savings_withdrawn',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 35,
         'title': 'Savings Withdrawn',
@@ -925,7 +941,7 @@ adult_earnings_meta_data = {
     },
     'cash_gifts': {
         'name': 'cash_gifts',
-        'type': 'earnings',
+        'type': 'form',
         'source': 4,
         'order': 36,
         'title': 'Cash Gifts',

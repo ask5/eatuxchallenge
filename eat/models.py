@@ -473,8 +473,9 @@ class Adult(models.Model):
                                                blank=True, null=True)
 
 
-class EarningSources(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Earning Source')
+class EarningSource(models.Model):
+    sources = models.Manager()
+    name = models.CharField(max_length=50, verbose_name='Source')
 
     def __str__(self):
         return self.name
@@ -488,7 +489,7 @@ class EarningsPage(models.Model):
     page_arg = models.CharField(max_length=50,
                                 choices=(('child_id', 'child_id',), ('adult_id', 'adult_id',)),
                                 verbose_name='Page Argument', blank=True, null=True)
-    source = models.ForeignKey(EarningSources, blank=True, null=True)
+    source = models.ForeignKey(EarningSource, blank=True, null=True)
     page_type = models.CharField(max_length=20,
                                  choices=(('form', 'Form',),
                                           ('confirmation', 'Confirmation',),
@@ -505,7 +506,10 @@ class EarningsPage(models.Model):
     def __str__(self):
         return self.name
 
+
 class EarningsWorkFlow(models.Model):
     page = models.ForeignKey(EarningsPage, related_name='current_page')
-    skip_to_page = models.ForeignKey(EarningsPage, blank=True, null=True, related_name='skip_page')
+    next = models.ForeignKey(EarningsPage, blank=True, null=True, related_name='next_page')
+    previous = models.ForeignKey(EarningsPage, blank=True, null=True, related_name='previous_page')
+    skip_to = models.ForeignKey(EarningsPage, blank=True, null=True, related_name='skip_page')
     active = models.BooleanField(verbose_name='Active', default=True)

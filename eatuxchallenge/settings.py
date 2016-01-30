@@ -124,6 +124,3 @@ STATIC_URL = '/static/'
 LOGIN_URL = '/eat/login'
 LOGOUT_URL = '/eat/logout'
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'eat/templatetags'),
-)

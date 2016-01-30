@@ -1,9 +1,9 @@
 from django.contrib import admin
-from eat.models import EarningSources, EarningsPage, EarningsWorkFlow
+from eat.models import EarningSource, EarningsPage, EarningsWorkFlow
 
 
 # Register your models here.
-class EarningSourcesAdmin(admin.ModelAdmin):
+class EarningSourceAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     fields = ('name',)
 
@@ -13,9 +13,9 @@ class EarningsPageAdmin(admin.ModelAdmin):
 
 
 class EarningsWorkFlowAdmin(admin.ModelAdmin):
-    list_display = ('id', 'active', 'page', 'skip_to_page')
+    list_display = ('id', 'active', 'page', 'previous', 'next', 'skip_to')
 
 
-admin.site.register(EarningSources, EarningSourcesAdmin)
+admin.site.register(EarningSource, EarningSourceAdmin)
 admin.site.register(EarningsPage, EarningsPageAdmin)
 admin.site.register(EarningsWorkFlow, EarningsWorkFlowAdmin)
