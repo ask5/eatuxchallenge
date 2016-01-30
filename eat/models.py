@@ -83,11 +83,7 @@ class Application(models.Model):
     is_black = models.NullBooleanField(verbose_name='Is Black or African American')
     is_hawaiian = models.NullBooleanField(verbose_name='Is Hawaiian or Other Pacific Islander')
     is_white = models.NullBooleanField(verbose_name='Is White')
-
-    def set_status(self, status):
-        if self.status < status:
-            self.status = status
-            self.save()
+    active = models.BooleanField(verbose_name='Active', default=True)
 
 
 class Child(models.Model):
@@ -484,25 +480,32 @@ class EarningSources(models.Model):
         return self.name
 
 
-class EarningsPagesMetaData(models.Model):
+class EarningsPage(models.Model):
     entity = models.CharField(max_length=50,
-                              choices=(('child', 'Child',), ('adult', 'Adult',)),
-                              verbose_name='Entity')
-    source = models.ForeignKey(EarningSources)
+                                choices=(('child', 'Child',), ('adult', 'Adult',)),
+                                verbose_name='Entity')
+    name = models.CharField(max_length=50, verbose_name='Page name')
+    page_arg = models.CharField(max_length=50,
+                                choices=(('child_id', 'child_id',), ('adult_id', 'adult_id',)),
+                                verbose_name='Page Argument', blank=True, null=True)
+    source = models.ForeignKey(EarningSources, blank=True, null=True)
     page_type = models.CharField(max_length=20,
-                                 choices=(('form', 'Form',), ('confirmation', 'Confirmation',)),
+                                 choices=(('form', 'Form',),
+                                          ('confirmation', 'Confirmation',),
+                                          ('summary', 'Summary',)),
                                  verbose_name='Page Type', default='form')
-    name = models.CharField(max_length=50, verbose_name='Earnings page name')
     value_field = models.CharField(max_length=50, verbose_name='Value Field', blank=True, null=True)
     frequency_field = models.CharField(max_length=50, verbose_name='Frequency Field', blank=True, null=True)
-    display_order = models.IntegerField(verbose_name='Display Order')
     display_title = models.CharField(max_length=50, verbose_name='Display Title', blank=True, null=True)
     headline = models.CharField(max_length=500, verbose_name='Page Headline', blank=True, null=True)
-    next_page_name = models.CharField(max_length=50, verbose_name='Next page name')
-    next_page_needs_id = models.BooleanField(verbose_name='Next page needs Entity ID', default=True)
-    previous_page_name = models.CharField(max_length=50, verbose_name='Previous page name')
-    previous_page_needs_id = models.BooleanField(verbose_name='Previous page needs Entity ID', default=True)
-    skip_to_page_name = models.CharField(max_length=50, verbose_name='Skip page name', blank=True, null=True)
-    skip_to_page_needs_id = models.BooleanField(verbose_name='Skip page needs Entity ID', default=True)
     help_tip = models.CharField(max_length=1000, verbose_name='Help tip', blank=True, null=True)
-    template = models.CharField(max_length=500, verbose_name='Template path', default='eat/user/application/child/earnings.html')
+    template = models.CharField(max_length=500, verbose_name='Template path',
+                                default='eat/user/application/child/earnings.html')
+
+    def __str__(self):
+        return self.name
+
+class EarningsWorkFlow(models.Model):
+    page = models.ForeignKey(EarningsPage, related_name='current_page')
+    skip_to_page = models.ForeignKey(EarningsPage, blank=True, null=True, related_name='skip_page')
+    active = models.BooleanField(verbose_name='Active', default=True)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from eat.models import EarningSources, EarningsPagesMetaData
+from eat.models import EarningSources, EarningsPage, EarningsWorkFlow
 
 
 # Register your models here.
@@ -8,10 +8,14 @@ class EarningSourcesAdmin(admin.ModelAdmin):
     fields = ('name',)
 
 
-class EarningsPagesMetaDataAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'entity', 'page_type', 'value_field', 'frequency_field', 'next_page_name',
-                    'previous_page_name')
+class EarningsPageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'entity', 'page_type', 'value_field', 'frequency_field')
+
+
+class EarningsWorkFlowAdmin(admin.ModelAdmin):
+    list_display = ('id', 'active', 'page', 'skip_to_page')
 
 
 admin.site.register(EarningSources, EarningSourcesAdmin)
-admin.site.register(EarningsPagesMetaData, EarningsPagesMetaDataAdmin)
+admin.site.register(EarningsPage, EarningsPageAdmin)
+admin.site.register(EarningsWorkFlow, EarningsWorkFlowAdmin)
