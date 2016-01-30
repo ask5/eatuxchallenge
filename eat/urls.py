@@ -16,8 +16,10 @@ urlpatterns = [
     url(r'^logout', views.logout_view, name="logout"),
     url(r'^app/welcome', views.application_welcome_back, name='application_welcome_back'),
     url(r'^app/create', views.application_create, name='application_create'),
+    url(r'^app/review', views.review, name='review'),
     url(r'^app/assistance_program/$', views.assistance_program, name='assistance_program'),
     url(r'^app/assistance_program/confirm', views.confirm_assistance_program, name='confirm_assistance_program'),
+
 
     # Child URLs
     url(r'^app/children/$', views.children, name='children'),

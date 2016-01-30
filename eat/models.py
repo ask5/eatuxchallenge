@@ -474,5 +474,35 @@ class Adult(models.Model):
     cash_gifts_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
                                                verbose_name='Frequency Of Cash Gifts',
                                                help_text='How often are earnings received',
-                                               blank=True,
-                                               null=True)
+                                               blank=True, null=True)
+
+
+class EarningSources(models.Model):
+    name = models.CharField(max_length=50, verbose_name='Earning Source')
+
+    def __str__(self):
+        return self.name
+
+
+class EarningsPagesMetaData(models.Model):
+    entity = models.CharField(max_length=50,
+                              choices=(('child', 'Child',), ('adult', 'Adult',)),
+                              verbose_name='Entity')
+    source = models.ForeignKey(EarningSources)
+    page_type = models.CharField(max_length=20,
+                                 choices=(('form', 'Form',), ('confirmation', 'Confirmation',)),
+                                 verbose_name='Page Type', default='form')
+    name = models.CharField(max_length=50, verbose_name='Earnings page name')
+    value_field = models.CharField(max_length=50, verbose_name='Value Field', blank=True, null=True)
+    frequency_field = models.CharField(max_length=50, verbose_name='Frequency Field', blank=True, null=True)
+    display_order = models.IntegerField(verbose_name='Display Order')
+    display_title = models.CharField(max_length=50, verbose_name='Display Title', blank=True, null=True)
+    headline = models.CharField(max_length=500, verbose_name='Page Headline', blank=True, null=True)
+    next_page_name = models.CharField(max_length=50, verbose_name='Next page name')
+    next_page_needs_id = models.BooleanField(verbose_name='Next page needs Entity ID', default=True)
+    previous_page_name = models.CharField(max_length=50, verbose_name='Previous page name')
+    previous_page_needs_id = models.BooleanField(verbose_name='Previous page needs Entity ID', default=True)
+    skip_to_page_name = models.CharField(max_length=50, verbose_name='Skip page name', blank=True, null=True)
+    skip_to_page_needs_id = models.BooleanField(verbose_name='Skip page needs Entity ID', default=True)
+    help_tip = models.CharField(max_length=1000, verbose_name='Help tip', blank=True, null=True)
+    template = models.CharField(max_length=500, verbose_name='Template path', default='eat/user/application/child/earnings.html')

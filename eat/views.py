@@ -135,19 +135,27 @@ def confirm_assistance_program(request):
 
 
 @login_required
+def review(request):
+    args = dict()
+    app = AppUtil.get_by_user(user=request.user)
+    _children = Child.children.filter(application=app[0])
+    _adults = Adult.adults.filter(application=app[0])
+    args['app'] = app[0]
+    args['children'] = _children
+    args['adults'] = _adults
+    args['child_earnings_categories'] = AppUtil.get_child_earning_categories()
+    args['adult_earnings_categories'] = AppUtil.get_adult_earning_categories()
+    return render(request, "eat/user/application/review.html", args)
+
+
+@login_required
 def children(request):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
-    c = Child.children.filter(application=app[0])
+    _children = Child.children.filter(application=app[0])
     args['app'] = app[0]
-    args['children'] = c
-
-    earnings_categories = list()
-    for k, v in child_earnings_meta_data.items():
-        if v['type'] == 'earnings':
-            earnings_categories.append(v)
-
-    args['earnings_categories'] = sorted(earnings_categories, key=lambda category: (category['order']))
+    args['children'] = _children
+    args['earnings_categories'] = AppUtil.get_child_earning_categories()
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/child/children.html", args)
 
@@ -256,16 +264,10 @@ def child_earnings(request, child_id):
 def adults(request):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
-    a = Adult.adults.filter(application=app[0])
+    _adults = Adult.adults.filter(application=app[0])
     args['app'] = app[0]
-    args['adults'] = a
-    earnings_categories = list()
-    for k, v in adult_earnings_meta_data.items():
-        if v['type'] == 'earnings':
-            earnings_categories.append(v)
-
-    args['earnings_categories'] = sorted(earnings_categories, key=lambda category: (category['order']))
-
+    args['adults'] = _adults
+    args['earnings_categories'] = AppUtil.get_adult_earning_categories()
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/adult/adults.html", args)
 

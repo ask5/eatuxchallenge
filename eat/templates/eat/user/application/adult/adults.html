@@ -31,11 +31,7 @@
                                         <td>
                                             <a class="btn btn-default pull-right"
                                                href="{% url category.name  adult_id=adult.id %}">
-                                                {% if adult|getvalue:category.value_field %}
-                                                    Change
-                                                {% else %}
-                                                    Add
-                                                {% endif %}
+                                                Change
                                             </a>
                                         </td>
                                     </tr>

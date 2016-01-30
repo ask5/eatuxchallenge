@@ -3,30 +3,24 @@
 {% load humanize %}
 {% load tags %}
 {% block application_content_main %}
-    <p class="lead">
-        Household Members who are infants, children and students up to and including grade 12.
-    </p>
-    <a class="btn btn-primary" role="button" href="{% url 'eat.views.add_child' %}">Add new Child</a>
+
+    <h3>Household Children</h3>
     {% if children %}
         <table class="table">
             {% for child in children %}
                 <tr class="info">
-                    <th>{{ child.first_name }} {{ child.last_name }}</th>
+                    <th>{{ child.first_name }} {{ child.middle_name }} {{ child.last_name }}</th>
                     <td>
                         {% if child.is_student %} Student, {% endif %}
                         {% if child.foster_child %} Foster Child, {% endif %}
                         {% if child.hmr %} Homeless, Migrant, Runaway {% endif %}
                     </td>
-                    <td>
-                        <a class="btn btn-primary" role="button" href="{% url 'eat.views.edit_child' child_id=child.id %}">Edit</a>
-                        <a class="btn btn-danger" role="button" href="{% url 'eat.views.delete_child' child_id=child.id %}">Delete</a>
-                    </td>
                 </tr>
                 {% if not child.application.assistance_program %}
                     <tr>
-                        <td colspan="3">
+                        <td colspan="2">
                             <table class="table table-condensed">
-                                {% for category in earnings_categories %}
+                                {% for category in child_earnings_categories %}
                                     <tr>
                                         <th>{{ category.title }}</th>
                                         <td>
@@ -38,7 +32,7 @@
                                         <td>
                                             <a class="btn btn-default pull-right"
                                                href="{% url category.name  child_id=child.id %}">
-                                                Change
+                                                Revisit
                                             </a>
                                         </td>
                                     </tr>
@@ -49,21 +43,41 @@
                 {% endif %}
             {% endfor %}
         </table>
-        <a class="btn btn-primary" role="button" href="{% url 'eat.views.add_child' %}">Add new Child</a>
     {% endif %}
-    <div>
-        <a class="btn btn-default pull-left" role="button"
-           href="{% url 'eat.views.assistance_program' %}">Back</a>
+    <h3>Household Adults</h3>
+    {% if adults %}
+        <table class="table">
+            {% for adult in adults %}
+                <tr>
+                    <th>{{ adult.first_name }} {{ adult.middle_name }} {{ adult.last_name }}</th>
+                </tr>
+                <tr>
+                    <td>
+                        <table class="table table-condensed">
+                            {% for category in earnings_categories %}
+                                <tr>
+                                    <th>{{ category.title }}</th>
+                                    <td>
+                                        {% if adult|getvalue:category.value_field %}
+                                            $ {{ adult|getvalue:category.value_field|intcomma }} -
+                                            {{ adult|getvalue:category.frequency_field|frequencylabel }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary pull-right"
+                                           href="{% url category.name  adult_id=adult.id %}">
+                                            Revisit
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
 
-        <a class="btn btn-default pull-right" role="button"
-                {% if not app.assistance_program %}
-           href="{% url 'eat.views.adults' %}"
-                {% else %}
-           href="{% url 'eat.views.contact' %}"
-                {% endif %}
-        >Continue
-        </a>
-    </div>
 {% endblock %}
 
 {% block application_content_right %}
