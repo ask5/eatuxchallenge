@@ -143,8 +143,9 @@ def review(request):
     args['app'] = app[0]
     args['children'] = _children
     args['adults'] = _adults
-    args['child_earnings_categories'] = AppUtil.get_child_earning_categories()
-    args['adult_earnings_categories'] = AppUtil.get_adult_earning_categories()
+
+    args['child_earnings_pages'] = AppUtil.get_earnings_pages('children')
+    args['adult_earnings_pages'] = AppUtil.get_earnings_pages('adults')
     return render(request, "eat/user/application/review.html", args)
 
 
@@ -155,13 +156,7 @@ def children(request):
     _children = Child.children.filter(application=app[0])
     args['app'] = app[0]
     args['children'] = _children
-    p = EarningsPage.objects.get(name='children')
-    e = []
-    while p.next.name != 'children':
-        if p.next.page_type == 'form':
-            e.append(p.next)
-        p = p.next
-    args['earnings_pages'] = e
+    args['earnings_pages'] = AppUtil.get_earnings_pages('children')
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/child/children.html", args)
 
@@ -223,7 +218,8 @@ def child_earnings(request, child_id):
     page = EarningsPage.objects.get(entity='child', name=page_name)
 
     if request.META.get('HTTP_REFERER'):
-        if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('children'):
+        if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('children') or \
+                        parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('review'):
             direct = True
 
     child = get_object_or_404(Child, pk=child_id, application=app[0])
@@ -275,13 +271,7 @@ def adults(request):
     args['app'] = app[0]
     args['adults'] = _adults
     AppUtil.set_last_page(app[0], request.get_full_path())
-    p = EarningsPage.objects.get(name='adults')
-    e = []
-    while p.next.name != 'adults':
-        if p.next.page_type == 'form':
-            e.append(p.next)
-        p = p.next
-    args['earnings_pages'] = e
+    args['earnings_pages'] = AppUtil.get_earnings_pages('adults')
     return render(request, "eat/user/application/adult/adults.html", args)
 
 
@@ -339,8 +329,8 @@ def adult_earnings(request, adult_id):
     page_name = resolve(request.path_info).url_name
     page = EarningsPage.objects.get(entity='adult', name=page_name)
 
-    if request.META.get('HTTP_REFERER'):
-        if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('children'):
+    if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('children') or \
+                    parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('review'):
             direct = True
 
     adult = get_object_or_404(Adult, pk=adult_id, application=app[0])

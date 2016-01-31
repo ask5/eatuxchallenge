@@ -19,12 +19,12 @@ class AppUtil(object):
         app.last_page = path
         app.save()
 
-
     @classmethod
-    def get_adult_earning_categories(self):
-        earnings_categories = list()
-        for k, v in adult_earnings_meta_data.items():
-            if v['type'] == 'earnings':
-                earnings_categories.append(v)
-        return sorted(earnings_categories, key=lambda category: (category['order']))
-
+    def get_earnings_pages(self, entity):
+        p = EarningsPage.objects.get(name=entity)
+        e = []
+        while p.next.name != entity:
+            if p.next.page_type == 'form':
+                e.append(p.next)
+            p = p.next
+        return e
