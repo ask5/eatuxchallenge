@@ -14,7 +14,7 @@
             <div>
                 <input type="hidden" name="is_direct" value="{{ direct }}">
                 {% if not direct %}
-                    {% if previous_page.has_child_id %}
+                    {% if previous_page.page_arg %}
                         <a class="btn btn-default" role="button" href="{% url previous_page.name child_id=child_id %}">Back</a>
                     {% else %}
                         <a class="btn btn-default" role="button" href="{% url previous_page.name %}">Back</a>

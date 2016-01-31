@@ -155,7 +155,7 @@ def children(request):
     _children = Child.children.filter(application=app[0])
     args['app'] = app[0]
     args['children'] = _children
-    args['earnings_categories'] = AppUtil.get_child_earning_categories()
+    args['earnings_pages'] = EarningsPage.objects.filter(entity='child', page_type='form')
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/child/children.html", args)
 
@@ -213,15 +213,21 @@ def child_earnings(request, child_id):
     args = dict()
     direct = False
     app = AppUtil.get_by_user(user=request.user)
-    url = resolve(request.path_info).url_name
-    meta = child_earnings_meta_data[url]
+    page_name = resolve(request.path_info).url_name
+    page = EarningsPage.objects.get(entity='child', name=page_name)
+
+    if not EarningsWorkFlow.objects.filter(page=page).exists():
+        return redirect('children')
+
+    workflow = EarningsWorkFlow.objects.get(page=page)
+
     if request.META.get('HTTP_REFERER'):
         if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('children'):
             direct = True
 
     child = get_object_or_404(Child, pk=child_id, application=app[0])
 
-    if meta['type'] == 'earnings':
+    if page.page_type == 'form':
         if request.method == 'POST':
             form = EarningsForm(request.POST)
             if form.is_valid():
@@ -231,33 +237,31 @@ def child_earnings(request, child_id):
                 if earning == "" or earning is None or earning == 0:
                     earning = 0
                     frequency = None
-                setattr(child, meta['value_field'], earning)
-                setattr(child, meta['frequency_field'], frequency)
-
+                setattr(child, page.value_field, earning)
+                setattr(child, page.frequency_field, frequency)
                 child.save()
                 if is_direct == 'True':
                     return redirect('children')
                 else:
-                    next_page = meta['next_page']
-                    if next_page['has_child_id']:
-                        return redirect(next_page['name'], child_id=child.id)
+                    if workflow.next.page_arg:
+                        return redirect(workflow.next.name, child_id=child.id)
                     else:
-                        return redirect(next_page['name'])
+                        return redirect(workflow.next.name)
         else:
             data = {
-                'earning': getattr(child, meta['value_field']),
-                'frequency': getattr(child, meta['frequency_field'])
+                'earning': getattr(child, page.value_field),
+                'frequency': getattr(child, page.frequency_field)
             }
             form = EarningsForm(initial=data)
         args['form'] = form
 
     args['direct'] = direct
     args['child_id'] = child.id
-    args['previous_page'] = meta['previous_page']
-    args['heading'] = meta['headline'].format(child.first_name)
-    args['tip'] = meta['help_tip']
+    args['previous_page'] = workflow.previous
+    args['heading'] = page.headline.format(child.first_name)
+    args['tip'] = page.help_tip
     AppUtil.set_last_page(child.application, request.get_full_path())
-    return render(request, meta['template'], args)
+    return render(request, page.template, args)
 
 
 @login_required
@@ -322,54 +326,56 @@ def delete_adult(request, adult_id):
 def adult_earnings(request, adult_id):
     args = dict()
     direct = False
-    url = resolve(request.path_info).url_name
-    meta = adult_earnings_meta_data[url]
-    if request.META.get('HTTP_REFERER'):
-        if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('adults'):
-            direct = True
     app = AppUtil.get_by_user(user=request.user)
+    page_name = resolve(request.path_info).url_name
+    page = EarningsPage.objects.get(entity='adult', name=page_name)
+
+    if not EarningsWorkFlow.objects.filter(page=page).exists():
+        return redirect('adults')
+
+    workflow = EarningsWorkFlow.objects.get(page=page)
+
+    if request.META.get('HTTP_REFERER'):
+        if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('children'):
+            direct = True
+
     adult = get_object_or_404(Adult, pk=adult_id, application=app[0])
 
-    if meta['type'] == 'earnings':
+    if page.page_type == 'form':
         if request.method == 'POST':
             form = EarningsForm(request.POST)
             if form.is_valid():
                 earning = form.cleaned_data['earning']
                 frequency = form.cleaned_data['frequency']
+                is_direct = request.POST.get('is_direct')
                 if earning == "" or earning is None or earning == 0:
                     earning = 0
                     frequency = None
-                setattr(adult, meta['value_field'], earning)
-                setattr(adult, meta['frequency_field'], frequency)
+                setattr(adult, page.value_field, earning)
+                setattr(adult, page.frequency_field, frequency)
                 adult.save()
-
-                is_direct = request.POST.get('is_direct')
                 if is_direct == 'True':
                     return redirect('adults')
                 else:
-                    next_page = meta['next_page']
-                    if next_page['has_adult_id']:
-                        return redirect(next_page['name'], adult_id=adult.id)
+                    if workflow.next.page_arg:
+                        return redirect(workflow.next.name, adult_id=adult.id)
                     else:
-                        return redirect(next_page['name'])
+                        return redirect(workflow.next.name)
         else:
             data = {
-                'earning': getattr(adult, meta['value_field']),
-                'frequency': getattr(adult, meta['frequency_field'])
+                'earning': getattr(adult, page.value_field),
+                'frequency': getattr(adult, page.frequency_field)
             }
             form = EarningsForm(initial=data)
         args['form'] = form
 
     args['direct'] = direct
     args['adult_id'] = adult.id
-    args['next_page'] = meta['next_page']
-    args['previous_page'] = meta['previous_page']
-    if 'skip_to_page' in meta:
-        args['skip_to_page'] = meta['skip_to_page']
-    args['heading'] = meta['headline'].format(adult.first_name)
-    args['tip'] = meta['help_tip']
+    args['previous_page'] = workflow.previous
+    args['heading'] = page.headline.format(adult.first_name)
+    args['tip'] = page.help_tip
     AppUtil.set_last_page(adult.application, request.get_full_path())
-    return render(request, meta['template'], args)
+    return render(request, page.template, args)
 
 
 @login_required

@@ -1,4 +1,4 @@
-from eat.models import Application
+from eat.models import EarningsPage
 from django.core.urlresolvers import resolve
 from eat.forms import *
 from . import *
@@ -18,14 +18,6 @@ class AppUtil(object):
     def set_last_page(cls, app, path):
         app.last_page = path
         app.save()
-
-    @classmethod
-    def get_child_earning_categories(self):
-        earnings_categories = list()
-        for k, v in child_earnings_meta_data.items():
-            if v['type'] == 'earnings':
-                earnings_categories.append(v)
-        return sorted(earnings_categories, key=lambda category: (category['order']))
 
 
     @classmethod

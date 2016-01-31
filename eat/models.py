@@ -503,9 +503,6 @@ class EarningsPage(models.Model):
     template = models.CharField(max_length=500, verbose_name='Template path',
                                 default='eat/user/application/child/earnings.html')
 
-    def __str__(self):
-        return self.name
-
 
 class EarningsWorkFlow(models.Model):
     page = models.ForeignKey(EarningsPage, related_name='current_page')

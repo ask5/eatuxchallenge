@@ -19,18 +19,18 @@
                     <tr>
                         <td colspan="2">
                             <table class="table table-condensed">
-                                {% for category in earnings_categories %}
+                                {% for page in earnings_pages %}
                                     <tr>
                                         <th>{{ category.title }}</th>
                                         <td>
-                                            {% if adult|getvalue:category.value_field %}
-                                                $ {{ adult|getvalue:category.value_field|intcomma }} -
-                                                {{ adult|getvalue:category.frequency_field|frequencylabel }}
+                                            {% if adult|getvalue:page.value_field %}
+                                                $ {{ adult|getvalue:page.value_field|intcomma }} -
+                                                {{ adult|getvalue:page.frequency_field|frequencylabel }}
                                             {% endif %}
                                         </td>
                                         <td>
                                             <a class="btn btn-default pull-right"
-                                               href="{% url category.name  adult_id=adult.id %}">
+                                               href="{% url page.name  adult_id=adult.id %}">
                                                 Change
                                             </a>
                                         </td>
