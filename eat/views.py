@@ -155,7 +155,13 @@ def children(request):
     _children = Child.children.filter(application=app[0])
     args['app'] = app[0]
     args['children'] = _children
-    args['earnings_pages'] = EarningsPage.objects.filter(entity='child', page_type='form')
+    p = EarningsPage.objects.get(name='children')
+    e = []
+    while p.next.name != 'children':
+        if p.next.page_type == 'form':
+            e.append(p.next)
+        p = p.next
+    args['earnings_pages'] = e
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/child/children.html", args)
 
@@ -189,7 +195,7 @@ def edit_child(request, child_id):
         form = AddChildForm(request.POST, instance=child)
         if form.is_valid():
             form.save()
-            return redirect('children')
+            return redirect('child_salary', child_id=child.id)
     else:
         form = AddChildForm(instance=child)
     args['form'] = form
@@ -216,11 +222,6 @@ def child_earnings(request, child_id):
     page_name = resolve(request.path_info).url_name
     page = EarningsPage.objects.get(entity='child', name=page_name)
 
-    if not EarningsWorkFlow.objects.filter(page=page).exists():
-        return redirect('children')
-
-    workflow = EarningsWorkFlow.objects.get(page=page)
-
     if request.META.get('HTTP_REFERER'):
         if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('children'):
             direct = True
@@ -243,10 +244,10 @@ def child_earnings(request, child_id):
                 if is_direct == 'True':
                     return redirect('children')
                 else:
-                    if workflow.next.page_arg:
-                        return redirect(workflow.next.name, child_id=child.id)
+                    if page.next.page_arg:
+                        return redirect(page.next.name, child_id=child.id)
                     else:
-                        return redirect(workflow.next.name)
+                        return redirect(page.next.name)
         else:
             data = {
                 'earning': getattr(child, page.value_field),
@@ -257,7 +258,9 @@ def child_earnings(request, child_id):
 
     args['direct'] = direct
     args['child_id'] = child.id
-    args['previous_page'] = workflow.previous
+    args['previous_page'] = EarningsPage.objects.get(next=page)
+    args['next_page'] = page.next
+    args['skip_to_page'] = page.skip_to
     args['heading'] = page.headline.format(child.first_name)
     args['tip'] = page.help_tip
     AppUtil.set_last_page(child.application, request.get_full_path())
@@ -271,8 +274,14 @@ def adults(request):
     _adults = Adult.adults.filter(application=app[0])
     args['app'] = app[0]
     args['adults'] = _adults
-    args['earnings_categories'] = AppUtil.get_adult_earning_categories()
     AppUtil.set_last_page(app[0], request.get_full_path())
+    p = EarningsPage.objects.get(name='adults')
+    e = []
+    while p.next.name != 'adults':
+        if p.next.page_type == 'form':
+            e.append(p.next)
+        p = p.next
+    args['earnings_pages'] = e
     return render(request, "eat/user/application/adult/adults.html", args)
 
 
@@ -303,7 +312,7 @@ def edit_adult(request, adult_id):
         form = AddAdultForm(request.POST, instance=adult)
         if form.is_valid():
             form.save()
-            return redirect('adults')
+            return redirect('adult_salary', adult_id=adult.id)
     else:
         form = AddAdultForm(instance=adult)
     args['form'] = form
@@ -330,11 +339,6 @@ def adult_earnings(request, adult_id):
     page_name = resolve(request.path_info).url_name
     page = EarningsPage.objects.get(entity='adult', name=page_name)
 
-    if not EarningsWorkFlow.objects.filter(page=page).exists():
-        return redirect('adults')
-
-    workflow = EarningsWorkFlow.objects.get(page=page)
-
     if request.META.get('HTTP_REFERER'):
         if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('children'):
             direct = True
@@ -357,10 +361,10 @@ def adult_earnings(request, adult_id):
                 if is_direct == 'True':
                     return redirect('adults')
                 else:
-                    if workflow.next.page_arg:
-                        return redirect(workflow.next.name, adult_id=adult.id)
+                    if page.next.page_arg:
+                        return redirect(page.next.name, adult_id=adult.id)
                     else:
-                        return redirect(workflow.next.name)
+                        return redirect(page.next.name)
         else:
             data = {
                 'earning': getattr(adult, page.value_field),
@@ -371,7 +375,9 @@ def adult_earnings(request, adult_id):
 
     args['direct'] = direct
     args['adult_id'] = adult.id
-    args['previous_page'] = workflow.previous
+    args['previous_page'] = EarningsPage.objects.get(next=page)
+    args['next_page'] = page.next
+    args['skip_to_page'] = page.skip_to
     args['heading'] = page.headline.format(adult.first_name)
     args['tip'] = page.help_tip
     AppUtil.set_last_page(adult.application, request.get_full_path())

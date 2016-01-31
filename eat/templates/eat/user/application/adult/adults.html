@@ -21,7 +21,7 @@
                             <table class="table table-condensed">
                                 {% for page in earnings_pages %}
                                     <tr>
-                                        <th>{{ category.title }}</th>
+                                        <th>{{ page.display_title }}</th>
                                         <td>
                                             {% if adult|getvalue:page.value_field %}
                                                 $ {{ adult|getvalue:page.value_field|intcomma }} -

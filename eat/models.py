@@ -296,11 +296,11 @@ class Adult(models.Model):
                                                        help_text='How often are earnings received',
                                                        blank=True,
                                                        null=True)
-    other_assistance = models.IntegerField(verbose_name='Other Public Assistance',
+    cash_assistance = models.IntegerField(verbose_name='Cash assistance from State or local government',
                                            blank=True,
                                            null=True)
-    other_assistance_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                     verbose_name='Frequency Of Other Assistance',
+    cash_assistance_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
+                                                     verbose_name='Frequency Of Csah Assistance',
                                                      help_text='How often are earnings received',
                                                      blank=True,
                                                      null=True)
@@ -416,6 +416,14 @@ class Adult(models.Model):
                                                     help_text='How often are earnings received',
                                                     blank=True,
                                                     null=True)
+    investment_income = models.IntegerField(verbose_name='Investment Income',
+                                          blank=True,
+                                          null=True)
+    investment_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
+                                                    verbose_name='Frequency Of Investment Income',
+                                                    help_text='How often are earnings received',
+                                                    blank=True,
+                                                    null=True)
     dividends = models.IntegerField(verbose_name='Dividends',
                                     blank=True,
                                     null=True)
@@ -497,16 +505,13 @@ class EarningsPage(models.Model):
                                  verbose_name='Page Type', default='form')
     value_field = models.CharField(max_length=50, verbose_name='Value Field', blank=True, null=True)
     frequency_field = models.CharField(max_length=50, verbose_name='Frequency Field', blank=True, null=True)
-    display_title = models.CharField(max_length=50, verbose_name='Display Title', blank=True, null=True)
+    display_title = models.CharField(max_length=100, verbose_name='Display Title', blank=True, null=True)
     headline = models.CharField(max_length=500, verbose_name='Page Headline', blank=True, null=True)
     help_tip = models.CharField(max_length=1000, verbose_name='Help tip', blank=True, null=True)
     template = models.CharField(max_length=500, verbose_name='Template path',
                                 default='eat/user/application/child/earnings.html')
+    next = models.ForeignKey('self', blank=True, null=True, related_name='next_page')
+    skip_to = models.ForeignKey('self', blank=True, null=True, related_name='skip_page')
 
-
-class EarningsWorkFlow(models.Model):
-    page = models.ForeignKey(EarningsPage, related_name='current_page')
-    next = models.ForeignKey(EarningsPage, blank=True, null=True, related_name='next_page')
-    previous = models.ForeignKey(EarningsPage, blank=True, null=True, related_name='previous_page')
-    skip_to = models.ForeignKey(EarningsPage, blank=True, null=True, related_name='skip_page')
-    active = models.BooleanField(verbose_name='Active', default=True)
+    def __str__(self):
+        return '%s.%s' % (self.entity, self.name)
