@@ -25,6 +25,59 @@ YES_NO = (
     (False, 'No',)
 )
 
+STATES = (
+    ('AL', 'Alabama',),
+    ('AK', 'Alaska',),
+    ('AZ', 'Arizona',),
+    ('AR', 'Arkansas',),
+    ('CA', 'California',),
+    ('CO', 'Colorado',),
+    ('CT', 'Connecticut',),
+    ('DE', 'Delaware',),
+    ('FL', 'Florida',),
+    ('GA', 'Georgia',),
+    ('HI', 'Hawaii',),
+    ('ID', 'Idaho',),
+    ('IL', 'Illinois',),
+    ('IN', 'Indiana',),
+    ('IA', 'Iowa',),
+    ('KS', 'Kansas',),
+    ('KY', 'Kentucky',),
+    ('LA', 'Louisiana',),
+    ('ME', 'Maine',),
+    ('MD', 'Maryland',),
+    ('MA', 'Massachusetts',),
+    ('MI', 'Michigan',),
+    ('MN', 'Minnesota',),
+    ('MS', 'Mississippi',),
+    ('MO', 'Missouri',),
+    ('MT', 'Montana',),
+    ('NE', 'Nebraska',),
+    ('NV', 'Nevada',),
+    ('NH', 'New Hampshire',),
+    ('NJ', 'New Jersey',),
+    ('NM', 'New Mexico',),
+    ('NY', 'New York',),
+    ('NC', 'North Carolina',),
+    ('ND', 'North Dakota',),
+    ('OH', 'Ohio',),
+    ('OK', 'Oklahoma',),
+    ('OR', 'Oregon',),
+    ('PA', 'Pennsylvania',),
+    ('RI', 'Rhode Island',),
+    ('SC', 'South Carolina',),
+    ('SD', 'South Dakota',),
+    ('TN', 'Tennessee',),
+    ('TX', 'Texas',),
+    ('UT', 'Utah',),
+    ('VT', 'Vermont',),
+    ('VA', 'Virginia',),
+    ('WA', 'Washington',),
+    ('WV', 'West Virginia',),
+    ('WI', 'Wisconsin',),
+    ('WY', 'Wyoming',),
+)
+
 
 class Application(models.Model):
     applications = models.Manager()
@@ -68,14 +121,12 @@ class Application(models.Model):
                            verbose_name='Apartment Number', blank=True, null=True)
     city = models.CharField(max_length=75,
                             verbose_name='City', blank=True, null=True)
-    state = models.CharField(max_length=50,
+    state = models.CharField(max_length=2, choices=STATES,
                              verbose_name='State', blank=True, null=True)
     zip = models.CharField(max_length=10,
                            verbose_name='Zip', blank=True, null=True)
-    phone = models.CharField(max_length=15,
-                             verbose_name='Phone', blank=True, null=True)
-    email = models.CharField(max_length=255,
-                             verbose_name='Email', blank=True, null=True),
+    phone = models.CharField(max_length=15, verbose_name='Phone', blank=True, null=True)
+    email = models.EmailField(max_length=255, verbose_name='Email', blank=True, null=True)
     ethnicity = models.CharField(max_length=25, choices=ETHNICITIES,
                                  verbose_name='Ethnicity', blank=True, null=True)
     is_american_indian = models.NullBooleanField(verbose_name='Is American Indian or Alaskan Native')

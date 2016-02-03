@@ -18,10 +18,16 @@ nav = {
         'current': False,
         'position': 3
     },
+    'contact': {
+        'caption': 'Contact',
+        'url': 'contact',
+        'current': False,
+        'position': 4
+    },
     'review': {
         'caption': 'Review',
         'url': 'review',
         'current': False,
-        'position': 4
+        'position': 5
     }
 }

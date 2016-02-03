@@ -379,6 +379,17 @@ def adult_earnings(request, adult_id):
 
 @login_required
 def contact(request):
+    args = dict()
     app = AppUtil.get_by_user(user=request.user)
+
+    if request.method == 'POST':
+        form = ContactForm(request.POST, instance=app[0])
+        if form.is_valid():
+            form.save()
+            return redirect('review')
+    else:
+        form = ContactForm(instance=app[0])
+    args['form'] = form
+    args['nav'] = AppUtil.get_nav(nav=nav, url='contact')
     AppUtil.set_last_page(app[0], request.get_full_path())
-    return render(request, "eat/user/application/contact.html")
+    return render(request, "eat/user/application/contact.html", args)

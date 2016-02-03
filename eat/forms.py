@@ -94,3 +94,11 @@ class EarningsForm(forms.Form):
             raise forms.ValidationError("Please specify how often you get the earnings")
         else:
             return self.cleaned_data['frequency']
+
+
+class ContactForm(ModelForm):
+
+    class Meta:
+        model = Application
+        fields = ('street_address', 'apt', 'city', 'state', 'zip', 'phone', 'email',
+                  'first_name', 'last_name', 'signature')

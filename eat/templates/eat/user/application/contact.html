@@ -4,40 +4,9 @@
     <h3>Contact Information</h3>
     <form class="form-horizontal" action="{% url 'eat.views.add_child' %}" method="post">
         {% csrf_token %}
-        <div class="row">
-            <div class="col-lg-6">
-                <label for="streetAddress">Street Address</label><br>
-                <input type="text" class="form-control" id="streetAddress">
-            </div>
-            <div class="col-lg-6">
-                <label for="aptNum">Apt#</label><br>
-                <input type="text" class="form-control" id="aptNum">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-5">
-                <label for="city">City</label><br>
-                <input type="text" class="form-control" id="city">
-            </div>
-            <div class="col-lg-2">
-                <label for="state">State</label><br>
-                <input type="text" class="form-control" id="state">
-            </div>
-            <div class="col-lg-5">
-                <label for="zip">Zip</label><br>
-                <input type="text" class="form-control" id="zip">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-6">
-                <label for="phone">Daytime Phone#</label><br>
-                <input type="text" class="form-control" id="phone">
-            </div>
-            <div class="col-lg-6">
-                <label for="email">Email</label><br>
-                <input type="email" class="form-control" id="email">
-            </div>
-        </div>
+            <table class="table">
+            {{ form }}
+            </table>
         <hr>
         <p>
             “The person signing is furnishing true information and to advise that person that the application is being
@@ -45,16 +14,6 @@
             the application; and<br><br> Deliberate misrepresentation of the information may subject the applicant to
             prosecution under State and Federal statutes.”
         </p>
-        <div class="row">
-            <div class="col-lg-6">
-                <label for="name">Name of the adult completing the form</label><br>
-                <input type="text" class="form-control" id="name">
-            </div>
-            <div class="col-lg-6">
-                <label for="sign">Signature</label><br>
-                <input type="text" class="form-control" id="sign">
-            </div>
-        </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-default">Continue</button>
