@@ -65,3 +65,9 @@ body.homepage{
     padding: 10px;
     font-size: 90%;
 }
+
+
+ol.breadcrumb > li.active a {
+    border-bottom: solid 2px red;
+    color: navy;
+}

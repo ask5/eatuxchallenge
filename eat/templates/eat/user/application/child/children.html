@@ -18,8 +18,8 @@
                         {% if child.hmr %} Homeless, Migrant, Runaway {% endif %}
                     </td>
                     <td>
-                        <a class="btn btn-primary" role="button" href="{% url 'eat.views.edit_child' child_id=child.id %}">Edit</a>
-                        <a class="btn btn-danger" role="button" href="{% url 'eat.views.delete_child' child_id=child.id %}">Delete</a>
+                        <a class="btn btn-primary" role="button" href="{% url 'edit_child' child_id=child.id %}">Edit</a>
+                        <a class="btn btn-danger" role="button" href="{% url 'delete_child' child_id=child.id %}">Delete</a>
                     </td>
                 </tr>
                 {% if not child.application.assistance_program %}

@@ -122,6 +122,7 @@ def assistance_program(request):
     else:
         form = AssistanceProgramForm(instance=app[0])
     args['form'] = form
+    args['nav'] = AppUtil.get_nav(nav=nav, url='assistance_program')
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/assistance_program.html", args)
 
@@ -143,7 +144,7 @@ def review(request):
     args['app'] = app[0]
     args['children'] = _children
     args['adults'] = _adults
-
+    args['nav'] = AppUtil.get_nav(nav=nav, url='review')
     args['child_earnings_pages'] = AppUtil.get_earnings_pages('children')
     args['adult_earnings_pages'] = AppUtil.get_earnings_pages('adults')
     return render(request, "eat/user/application/review.html", args)
@@ -155,6 +156,7 @@ def children(request):
     app = AppUtil.get_by_user(user=request.user)
     _children = Child.children.filter(application=app[0])
     args['app'] = app[0]
+    args['nav'] = AppUtil.get_nav(nav=nav, url='children')
     args['children'] = _children
     args['earnings_pages'] = AppUtil.get_earnings_pages('children')
     AppUtil.set_last_page(app[0], request.get_full_path())
@@ -270,6 +272,7 @@ def adults(request):
     _adults = Adult.adults.filter(application=app[0])
     args['app'] = app[0]
     args['adults'] = _adults
+    args['nav'] = AppUtil.get_nav(nav=nav, url='adults')
     AppUtil.set_last_page(app[0], request.get_full_path())
     args['earnings_pages'] = AppUtil.get_earnings_pages('adults')
     return render(request, "eat/user/application/adult/adults.html", args)

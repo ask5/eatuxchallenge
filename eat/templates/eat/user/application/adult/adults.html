@@ -12,8 +12,8 @@
             <tr>
                 <th>{{ adult.first_name }} {{ adult.last_name }}</th>
                 <td>
-                    <a class="btn btn-primary" role="button" href="{% url 'eat.views.edit_adult' adult_id=adult.id %}">Edit</a>
-                    <a class="btn btn-danger" role="button" href="{% url 'eat.views.delete_adult' adult_id=adult.id %}">Delete</a>
+                    <a class="btn btn-primary" role="button" href="{% url 'edit_adult' adult_id=adult.id %}">Edit</a>
+                    <a class="btn btn-danger" role="button" href="{% url 'delete_adult' adult_id=adult.id %}">Delete</a>
                 </td>
             </tr>
                     <tr>

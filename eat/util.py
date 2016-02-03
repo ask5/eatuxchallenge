@@ -28,3 +28,12 @@ class AppUtil(object):
                 e.append(p.next)
             p = p.next
         return e
+
+    @classmethod
+    def get_nav(cls, nav, url):
+        t = []
+        for k, v in nav.items():
+            v['current'] = True if v['url'] == url else False
+            t.append(v)
+        s = sorted(t, key=lambda k:k['position'])
+        return s
