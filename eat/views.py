@@ -180,6 +180,7 @@ def add_child(request):
     else:
         form = AddChildForm()
     args['form'] = form
+    args['nav'] = AppUtil.get_nav(nav=nav, url='children')
     return render(request, "eat/user/application/child/add_edit.html", args)
 
 
@@ -196,6 +197,8 @@ def edit_child(request, child_id):
     else:
         form = AddChildForm(instance=child)
     args['form'] = form
+    args['child'] = child
+    args['nav'] = AppUtil.get_nav(nav=nav, url='children')
     return render(request, "eat/user/application/child/add_edit.html", args)
 
 
@@ -208,6 +211,7 @@ def delete_child(request, child_id):
         child.delete()
         return redirect('children')
     args['child'] = child
+    args['nav'] = AppUtil.get_nav(nav=nav, url='children')
     return render(request, "eat/user/application/child/delete.html", args)
 
 
@@ -261,6 +265,7 @@ def child_earnings(request, child_id):
     args['skip_to_page'] = page.skip_to
     args['heading'] = page.headline.format(child.first_name)
     args['tip'] = page.help_tip
+    args['nav'] = AppUtil.get_nav(nav=nav, url='children')
     AppUtil.set_last_page(child.application, request.get_full_path())
     return render(request, page.template, args)
 
@@ -292,6 +297,7 @@ def add_adult(request):
     else:
         form = AddAdultForm()
     args['form'] = form
+    args['nav'] = AppUtil.get_nav(nav=nav, url='adults')
     return render(request, "eat/user/application/adult/add_edit.html", args)
 
 
@@ -309,6 +315,7 @@ def edit_adult(request, adult_id):
     else:
         form = AddAdultForm(instance=adult)
     args['form'] = form
+    args['nav'] = AppUtil.get_nav(nav=nav, url='adults')
     return render(request, "eat/user/application/adult/add_edit.html", args)
 
 
@@ -321,6 +328,7 @@ def delete_adult(request, adult_id):
         adult.delete()
         return redirect('adults')
     args['adult'] = adult
+    args['nav'] = AppUtil.get_nav(nav=nav, url='adults')
     return render(request, "eat/user/application/adult/delete.html", args)
 
 
@@ -373,6 +381,7 @@ def adult_earnings(request, adult_id):
     args['skip_to_page'] = page.skip_to
     args['heading'] = page.headline.format(adult.first_name)
     args['tip'] = page.help_tip
+    args['nav'] = AppUtil.get_nav(nav=nav, url='adults')
     AppUtil.set_last_page(adult.application, request.get_full_path())
     return render(request, page.template, args)
 

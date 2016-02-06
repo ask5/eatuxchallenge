@@ -19,25 +19,6 @@ body.homepage{
     background-image: url("/static/img/USDA-lunch-bkgd.gif");
 }
 
-.registration th, .registration td{
-    padding: 2px;
-}
-
-.registration .errorlist {
-    padding-left: 0;
-    margin-bottom: 0;
-    list-style: outside none none;
-    color: red;
-}
-
-.registration th {
-    vertical-align: top;
-}
-
-.registration .helptext{
-    font-size: 80%;
-}
-
 .footer {
   position: absolute;
   bottom: 0;
@@ -50,6 +31,23 @@ body.homepage{
     border-bottom: solid 1px #999;
     margin-bottom: 15px;
 }
+
+ul.errorlist {
+    margin: 0;
+    padding: 0;
+    list-style: outside none none;
+    color: red;
+}
+
+.login-error{
+    margin-top: 1em;
+    color: red;
+}
+h3{
+    border-bottom: 1px solid darkgray;
+    margin-bottom: 2em;
+}
+
 .navbar a{
     color: white !important;
 }
@@ -68,6 +66,23 @@ body.homepage{
 
 
 ol.breadcrumb > li.active a {
-    border-bottom: solid 2px red;
+    border-bottom: solid 2px #FF4136;
     color: navy;
 }
+
+.frm-control input, .frm-control select {
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%;
+}
+

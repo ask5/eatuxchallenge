@@ -1,39 +1,39 @@
 {% extends "eat/base.html" %}
 {% load staticfiles %}
 {% block base_content %}
-    <div class="panel panel-primary center-block" style="width:400px">
-        <div class="panel-heading">
+        <h3>
             <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login
-        </div>
-        <div class="panel-body">
-            <p class="danger">{{ error }}</p>
-            <form method="post" class="form-signin" action="{% url 'eat.views.login_view' %}">
+        </h3>
+        <div style="margin-left: auto; margin-right: auto;">
+            <form method="post" class="form-horizontal">
                 {% csrf_token %}
-                <table  class="registration">
-                    <tr>
-                        <th>
-                            Username:
-                        </th>
-                        <td>
-                            <input type="text" id="username" name="username" placeholder="Username" required autofocus>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Password:
-                        </th>
-                        <td>
-                            <input type="password" name="password" id="password" placeholder="Password" required><br>
-                            <a class="small" href="#">Forgot Password?</a>
-                        </td>
-                    </tr>
-                </table>
-                <hr/>
-                <input type="hidden" name="next" id="naext" value="{{ next }}">
-                <input type="submit" value="Login" class="btn btn-primary"/>
-                <a class="btn btn-primary" role="button" href="{% url 'index' %}">Cancel</a>
+                <div class="form-group">
+                    <label for="username" class="col-sm-2 control-label">Username</label>
+                    <div class="col-sm-2">
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-2">
+                        <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                          <a class="small" href="#">Forgot Password?</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <input type="hidden" name="next" id="next" value="{{ next }}">
+                        <input type="submit" value="Login" class="btn btn-primary"/>
+                        <a class="btn btn-primary" role="button" href="{% url 'index' %}">Cancel</a>
+                        <p class="login-error">{{ error }}</p>
+                    </div>
+                </div>
+
             </form>
         </div>
-    </div>
 {% endblock %}
 

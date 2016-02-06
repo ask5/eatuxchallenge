@@ -31,9 +31,11 @@
     </div>
 </nav>
 <div class="container">
-    <div>
-        {% show_nav nav %}
-    </div>
+    {% if nav %}
+        <div>
+            {% show_nav nav %}
+        </div>
+    {% endif %}
     <div class="row">
         <div class="col-lg-9">
             {% block application_content_main %}{% endblock %}
@@ -43,8 +45,6 @@
         </div>
     </div>
 </div>
-<footer class="footer">
-</footer>
 <script src="/static/js/jquery-2.1.4.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"

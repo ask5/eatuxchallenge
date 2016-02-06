@@ -1,65 +1,80 @@
 {% extends "eat/user/application/base.html" %}
 {% load staticfiles %}
 {% block application_content_main %}
-    <h3>Add a household member</h3>
-    <small>The member can be either infant, child or a student upto and including grade 12</small>
+    {% if child.id %}
+        <h3>You are editing {{ child.first_name }}'s information</h3>
+    {% else %}
+        <h3>Add a household member</h3>
+    {% endif %}
     <form class="form-horizontal" method="post">
         {% csrf_token %}
-            {{ form.non_field_errors }}
+        {{ form.non_field_errors }}
         <div class="form-group">
             {{ form.first_name.errors }}
-            <label for="{{ form.first_name.id_for_label }}" class="col-sm-2 control-label">First Name</label>
-            <div class="col-sm-10">
+            <label for="{{ form.first_name.id_for_label }}" class="col-sm-3 control-label">First Name</label>
+            <div class="col-sm-3 frm-control">
                 {{ form.first_name }}
             </div>
         </div>
         <div class="form-group">
             {{ form.middle_name.errors }}
-            <label for="{{ form.middle_name.id_for_label }}" class="col-sm-2 control-label">Middle Name</label>
-            <div class="col-sm-10">
+            <label for="{{ form.middle_name.id_for_label }}" class="col-sm-3 control-label">Middle Name</label>
+            <div class="col-sm-3 frm-control">
                 {{ form.middle_name }}
             </div>
         </div>
         <div class="form-group">
             {{ form.last_name.errors }}
-            <label for="{{ form.last_name.id_for_label }}" class="col-sm-2 control-label">Last Name</label>
-            <div class="col-sm-10">
+            <label for="{{ form.last_name.id_for_label }}" class="col-sm-3 control-label">Last Name</label>
+            <div class="col-sm-3 frm-control">
                 {{ form.last_name }}
             </div>
         </div>
         <div class="form-group">
             {{ form.is_student.errors }}
-            <label for="{{ form.is_student.id_for_label }}" class="col-sm-2 control-label">
-                Is this child a student?
-            </label>
-            <div class="col-sm-10">
-                {{ form.is_student }}
+            <div class="col-sm-offset-3 col-sm-9">
+                <div class="checkbox">
+                    <label>
+                        {{ form.is_student }} this child a Student.
+                    </label>
+                </div>
             </div>
         </div>
         <div class="form-group">
             {{ form.foster_child.errors }}
-            <label for="{{ form.foster_child.id_for_label }}" class="col-sm-2 control-label">
-                Is this a foster child?
-            </label>
-            <div class="col-sm-10">
-                {{ form.foster_child }}
+            <div class="col-sm-offset-3 col-sm-9">
+                <div class="checkbox">
+                    <label>
+                        {{ form.foster_child }} this a Foster Child?
+                    </label>
+                </div>
             </div>
         </div>
         <div class="form-group">
             {{ form.hmr.errors }}
-            <label for="{{ form.hmr.id_for_label }}" class="col-sm-2 control-label">
-                Is this child Homeless, Migrant or Runaway?
-            </label>
-            <div class="col-sm-10">
-                {{ form.hmr }}
+            <div class="col-sm-offset-3 col-sm-9">
+                <div class="checkbox">
+                    <label>
+                        {{ form.hmr }} this child Homeless, Migrant or Runaway.
+                    </label>
+                </div>
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Continue</button>
-                <a class="btn btn-default" role="button"href="{% url 'eat.views.children' %}">Cancel</a>
+            <div class="col-sm-offset-3 col-sm-9">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a class="btn btn-default" role="button" href="{% url 'children' %}">Cancel</a>
             </div>
         </div>
     </form>
 {% endblock %}
-
+{% block application_content_right %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Help tip!
+        </div>
+        <div class="panel-body">
+            The member can be either infant, child or a student upto and including grade 12
+        </div>
+    </div>
+{% endblock %}

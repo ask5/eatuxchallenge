@@ -2,24 +2,90 @@
 {% block title %}Statements{% endblock %}
 {% load staticfiles %}
 {% block base_content %}
-    <div class="panel panel-primary center-block" style="width:400px">
-        <div class="panel-heading">
-            <span class="glyphicon glyphicon-file" aria-hidden="true"></span> Create an Account
+    <h3>
+        <span class="glyphicon glyphicon-file" aria-hidden="true"></span> Create an Account
+    </h3>
+    <form method="post" class="form-horizontal">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}" class="col-sm-3 control-label">User Name</label>
+            <div class="col-sm-3 frm-control">
+                {{ form.username }}
+                {% if form.username.help_text %}
+                    <span id="helpBlock" class="help-block">
+                        {{ form.username.help_text }}
+                    </span>
+                {% endif %}
+            </div>
+            {{ form.username.errors }}
         </div>
-        <small>Creating an account with us allows you to save your application at anytime, leave the website and return
-            and complete it at your convinience
-        </small>
-        <div class="panel-body">
-            <form method="post" action="{% url 'register' %}">
-                {% csrf_token %}
-                <table class="registration">
-                    {{ form }}
-                </table>
-                <hr />
+        <div class="form-group">
+            <label for="{{ form.first_name.id_for_label }}" class="col-sm-3 control-label">First Name</label>
+            <div class="col-sm-3 frm-control">
+                {{ form.first_name }}
+                {% if form.first_name.help_text %}
+                    <span id="helpBlock" class="help-block">
+                        {{ form.first_name.help_text }}
+                    </span>
+                {% endif %}
+            </div>
+            {{ form.first_name.errors }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.last_name.id_for_label }}" class="col-sm-3 control-label">Last Name</label>
+            <div class="col-sm-3 frm-control">
+                {{ form.last_name }}
+                {% if form.last_name.help_text %}
+                    <span id="helpBlock" class="help-block">
+                        {{ form.last_name.help_text }}
+                    </span>
+                {% endif %}
+            </div>
+            {{ form.last_name.errors }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.email.id_for_label }}" class="col-sm-3 control-label">Email</label>
+            <div class="col-sm-3 frm-control">
+                {{ form.email }}
+                {% if form.email.help_text %}
+                    <span id="helpBlock" class="help-block">
+                        {{ form.email.help_text }}
+                    </span>
+                {% endif %}
+            </div>
+            {{ form.email.errors }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password1.id_for_label }}" class="col-sm-3 control-label">Password</label>
+            <div class="col-sm-3 frm-control">
+                {{ form.password1 }}
+                {% if form.password1.help_text %}
+                    <span id="helpBlock" class="help-block">
+                        {{ form.password1.help_text }}
+                    </span>
+                {% endif %}
+            </div>
+            {{ form.password1.errors }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password2.id_for_label }}" class="col-sm-3 control-label">Confirm Password</label>
+            <div class="col-sm-3 frm-control">
+                {{ form.password2 }}
+                {% if form.password2.help_text %}
+                    <span id="helpBlock" class="help-block">
+                        {{ form.password2.help_text }}
+                    </span>
+                {% endif %}
+            </div>
+            {{ form.password2.errors }}
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
                 <input type="submit" value="Create Account" class="btn btn-primary"/>
                 <a class="btn btn-primary" href="{% url 'index' %}">Cancel</a>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
 {% endblock %}
 

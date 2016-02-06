@@ -3,10 +3,11 @@
 {% load humanize %}
 {% load tags %}
 {% block application_content_main %}
-    <p class="lead">
+    {% if not app.assistance_program %}
+        <p class="lead">
         Let's add all Adult Household Members, including yourself.
     </p>
-    {% if adults %}
+        {% if adults %}
         <table class="table">
         {% for adult in adults %}
             <tr>
@@ -18,7 +19,7 @@
             </tr>
                     <tr>
                         <td colspan="2">
-                            <table class="table table-condensed">
+                            <table class="table table-striped">
                                 {% for page in earnings_pages %}
                                     <tr>
                                         <th>{{ page.display_title }}</th>
@@ -42,19 +43,24 @@
         {% endfor %}
         </table>
     {% endif %}
-    <a class="btn btn-primary" role="button" href="{% url 'eat.views.add_adult' %}">Add new Adult</a>
-        <div>
-            <a class="btn btn-default pull-left" role="button"
-               href="{% url 'eat.views.children' %}">Back</a>
+        <a class="btn btn-primary" role="button" href="{% url 'eat.views.add_adult' %}">Add new Adult</a>
+    {% else %}
+        <p>
+            Since you are participating in assistance program, you dont need to enter adult household members!
+        </p>
+    {% endif %}
+    <div>
+        <a class="btn btn-default pull-left" role="button"
+           href="{% url 'eat.views.children' %}">Back</a>
 
-            {% if app.assistance_program %}
-                <a class="btn btn-default pull-right" role="button"
-                   href="{% url 'eat.views.application_welcome_back' %}">Continue</a>
-            {% else %}
-                <a class="btn btn-default pull-right" role="button"
-                   href="{% url 'eat.views.contact' %}">Continue</a>
-            {% endif %}
-        </div>
+        {% if app.assistance_program %}
+            <a class="btn btn-default pull-right" role="button"
+               href="{% url 'eat.views.application_welcome_back' %}">Continue</a>
+        {% else %}
+            <a class="btn btn-default pull-right" role="button"
+               href="{% url 'eat.views.contact' %}">Continue</a>
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block application_content_right %}

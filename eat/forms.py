@@ -13,19 +13,27 @@ class RegistrationForm(UserCreationForm):
         super(UserCreationForm, self).__init__(*args, **kwargs)
 
         self.fields['username'].help_text = None
+        self.fields['username'].error_messages = { 'required': 'Username cannot be blank' }
         self.fields['password1'].help_text = None
+        self.fields['password1'].error_messages = { 'required': 'Password cannot be blank' }
         self.fields['password2'].help_text = "Password must contain at least 8 characters."
         self.fields['password2'].label = "Confirm Password"
+        self.fields['password2'].error_messages = { 'required': 'Retype the password for confirmation' }
         self.fields['email'].label = "Email"
 
+
     def clean_email(self):
-        qs = User.objects.filter(email=self.cleaned_data['email'])
-        if self.instance:
-            qs = qs.exclude(pk=self.instance.pk)
-        if qs.count():
-            raise forms.ValidationError('That email address is already in use')
+        e = self.cleaned_data['email']
+        if e == '':
+            raise forms.ValidationError('Email cannot be blank')
         else:
-            return self.cleaned_data['email']
+            qs = User.objects.filter(email=e)
+            if self.instance:
+                qs = qs.exclude(pk=self.instance.pk)
+            if qs.count():
+                raise forms.ValidationError('That email address is already in use')
+            else:
+                return self.cleaned_data['email']
 
 
 class AssistanceProgramForm(ModelForm):
@@ -102,3 +110,8 @@ class ContactForm(ModelForm):
         model = Application
         fields = ('street_address', 'apt', 'city', 'state', 'zip', 'phone', 'email',
                   'first_name', 'last_name', 'signature')
+
+    def __init__(self, *args, **kwargs):
+        super(ContactForm, self).__init__(*args, **kwargs)
+        self.fields['state'].empty_label = "Select a State"
+        self.fields['state'].widget.choices = self.fields['state'].choices
