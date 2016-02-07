@@ -1,5 +1,6 @@
 body{
     padding-top: 60px;
+    color: #111111;
 }
 
 body.homepage{
@@ -86,3 +87,16 @@ ol.breadcrumb > li.active a {
     width: 100%;
 }
 
+.nav-buttons{
+    margin-top: 1em;
+    /*border-top: 1px solid silver;*/
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    padding: 0.5em;
+}
+
+.radio-options ul{
+    margin: 0;
+    padding: 0;
+    list-style: outside none none;
+}

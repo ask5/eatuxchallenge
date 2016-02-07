@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^app/children/add/$', views.add_child, name='add_child'),
     url(r'^app/children/(?P<child_id>[0-9]+)/edit', views.edit_child, name='edit_child'),
     url(r'^app/children/(?P<child_id>[0-9]+)/delete', views.delete_child, name='delete_child'),
+    url(r'^app/children/(?P<child_id>[0-9]+)/exempt_child', views.exempt_child, name='exempt_child'),
 
     #Child earnings
     url(r'^app/children/(?P<child_id>[0-9]+)/salary', views.child_earnings, name='child_salary'),

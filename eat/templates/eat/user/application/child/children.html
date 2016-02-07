@@ -4,28 +4,29 @@
 {% load tags %}
 {% block application_content_main %}
     <p class="lead">
-        Household Members who are infants, children and students up to and including grade 12.
+        Household members who are infants, children and students up to and including grade 12.
     </p>
-    <a class="btn btn-primary" role="button" href="{% url 'eat.views.add_child' %}">Add new Child</a>
+    <a class="pull-right" role="button" href="{% url 'add_child' %}">Add a Child</a>
+    <br><br>
     {% if children %}
         <table class="table">
             {% for child in children %}
-                <tr class="info">
+                <tr>
                     <th>{{ child.first_name }} {{ child.last_name }}</th>
                     <td>
-                        {% if child.is_student %} Student, {% endif %}
-                        {% if child.foster_child %} Foster Child, {% endif %}
-                        {% if child.hmr %} Homeless, Migrant, Runaway {% endif %}
-                    </td>
-                    <td>
-                        <a class="btn btn-primary" role="button" href="{% url 'edit_child' child_id=child.id %}">Edit</a>
-                        <a class="btn btn-danger" role="button" href="{% url 'delete_child' child_id=child.id %}">Delete</a>
+                        <a class="pull-right" role="button"
+                           href="{% url 'delete_child' child_id=child.id %}">Delete</a>
                     </td>
                 </tr>
                 {% if not child.application.assistance_program %}
                     <tr>
-                        <td colspan="3">
-                            <table class="table table-condensed">
+                        <td colspan="2">
+                            <a class="" role="button" data-toggle="collapse" href="#collapseExample"
+                               aria-expanded="false" aria-controls="collapseExample">
+                                Show Earnings
+                            </a>
+                            <div class="collapse" id="collapseExample">
+                                <table class="table table-condensed">
                                 {% for page in earnings_pages %}
                                     <tr>
                                         <th>{{ page.display_title }}</th>
@@ -44,25 +45,27 @@
                                     </tr>
                                 {% endfor %}
                             </table>
+                            </div>
                         </td>
                     </tr>
                 {% endif %}
             {% endfor %}
         </table>
     {% endif %}
-    <div>
-        <a class="btn btn-default pull-left" role="button"
-           href="{% url 'eat.views.assistance_program' %}">Back</a>
+{% endblock %}
 
-        <a class="btn btn-default pull-right" role="button"
-                {% if not app.assistance_program %}
-           href="{% url 'eat.views.adults' %}"
-                {% else %}
-           href="{% url 'eat.views.contact' %}"
-                {% endif %}
-        >Continue
-        </a>
-    </div>
+{% block application_bottom_nav %}
+    <a class="btn btn-default pull-left" role="button"
+       href="{% url 'eat.views.assistance_program' %}">Back</a>
+
+    <a class="btn btn-default pull-right" role="button"
+            {% if not app.assistance_program %}
+       href="{% url 'eat.views.adults' %}"
+            {% else %}
+       href="{% url 'eat.views.contact' %}"
+            {% endif %}
+    >Continue
+    </a>
 {% endblock %}
 
 {% block application_content_right %}

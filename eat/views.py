@@ -173,8 +173,8 @@ def add_child(request):
             child = form.save(commit=False)
             child.application = app[0]
             child.save()
-            if app[0].assistance_program:
-                return redirect('children')
+            if app[0].assistance_program or child.foster_child:
+                return redirect('exempt_child', child_id=child.id)
             else:
                 return redirect('child_salary', child_id=child.id)
     else:
@@ -193,13 +193,26 @@ def edit_child(request, child_id):
         form = AddChildForm(request.POST, instance=child)
         if form.is_valid():
             form.save()
-            return redirect('child_salary', child_id=child.id)
+            if app[0].assistance_program or child.foster_child:
+                return redirect('exempt_child', child_id=child.id)
+            else:
+                return redirect('child_salary', child_id=child.id)
     else:
         form = AddChildForm(instance=child)
     args['form'] = form
     args['child'] = child
     args['nav'] = AppUtil.get_nav(nav=nav, url='children')
     return render(request, "eat/user/application/child/add_edit.html", args)
+
+
+@login_required
+def exempt_child(request, child_id):
+    args = dict()
+    app = AppUtil.get_by_user(user=request.user)
+    child = get_object_or_404(Child, pk=child_id, application=app[0])
+    args['app'] = app[0]
+    args['child'] = child
+    return render(request, "eat/user/application/child/exempt_child.html", args)
 
 
 @login_required
