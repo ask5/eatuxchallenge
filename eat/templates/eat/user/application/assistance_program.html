@@ -2,8 +2,8 @@
 {% load staticfiles %}
 {% block application_content_main %}
     <p>
-        {{ user.first_name }}, do any household members, including you, currently participate in one or more of the following assistance
-        programs: SNAP, TANF OR FDPIR?
+        {{ user.first_name }}, do any household members, including you, currently participate in one or more of the
+        following assistance programs: SNAP, TANF OR FDPIR?
     </p>
     <div>
         <div class="form-group">
@@ -29,19 +29,12 @@
     <button type="submit" class="btn btn-default pull-right">Continue</button>
 {% endblock %}
 
-{% block application_content_right %}
-    <div class="tips">
-        <div class="heading">
-            Help tips
-        </div>
-        <div class="body">
-            If anyone in your household participates in the assistance programs listed below,
-            your children are <strong>eligible</strong> for free school meals:
-            <ul>
-                <li>The Supplemental Nutrition Assistance Program (SNAP) or [insert State SNAP here]</li>
-                <li>Temporary Assistance for Needy Families (TANF) or [insert State TANF here]</li>
-                <li>The Food Distribution Program on Indian Reservations (FDPIR)</li>
-            </ul>
-        </div>
-    </div>
+{% block application_help_tip %}
+    If anyone in your household participates in the assistance programs listed below,
+    your children are <strong>eligible</strong> for free school meals:
+    <ul>
+        <li>The Supplemental Nutrition Assistance Program (SNAP) or [insert State SNAP here]</li>
+        <li>Temporary Assistance for Needy Families (TANF) or [insert State TANF here]</li>
+        <li>The Food Distribution Program on Indian Reservations (FDPIR)</li>
+    </ul>
 {% endblock %}

@@ -43,13 +43,24 @@
                 <div class="working-area">
                     {% block application_content_main %}{% endblock %}
                 </div>
-                <div class="nav-buttons">
-                    {% block application_bottom_nav %}{% endblock %}
-                    <div class="clearfix"></div>
-                </div>
+                {% block application_bottom_nav_wrapper %}
+                    <div class="nav-buttons">
+                        {% block application_bottom_nav %}{% endblock %}
+                        <div class="clearfix"></div>
+                    </div>
+                {% endblock %}
             </div>
             <div class="col-lg-3">
-                {% block application_content_right %}{% endblock %}
+                {% block application_content_right %}
+                    <div class="tips">
+                        <div class="heading">
+                            Help tips
+                        </div>
+                        <div class="body">
+                            {% block application_help_tip %}{% endblock %}
+                        </div>
+                    </div>
+                {% endblock %}
             </div>
         </form>
     </div>

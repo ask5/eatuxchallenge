@@ -6,7 +6,7 @@ register = template.Library()
 
 @register.filter(name='getvalue')
 def getvalue(object, property):
-    if object:
+    if object and property:
         return getattr(object, property)
     else:
         return None

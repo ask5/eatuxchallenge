@@ -40,15 +40,14 @@
     </button>
 {% endblock %}
 
-{% block application_content_right %}
+
+{% block application_help_tip %}
     {% if tip %}
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                Tips
-            </div>
-            <div class="panel-body">
-                {{ tip }}
-            </div>
-        </div>
+        <p>
+            {{ tip }}
+        </p>
     {% endif %}
+    <p>
+        Leave the earnings field blank and save if it's not applicable.
+    </p>
 {% endblock %}

@@ -293,6 +293,19 @@ def adults(request):
     args['nav'] = AppUtil.get_nav(nav=nav, url='adults')
     AppUtil.set_last_page(app[0], request.get_full_path())
     args['earnings_pages'] = AppUtil.get_earnings_pages('adults')
+    earnings_sources = EarningSource.sources.all()
+
+    earnings = []
+    for source in earnings_sources:
+        pages = EarningsPage.objects.filter(source=source, entity='adult', page_type='form')
+        if pages.exists():
+            earnings.append({
+                'name': source,
+                'pages': pages.order_by('display_title')
+            })
+
+    args['earnings'] = earnings
+
     return render(request, "eat/user/application/adult/adults.html", args)
 
 

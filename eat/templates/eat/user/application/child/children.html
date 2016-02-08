@@ -4,7 +4,7 @@
 {% load tags %}
 {% block application_content_main %}
     <p class="lead">
-        Household members who are infants, children and students up to and including grade 12.
+        Children in the household.
     </p>
     <a class="pull-right" role="button" href="{% url 'add_child' %}">Add a Child</a>
     <br><br>
@@ -12,43 +12,42 @@
         <table class="table">
             {% for child in children %}
                 <tr>
-                    <th>{{forloop.counter}}. {{ child.first_name }} {{ child.last_name }}</th>
-                    <td>
-                        <a class="pull-right" role="button"
-                           href="{% url 'delete_child' child_id=child.id %}">Delete</a>
-                    </td>
-                </tr>
-                {% if not child.application.assistance_program %}
-                    <tr>
-                        <td colspan="2">
-                            <a class="" role="button" data-toggle="collapse" href="#collapseExample-{{ child.id }}"
+                    <td>{{ forloop.counter }}. {{ child.first_name }} {{ child.last_name }}
+                        {% if not child.application.assistance_program and not child.foster_child %}
+                            <a role="button" data-toggle="collapse" href="#collapseExample-{{ child.id }}"
                                aria-expanded="false" aria-controls="collapseExample">
-                                Show Earnings
+                                Earnings <span class="caret"></span>
                             </a>
-                            <div class="collapse" id="collapseExample-{{ child.id }}">
-                                <table class="table table-condensed table-striped">
-                                {% for page in earnings_pages %}
-                                    <tr>
-                                        <th>{{ page.display_title }}</th>
-                                        <td>
+                            <div class="earnings-div collapse" id="collapseExample-{{ child.id }}">
+                                <ul>
+                                    {% for page in earnings_pages %}
+                                        <li  class="stripped">
+                                            {{ page.display_title }}
+                                        <span class="pull-right">
+                                            <span class="earnings-value">
                                             {% if child|getvalue:page.value_field %}
                                                 $ {{ child|getvalue:page.value_field|intcomma }} -
                                                 {{ child|getvalue:page.frequency_field|frequencylabel }}
                                             {% endif %}
-                                        </td>
-                                        <td>
+                                            </span>
                                             <a class="btn btn-default pull-right"
                                                href="{% url page.name  child_id=child.id %}">
                                                 Change
                                             </a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </table>
+                                        </span>
+                                            <div class="clearfix"></div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
                             </div>
-                        </td>
-                    </tr>
-                {% endif %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a class="btn btn-danger pull-right" role="button"
+                           href="{% url 'delete_child' child_id=child.id %}">Delete</a>
+                    </td>
+                </tr>
+
             {% endfor %}
         </table>
     {% endif %}
@@ -68,19 +67,12 @@
     </a>
 {% endblock %}
 
-{% block application_content_right %}
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            Tips
-        </div>
-        <div class="panel-body">
-            <strong>Who should I list here?</strong>
-            When filling out this section, please include all members in your household who are:
-            <ul>
-                <li>Children age 18 or under and are supported with the household’s income</li>
-                <li>In your care under a foster arrangement, or qualify as homeless, migrant, or runaway youth</li>
-                <li>Students attending [school/school system here], regardless of age</li>
-            </ul>
-        </div>
-    </div>
+{% block application_help_tip %}
+    <strong>Who should I list here?</strong>
+    When filling out this section, please include all members in your household who are:
+    <ul>
+        <li>Children age 18 or under and are supported with the household’s income</li>
+        <li>In your care under a foster arrangement, or qualify as homeless, migrant, or runaway youth</li>
+        <li>Students attending [school/school system here], regardless of age</li>
+    </ul>
 {% endblock %}

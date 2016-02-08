@@ -30,9 +30,14 @@
         <div class="form-group">
             <div class="col-sm-offset-3 col-sm-9">
                 <button type="submit" class="btn btn-primary">Save</button>
-                <a class="btn btn-default" role="button"href="{% url 'adults' %}">Cancel</a>
+                <a class="btn btn-default" role="button" href="{% url 'adults' %}">Cancel</a>
             </div>
         </div>
     </form>
 {% endblock %}
 
+{% block application_bottom_nav_wrapper %}
+{% endblock %}
+
+{% block application_content_right %}
+{% endblock %}
