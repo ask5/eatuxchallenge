@@ -6,7 +6,11 @@
     {% else %}
         <h3>Add a household member</h3>
     {% endif %}
-        {{ form.non_field_errors }}
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+                {{ form.non_field_errors }}
+            </div>
+        </div>
         <div class="form-group">
             <label for="{{ form.first_name.id_for_label }}" class="col-sm-3 control-label">First Name</label>
             <div class="col-sm-3 frm-control">

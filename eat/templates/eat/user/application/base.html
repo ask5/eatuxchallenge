@@ -30,17 +30,19 @@
         </div><!-- /.navbar-collapse -->
     </div>
 </nav>
-<div class="container">
-    {% if nav %}
-        <div>
-            {% show_nav nav %}
-        </div>
-    {% endif %}
+<div class="container-fluid">
     <div class="row">
         <form class="form-horizontal" method="post">
             {% csrf_token %}
             <div class="col-lg-9">
-                {% block application_content_main %}{% endblock %}
+                {% if nav %}
+                    <div>
+                        {% show_nav nav %}
+                    </div>
+                {% endif %}
+                <div class="working-area">
+                    {% block application_content_main %}{% endblock %}
+                </div>
                 <div class="nav-buttons">
                     {% block application_bottom_nav %}{% endblock %}
                     <div class="clearfix"></div>

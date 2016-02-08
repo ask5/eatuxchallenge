@@ -12,7 +12,7 @@
         <table class="table">
             {% for child in children %}
                 <tr>
-                    <th>{{ child.first_name }} {{ child.last_name }}</th>
+                    <th>{{forloop.counter}}. {{ child.first_name }} {{ child.last_name }}</th>
                     <td>
                         <a class="pull-right" role="button"
                            href="{% url 'delete_child' child_id=child.id %}">Delete</a>
@@ -21,12 +21,12 @@
                 {% if not child.application.assistance_program %}
                     <tr>
                         <td colspan="2">
-                            <a class="" role="button" data-toggle="collapse" href="#collapseExample"
+                            <a class="" role="button" data-toggle="collapse" href="#collapseExample-{{ child.id }}"
                                aria-expanded="false" aria-controls="collapseExample">
                                 Show Earnings
                             </a>
-                            <div class="collapse" id="collapseExample">
-                                <table class="table table-condensed">
+                            <div class="collapse" id="collapseExample-{{ child.id }}">
+                                <table class="table table-condensed table-striped">
                                 {% for page in earnings_pages %}
                                     <tr>
                                         <th>{{ page.display_title }}</th>

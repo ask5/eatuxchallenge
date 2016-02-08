@@ -1,5 +1,6 @@
 {% extends "eat/user/application/base.html" %}
 {% load staticfiles %}
+
 {% block application_content_main %}
     <p class="lead">
         {% if app.assistance_program %}
@@ -10,10 +11,11 @@
             your eligibility!
         {% endif %}
     </p>
-    <div class="nav-buttons">
-        <a class="btn btn-default pull-left" role="button" href="{% url 'eat.views.assistance_program' %}">Back</a>
-        <a class="btn btn-default pull-right" role="button" href="{% url 'eat.views.children' %}">Continue</a>
-    </div>
+{% endblock %}
+
+{% block application_bottom_nav %}
+    <a class="btn btn-default pull-left" role="button" href="{% url 'eat.views.assistance_program' %}">Back</a>
+    <a class="btn btn-default pull-right" role="button" href="{% url 'eat.views.children' %}">Continue</a>
 {% endblock %}
 
 {% block application_content_right %}
