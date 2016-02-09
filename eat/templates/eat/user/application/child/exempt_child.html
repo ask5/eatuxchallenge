@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% block application_content_main %}
     <div style="padding: 2em;">
-        <h1>
+        <h2>
             {% if app.assistance_program %}
                 You don't need to provide earnings for {{ child.first_name }} since
                 you participate in an Assistance Program.
@@ -10,12 +10,13 @@
             {% if app.assistance_program != True and child.foster_child %}
                 Since {{ child.first_name }} is a foster child, you don't need to provide earnings for the child.
             {% endif %}
-        </h1>
+        </h2>
     </div>
-    <div>
-        <a class="btn btn-default pull-left" role="button" href="{% url "edit_child" child_id=child.id %}">Back</a>
-        <a class="btn btn-default pull-right" role="button" href="{% url "children" %}">Continue</a>
-    </div>
+{% endblock %}
+
+{% block application_bottom_nav %}
+    <a class="btn btn-default pull-left" role="button" href="{% url "edit_child" child_id=child.id %}">Back</a>
+    <a class="btn btn-default pull-right" role="button" href="{% url "children" %}">Continue</a>
 {% endblock %}
 
 {% block application_content_right %}

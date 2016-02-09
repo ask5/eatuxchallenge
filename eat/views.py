@@ -88,11 +88,9 @@ def application_create(request):
     if request.POST:
         app = Application(
             user=request.user,
-            status=1,
-            create_date=datetime.now()
+            status=1
         )
         app.save()
-        request.session['app_id'] = app.id
         result = redirect('assistance_program')
     return result
 
@@ -141,9 +139,18 @@ def review(request):
     app = AppUtil.get_by_user(user=request.user)
     _children = Child.children.filter(application=app[0])
     _adults = Adult.adults.filter(application=app[0])
+    issues = []
     args['app'] = app[0]
+
+    if not app[0].contact_form_complete:
+        issues.append("Contact form is not complete")
+
+    if not app[0].assistance_program and not _adults.exists():
+        issues.append("You haven't entered household Adults information")
+
     args['children'] = _children
     args['adults'] = _adults
+    args['issues'] = issues
     args['nav'] = AppUtil.get_nav(nav=nav, url='review')
     args['child_earnings_pages'] = AppUtil.get_earnings_pages('children')
     args['adult_earnings_pages'] = AppUtil.get_earnings_pages('adults')
@@ -366,7 +373,7 @@ def adult_earnings(request, adult_id):
     page_name = resolve(request.path_info).url_name
     page = EarningsPage.objects.get(entity='adult', name=page_name)
 
-    if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('children') or \
+    if parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('adults') or \
                     parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('review'):
             direct = True
 
@@ -421,10 +428,31 @@ def contact(request):
         form = ContactForm(request.POST, instance=app[0])
         if form.is_valid():
             form.save()
-            return redirect('review')
+            app.contact_form_complete = True
+            return redirect('race')
+        else:
+            app.contact_form_complete = False
     else:
         form = ContactForm(instance=app[0])
     args['form'] = form
     args['nav'] = AppUtil.get_nav(nav=nav, url='contact')
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/contact.html", args)
+
+
+@login_required
+def race(request):
+    args = dict()
+    app = AppUtil.get_by_user(user=request.user)
+    if request.method == 'POST':
+        form = RaceForm(request.POST, instance=app[0])
+        if form.is_valid():
+            form.save()
+            return redirect('review')
+    else:
+        form = RaceForm(instance=app[0])
+
+    args['form'] = form
+    args['nav'] = AppUtil.get_nav(nav=nav, url='race')
+    AppUtil.set_last_page(app[0], request.get_full_path())
+    return render(request, "eat/user/application/race.html", args)

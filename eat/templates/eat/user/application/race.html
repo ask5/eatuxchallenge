@@ -1,0 +1,56 @@
+{% extends "eat/user/application/base.html" %}
+{% load staticfiles %}
+{% block application_content_main %}
+    <h3>
+        Children's Racial and Ethnic Identities
+    </h3>
+    <p class="well">
+        We are required to ask for information about your children’s race and ethnicity. This information is important
+        and helps to make sure we are fully serving our community. Responding to this section is optional and does not
+        affect your children’s eligibility for free or reduced price meals.
+    </p>
+    <div class="row">
+        <div class="col-lg-6">
+            <strong>Ethnicity</strong>
+            <div class="radio">
+                {{ form.ethnicity }}
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <strong>Race (check one or more)</strong>
+            <div class="checkbox">
+                <label>
+                    {{ form.is_american_indian }} American Indian or Alaskan Native.
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    {{ form.is_asian }} Asian.
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    {{ form.is_black }} Black or African American.
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    {{ form.is_hawaiian }} Native Hawaiian or Other Pacific Islander.
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    {{ form.is_white }} White.
+                </label>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block application_bottom_nav %}
+    <a class="btn btn-default pull-left" role="button" href="{% url 'contact' %}">Back</a>
+    <button type="submit" class="btn btn-default pull-right">Continue</button>
+{% endblock %}
+
+{% block application_content_right %}
+{% endblock %}

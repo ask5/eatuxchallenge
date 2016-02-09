@@ -58,21 +58,44 @@ class AssistanceProgramForm(ModelForm):
         }
 
 
+class RaceForm(ModelForm):
+
+    class Meta:
+        model = Application
+        fields = ['ethnicity', 'is_american_indian', 'is_asian', 'is_black', 'is_hawaiian', 'is_white']
+        widgets = {
+            'ethnicity': forms.RadioSelect,
+            'is_american_indian': forms.CheckboxInput,
+            'is_asian': forms.CheckboxInput,
+            'is_black': forms.CheckboxInput,
+            'is_hawaiian': forms.CheckboxInput,
+            'is_white': forms.CheckboxInput
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(RaceForm, self).__init__(*args, **kwargs)
+        self.fields['ethnicity'].empty_label = None
+        self.fields['ethnicity'].widget.choices = self.fields['ethnicity'].choices
+
+
 class AddChildForm(ModelForm):
 
     class Meta:
         model = Child
-        fields = ['first_name', 'middle_name', 'last_name', 'is_student', 'foster_child', 'hmr']
+        fields = ['first_name', 'middle_name', 'last_name', 'is_student', 'foster_child', 'hmr',
+                  'is_head_start_participant']
         exclude = ("application",)
         widgets = {
             'is_student': forms.CheckboxInput,
             'foster_child': forms.CheckboxInput,
-            'hmr': forms.CheckboxInput
+            'hmr': forms.CheckboxInput,
+            'is_head_start_participant': forms.CheckboxInput
         }
         labels = {
             'is_student': "Is this child a student?",
             'foster_child': "Is this a foster child?",
             'hmr': "Is the child Homeless, Migrant or Runaway?",
+            'is_head_start_participant': "Is the child Head Start participant?",
         }
 
     def clean(self):
@@ -83,7 +106,6 @@ class AddChildForm(ModelForm):
             raise forms.ValidationError("Child with the same name already exits")
         else:
             return cleaned_data
-
 
 
 class AddAdultForm(ModelForm):
@@ -119,9 +141,48 @@ class ContactForm(ModelForm):
     class Meta:
         model = Application
         fields = ('street_address', 'apt', 'city', 'state', 'zip', 'phone', 'email',
-                  'first_name', 'last_name', 'signature')
+                  'first_name', 'last_name', 'signature', 'ssn_four_digit', 'no_ssn', 'todays_date')
+
+        widgets = {
+            'todays_date': forms.DateInput(format='%d/%m/%Y')
+        }
 
     def __init__(self, *args, **kwargs):
         super(ContactForm, self).__init__(*args, **kwargs)
         self.fields['state'].empty_label = "Select a State"
         self.fields['state'].widget.choices = self.fields['state'].choices
+
+    def clean(self):
+        cleaned_data = super(ContactForm, self).clean()
+        fname = cleaned_data.get("first_name")
+        lname = cleaned_data.get("last_name")
+        street_address = cleaned_data.get("street_address")
+        signature = cleaned_data.get("signature")
+        city = cleaned_data.get("city")
+        state = cleaned_data.get("state")
+        zip = cleaned_data.get("zip")
+        tdate = cleaned_data.get("todays_date")
+        errors = []
+
+        if fname == '' or lname == '':
+            errors.append(forms.ValidationError("Enter both first and last name"))
+
+        if street_address == '' or city == '' or state == '' or zip == '':
+            errors.append(forms.ValidationError("Enter complete address"))
+
+        if not self.cleaned_data['no_ssn'] and not self.cleaned_data['ssn_four_digit']:
+            errors.append(forms.ValidationError("Enter last 4 digits of your Social Security Number"))
+
+        if not self.cleaned_data['no_ssn'] and not self.cleaned_data['ssn_four_digit'].isnumeric():
+            errors.append(forms.ValidationError("SSN digits must be numeric"))
+
+        if signature == '':
+            errors.append(forms.ValidationError("Signature cannot be blank"))
+
+        if tdate:
+            errors.append(forms.ValidationError("Enter valid date"))
+
+        if errors:
+            raise forms.ValidationError(errors)
+        else:
+            return cleaned_data

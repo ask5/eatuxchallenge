@@ -6,7 +6,7 @@
         {% csrf_token %}
         <p>
             <input type="submit" value="Yes, I want to delete." class="btn btn-danger"/>
-            <a class="btn btn-default" role="button"href="{% url 'eat.views.adults' %}">Cancel</a>
+            <a class="btn btn-default" role="button"href="{% url 'adults' %}">Cancel</a>
         </p>
     </form>
 {% endblock %}

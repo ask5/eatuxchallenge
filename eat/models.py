@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
+import uuid
 
 APPLICATION_STATUSES = (
     (0, 'Start'),
@@ -81,12 +82,13 @@ STATES = (
 
 class Application(models.Model):
     applications = models.Manager()
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     status = models.IntegerField(choices=APPLICATION_STATUSES, verbose_name='Application Status',
                                  help_text='Application Status', default=0)
     last_page = models.CharField(max_length=50, verbose_name='Last Page', blank=True, null=True)
     enabled = models.BooleanField(verbose_name='Enabled', default=True)
-    create_date = models.DateField(verbose_name='Create date')
+    create_date = models.DateField(verbose_name='Create date', default=datetime.date.today)
     modified_date = models.DateField(verbose_name='Last modified date', blank=True, null=True)
     total_household_members = models.IntegerField(verbose_name='Total Household Members',
                                                   help_text='Total household members including children and adults',
@@ -135,10 +137,12 @@ class Application(models.Model):
     is_hawaiian = models.NullBooleanField(verbose_name='Is Hawaiian or Other Pacific Islander')
     is_white = models.NullBooleanField(verbose_name='Is White')
     active = models.BooleanField(verbose_name='Active', default=True)
+    contact_form_complete = models.BooleanField(verbose_name='Contact form complete', default=False)
 
 
 class Child(models.Model):
     children = models.Manager()
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=25,
                                   verbose_name='First Name')
@@ -149,6 +153,7 @@ class Child(models.Model):
                                    blank=True,
                                    null=True)
     is_student = models.BooleanField(verbose_name='Is Student')
+    is_head_start_participant = models.BooleanField(verbose_name='Is Head Start Participant')
     foster_child = models.BooleanField(verbose_name='Is Foster Child')
     hmr = models.BooleanField(verbose_name='Homeless, Migrant, Runaway')
     salary = models.IntegerField(verbose_name='Salary',
@@ -232,6 +237,7 @@ class Child(models.Model):
 
 class Adult(models.Model):
     adults = models.Manager()
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=25,
                                   verbose_name='First Name')

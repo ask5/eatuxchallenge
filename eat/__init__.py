@@ -24,10 +24,16 @@ nav = {
         'current': False,
         'position': 4
     },
+    'race': {
+        'caption': 'Ethnicity & Race',
+        'url': 'race',
+        'current': False,
+        'position': 5
+    },
     'review': {
         'caption': 'Review',
         'url': 'review',
         'current': False,
-        'position': 5
+        'position': 6
     }
 }
