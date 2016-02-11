@@ -7,7 +7,7 @@
         <h3>
             Adult household members, including yourself.
         </h3>
-        <a class="pull-right" role="button" href="{% url 'add_adult' %}">Add an Adult</a>
+        <a class="btn btn-primary pull-right" role="button" href="{% url 'add_adult' %}">Add an Adult</a>
         <div class="clearfix"></div>
         <hr>
         {% if adults %}
@@ -16,7 +16,7 @@
                     <a class="btn btn-danger pull-right" role="button"
                        href="{% url 'delete_adult' adult_id=adult.id %}">Delete</a>
                     <span class="adult-name">{{ forloop.counter }}. {{ adult.first_name }} {{ adult.last_name }}<span>
-                    <a class="" role="button" data-toggle="collapse" href="#collapseExample-{{ adult.id }}"
+                    <a class="earnings-dropdown-label" role="button" data-toggle="collapse" href="#collapseExample-{{ adult.id }}"
                        aria-expanded="false" aria-controls="collapseExample">
                         Earnings <span class="caret"></span>
                     </a>

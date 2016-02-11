@@ -130,7 +130,7 @@ class Application(models.Model):
     phone = models.CharField(max_length=15, verbose_name='Phone', blank=True, null=True)
     email = models.EmailField(max_length=255, verbose_name='Email', blank=True, null=True)
     ethnicity = models.CharField(max_length=25, choices=ETHNICITIES,
-                                 verbose_name='Ethnicity', blank=True, null=True)
+                                 verbose_name='Ethnicity', blank=True, null=True, default=None)
     is_american_indian = models.NullBooleanField(verbose_name='Is American Indian or Alaskan Native')
     is_asian = models.NullBooleanField(verbose_name='Is Asian')
     is_black = models.NullBooleanField(verbose_name='Is Black or African American')

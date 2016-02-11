@@ -4,7 +4,7 @@
 {% load tags %}
 {% block application_content_main %}
     {% if issues %}
-        <div class="well bg-danger">
+        <div class="bg-danger">
             <h4 class="text-danger">{{ user.first_name }}, we found following issues in you application:</h4>
             <ul class="text-danger">
                 {% for issue in issues %}
@@ -15,6 +15,9 @@
             </ul>
             <p class="text-danger">Please correct the above so that we can successfully process your application</p>
         </div>
+    {% else %}
+            <p class="bg-success" style="padding: 1.5em">Congratulations, {{ user.first_name }}!
+            Your application is ready to be submitted to USDA!</p>
     {% endif  %}
 
     <h3>Assistance Program</h3>
@@ -81,7 +84,7 @@
                     </a>
                     <div class="earnings-div collapse" id="adult-earnings-{{ adult.id }}">
                         <ul>
-                        {% for source in earnings %}
+                        {% for source in adult_earnings_pages %}
                             <li>
                                 <strong class="page_display_title">{{ source.name }}</strong>
                                 <ul>

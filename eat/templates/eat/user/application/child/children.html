@@ -6,7 +6,7 @@
     <h3>
         Children in the household.
     </h3>
-    <a class="pull-right" role="button" href="{% url 'add_child' %}">Add a Child</a>
+    <a class="btn btn-primary pull-right" role="button" href="{% url 'add_child' %}">Add a Child</a>
     <div class="clearfix"></div>
     <hr>
     {% if children %}
@@ -16,7 +16,7 @@
                    href="{% url 'delete_child' child_id=child.id %}">Delete</a>
                 <span class="child-name">{{ forloop.counter }}. {{ child.first_name }} {{ child.last_name }}</span>
                 {% if not child.application.assistance_program and not child.foster_child %}
-                    <a role="button" data-toggle="collapse" href="#collapseExample-{{ child.id }}"
+                    <a class="earnings-dropdown-label" role="button" data-toggle="collapse" href="#collapseExample-{{ child.id }}"
                        aria-expanded="false" aria-controls="collapseExample">
                         Earnings <span class="caret"></span>
                     </a>

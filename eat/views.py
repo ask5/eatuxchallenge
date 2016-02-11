@@ -142,11 +142,15 @@ def review(request):
     issues = []
     args['app'] = app[0]
 
+    if not _children.exists():
+        issues.append("Household children information could not be found.")
+
+    if not app[0].assistance_program and not _adults.exists():
+        issues.append("Household Adults information could not be found.")
+
     if not app[0].contact_form_complete:
         issues.append("Contact form is not complete")
 
-    if not app[0].assistance_program and not _adults.exists():
-        issues.append("You haven't entered household Adults information")
 
     args['children'] = _children
     args['adults'] = _adults
@@ -423,15 +427,15 @@ def adult_earnings(request, adult_id):
 def contact(request):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
-
     if request.method == 'POST':
+        app[0].contact_form_complete = False
+        app[0].save()
         form = ContactForm(request.POST, instance=app[0])
         if form.is_valid():
-            form.save()
-            app.contact_form_complete = True
+            _app = form.save(commit=False)
+            _app.contact_form_complete = True
+            _app.save()
             return redirect('race')
-        else:
-            app.contact_form_complete = False
     else:
         form = ContactForm(instance=app[0])
     args['form'] = form

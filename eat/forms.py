@@ -59,24 +59,17 @@ class AssistanceProgramForm(ModelForm):
 
 
 class RaceForm(ModelForm):
-
     class Meta:
         model = Application
         fields = ['ethnicity', 'is_american_indian', 'is_asian', 'is_black', 'is_hawaiian', 'is_white']
         widgets = {
-            'ethnicity': forms.RadioSelect,
+            'ethnicity': forms.RadioSelect(),
             'is_american_indian': forms.CheckboxInput,
             'is_asian': forms.CheckboxInput,
             'is_black': forms.CheckboxInput,
             'is_hawaiian': forms.CheckboxInput,
             'is_white': forms.CheckboxInput
         }
-
-    def __init__(self, *args, **kwargs):
-        super(RaceForm, self).__init__(*args, **kwargs)
-        self.fields['ethnicity'].empty_label = None
-        self.fields['ethnicity'].widget.choices = self.fields['ethnicity'].choices
-
 
 class AddChildForm(ModelForm):
 
@@ -138,19 +131,22 @@ class EarningsForm(forms.Form):
 
 class ContactForm(ModelForm):
 
+    todays_date = forms.DateField(('%m/%d/%Y',), label='Today''s Date', required=True,
+        widget=forms.DateTimeInput(format='%m/%d/%Y', attrs={
+            'class':'input',
+            'readonly':'readonly',
+            'size':'15'
+        })
+    )
+
     class Meta:
         model = Application
         fields = ('street_address', 'apt', 'city', 'state', 'zip', 'phone', 'email',
                   'first_name', 'last_name', 'signature', 'ssn_four_digit', 'no_ssn', 'todays_date')
 
         widgets = {
-            'todays_date': forms.DateInput(format='%d/%m/%Y')
+            'todays_date': forms.DateInput(format='%m/%d/%Y')
         }
-
-    def __init__(self, *args, **kwargs):
-        super(ContactForm, self).__init__(*args, **kwargs)
-        self.fields['state'].empty_label = "Select a State"
-        self.fields['state'].widget.choices = self.fields['state'].choices
 
     def clean(self):
         cleaned_data = super(ContactForm, self).clean()
@@ -176,10 +172,14 @@ class ContactForm(ModelForm):
         if not self.cleaned_data['no_ssn'] and not self.cleaned_data['ssn_four_digit'].isnumeric():
             errors.append(forms.ValidationError("SSN digits must be numeric"))
 
+        if self.cleaned_data['no_ssn'] and self.cleaned_data['ssn_four_digit']:
+            errors.append(forms.ValidationError("Uncheck the 'I don't have SSN#' box OR "
+                                                "erase the value in the Last 4 digits of SSN# box. Both can't be true"))
+
         if signature == '':
             errors.append(forms.ValidationError("Signature cannot be blank"))
 
-        if tdate:
+        if tdate == '':
             errors.append(forms.ValidationError("Enter valid date"))
 
         if errors:
