@@ -138,6 +138,9 @@ class Application(models.Model):
     is_white = models.NullBooleanField(verbose_name='Is White')
     active = models.BooleanField(verbose_name='Active', default=True)
     contact_form_complete = models.BooleanField(verbose_name='Contact form complete', default=False)
+    all_adults_entered = models.BooleanField(verbose_name='All adults were entered', default=False)
+    all_children_entered = models.BooleanField(verbose_name='All children were entered', default=False)
+    app_for_foster_child = models.BooleanField(verbose_name='Is this App for Foster Child only?', default=False)
 
 
 class Child(models.Model):
@@ -233,6 +236,19 @@ class Child(models.Model):
                                                  help_text='How often are earnings received',
                                                  blank=True,
                                                  null=True)
+
+    def get_total_earning(self):
+        t = 0
+        t += self.salary
+        t += self.ssi_disability
+        t += self.ssi_parent_disability
+        t += self.spending_money_income
+        t += self.other_friend_income
+        t += self.pension_income
+        t += self.annuity_income
+        t += self.trust_income
+        t += self.other_income
+        return t
 
 
 class Adult(models.Model):
@@ -536,6 +552,46 @@ class Adult(models.Model):
                                                verbose_name='Frequency Of Cash Gifts',
                                                help_text='How often are earnings received',
                                                blank=True, null=True)
+
+    def get_total_earning(self):
+        t = 0
+        t += self.salary
+        t += self.wages
+        t += self.cash_bonuses
+        t += self.self_employment_income
+        t += self.strike_benefits
+        t += self.unemployment_insurance
+        t += self.other_earned_income
+        t += self.military_basic_pay
+        t += self.military_bonus
+        t += self.military_allowance
+        t += self.military_food
+        t += self.military_clothing
+        t += self.general_assistance
+        t += self.cash_assistance
+        t += self.alimony
+        t += self.child_support
+        t += self.social_security_income
+        t += self.railroad_income
+        t += self.pension_income
+        t += self.annuity_income
+        t += self.survivors_benefits
+        t += self.ssi_disability_benefits
+        t += self.private_disability_benefits
+        t += self.black_lung_benefits
+        t += self.workers_compensation
+        t += self.veterans_benefits
+        t += self.other_retirement_sources
+        t += self.interest_income
+        t += self.investment_income
+        t += self.dividends
+        t += self.trust_or_estates_income
+        t += self.rental_income
+        t += self.royalties_income
+        t += self.prize_winnings
+        t += self.savings_withdrawn
+        t += self.cash_gifts
+        return t
 
 
 class EarningSource(models.Model):

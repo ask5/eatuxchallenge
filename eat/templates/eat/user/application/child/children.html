@@ -15,6 +15,13 @@
                 <a class="btn btn-danger pull-right" role="button"
                    href="{% url 'delete_child' child_id=child.id %}">Delete</a>
                 <span class="child-name">{{ forloop.counter }}. {{ child.first_name }} {{ child.last_name }}</span>
+                <br>
+                <small>
+                    {% if child.is_student %} Student {% endif %}
+                    {% if child.foster_child %}, Foster child {% endif %}
+                    {% if child.is_head_start_participant %} Head Start Participant {% endif %}
+                    {% if child.hmr %} Homeless, Migrant or Runaway {% endif %}
+                </small>
                 {% if not child.application.assistance_program and not child.foster_child %}
                     <a class="earnings-dropdown-label" role="button" data-toggle="collapse" href="#collapseExample-{{ child.id }}"
                        aria-expanded="false" aria-controls="collapseExample">

@@ -4,18 +4,15 @@
     <h3>
         Assistance Program
     </h3>
-    <div class="well large">
-        {{ user.first_name }}, do any of your household members, including you, currently participate in
-        one or more of the following assistance programs: <strong>SNAP, TANF OR FDPIR</strong>?
-        <hr>
-        <div class="text-center">
-            <a class="btn btn-primary btn-lg" role="button" href="{% url 'participate' %}">Yes</a>
-            <a class="btn btn-primary btn-lg" role="button" href="{% url 'no_participation' %}">No</a>
-        </div>
-    </div>
+    <p class="well large">
+        Great, we'll ask you some questions later in the application about your household members and
+        income, which will help us determine your eligibility!
+    </p>
 {% endblock %}
 
-{% block application_bottom_nav_wrapper %}
+{% block application_bottom_nav %}
+    <a class="btn btn-default pull-left" role="button" href="{% url 'assistance_program' %}">Back</a>
+    <a class="btn btn-default pull-right" role="button" href="{% url 'foster_child' %}">Continue</a>
 {% endblock %}
 
 {% block application_help_tip %}

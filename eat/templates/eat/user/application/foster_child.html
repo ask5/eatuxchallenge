@@ -1,0 +1,33 @@
+{% extends "eat/user/application/base.html" %}
+{% load staticfiles %}
+
+{% block application_content_main %}
+    <h3>
+        Foster Child
+    </h3>
+    <div class="well large">
+        Is this application solely for <strong>foster child</strong> ?
+        <hr>
+        {% if form.non_field_errors %}
+            {{ form.non_field_errors }}
+            <div class="checkbox">
+                <label>
+                  {{ form.delete }} Check if you want to delete.
+                </label>
+            </div>
+        {% endif %}
+        <div class="text-center">
+            <input type="submit" value="Yes" class="btn btn-primary btn-lg"/>
+            <a class="btn btn-primary btn-lg" role="button" href="{% url 'children' %}">No</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block application_bottom_nav_wrapper %}
+{% endblock %}
+
+{% block application_help_tip %}
+    If the application is being made only for a student that is a foster child,
+    all you need to provide us is the child’s name,
+    indication of their status as a foster child, signature, date, and contact information.
+{% endblock %}

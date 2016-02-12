@@ -112,25 +112,60 @@ def application_welcome_back(request):
 def assistance_program(request):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
-    if request.method == 'POST':
-        form = AssistanceProgramForm(request.POST, instance=app[0])
-        if form.is_valid():
-            form.save()
-            return redirect('confirm_assistance_program')
-    else:
-        form = AssistanceProgramForm(instance=app[0])
-    args['form'] = form
     args['nav'] = AppUtil.get_nav(nav=nav, url='assistance_program')
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/assistance_program.html", args)
 
 
 @login_required
-def confirm_assistance_program(request):
+def assistance_program_participate(request):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
-    args['app'] = app[0]
-    return render(request, "eat/user/application/confirm_assistance_program.html", args)
+    if request.method == 'POST':
+        form = AssistanceProgramForm(request.POST, instance=app[0])
+        if form.is_valid():
+            _app = form.save(commit=False)
+            _app.assistance_program = True
+            _app.save()
+            return redirect('foster_child')
+    else:
+        form = AssistanceProgramForm(instance=app[0])
+
+    args['form'] = form
+    args['nav'] = AppUtil.get_nav(nav=nav, url='assistance_program')
+    AppUtil.set_last_page(app[0], request.get_full_path())
+    return render(request, "eat/user/application/assistance_program_participate.html", args)
+
+
+@login_required
+def assistance_program_no_participation(request):
+    args = dict()
+    app = AppUtil.get_by_user(user=request.user)
+    AppUtil.reset_assistance_program(app[0])
+    args['nav'] = AppUtil.get_nav(nav=nav, url='assistance_program')
+    return render(request, "eat/user/application/assistance_program_no_participation.html", args)
+
+
+@login_required
+def foster_child(request):
+    args = dict()
+    app = AppUtil.get_by_user(user=request.user)
+    if request.method == 'POST':
+        form = FosterChildForm(request.POST, instance=app[0])
+        if form.is_valid():
+            _app = form.save(commit=False)
+            _app.app_for_foster_child = True
+            _app.save()
+            Child.children.filter(application=app).delete()
+            return redirect('add_child')
+    else:
+        form = FosterChildForm(instance=app[0])
+
+    args['form'] = form
+    args['nav'] = AppUtil.get_nav(nav=nav, url='foster_child')
+    AppUtil.set_last_page(app[0], request.get_full_path())
+    return render(request, "eat/user/application/foster_child.html", args)
+
 
 
 @login_required
@@ -139,6 +174,10 @@ def review(request):
     app = AppUtil.get_by_user(user=request.user)
     _children = Child.children.filter(application=app[0])
     _adults = Adult.adults.filter(application=app[0])
+    total_adults_earnings = 0
+    for adult in adults:
+        total_adults_earnings += adult.get_total_earning()
+
     issues = []
     args['app'] = app[0]
 
@@ -147,6 +186,9 @@ def review(request):
 
     if not app[0].assistance_program and not _adults.exists():
         issues.append("Household Adults information could not be found.")
+
+    if not app[0].assistance_program and total_adults_earnings <=0:
+        issues.append("Total household adults'' earnings can't be zero.")
 
     if not app[0].contact_form_complete:
         issues.append("Contact form is not complete")
@@ -189,7 +231,7 @@ def add_child(request):
             else:
                 return redirect('child_salary', child_id=child.id)
     else:
-        form = AddChildForm()
+        form = AddChildForm(initial={ "foster_child": app[0].app_for_foster_child })
     args['form'] = form
     args['nav'] = AppUtil.get_nav(nav=nav, url='children')
     return render(request, "eat/user/application/child/add_edit.html", args)
@@ -209,6 +251,8 @@ def edit_child(request, child_id):
             else:
                 return redirect('child_salary', child_id=child.id)
     else:
+        if app[0].app_for_foster_child:
+            child.foster_child = True
         form = AddChildForm(instance=child)
     args['form'] = form
     args['child'] = child

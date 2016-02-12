@@ -6,34 +6,40 @@ nav = {
         'position': 1
 
     },
+    'foster_child': {
+        'caption': 'Foster Child',
+        'url': 'foster_child',
+        'current': False,
+        'position': 2
+    },
     'children': {
         'caption': 'Children',
         'url': 'children',
         'current': False,
-        'position': 2
+        'position': 3
     },
     'adults': {
         'caption': 'Adults',
         'url': 'adults',
         'current': False,
-        'position': 3
+        'position': 4
     },
     'contact': {
         'caption': 'Contact',
         'url': 'contact',
         'current': False,
-        'position': 4
+        'position': 5
     },
     'race': {
         'caption': 'Ethnicity & Race',
         'url': 'race',
         'current': False,
-        'position': 5
+        'position': 6
     },
     'review': {
         'caption': 'Review',
         'url': 'review',
         'current': False,
-        'position': 6
+        'position': 7
     }
 }

@@ -4,18 +4,25 @@
     <h3>
         Assistance Program
     </h3>
-    <div class="well large">
-        {{ user.first_name }}, do any of your household members, including you, currently participate in
-        one or more of the following assistance programs: <strong>SNAP, TANF OR FDPIR</strong>?
-        <hr>
-        <div class="text-center">
-            <a class="btn btn-primary btn-lg" role="button" href="{% url 'participate' %}">Yes</a>
-            <a class="btn btn-primary btn-lg" role="button" href="{% url 'no_participation' %}">No</a>
+    <p  class="well large">
+        Please provide the Case Number of the assistance program.
+    </p>
+    <div>
+        <div class="form-group">
+            <label for="{{ form.case_number.id_for_label }}" class="col-sm-5 control-label">
+                Assistance Program Case Number
+            </label>
+            <div class="col-sm-3 frm-control">
+                {{ form.case_number }}
+            </div>
+            {{ form.case_number.errors }}
         </div>
     </div>
 {% endblock %}
 
-{% block application_bottom_nav_wrapper %}
+{% block application_bottom_nav %}
+    <a class="btn btn-default pull-left" role="button" href="{% url 'assistance_program' %}">Back</a>
+    <button type="submit" class="btn btn-default pull-right">Continue</button>
 {% endblock %}
 
 {% block application_help_tip %}

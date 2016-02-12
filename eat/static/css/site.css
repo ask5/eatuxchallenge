@@ -1,6 +1,8 @@
 body{
     padding-top: 60px;
     color: #111111;
+    font-family: 'Fira Sans';
+    font-weight: 300;
 }
 
 body.homepage{

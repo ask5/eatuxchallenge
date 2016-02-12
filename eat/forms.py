@@ -38,7 +38,7 @@ class RegistrationForm(UserCreationForm):
 
 class AssistanceProgramForm(ModelForm):
     def clean_case_number(self):
-        if self.cleaned_data['assistance_program'] and self.cleaned_data['case_number'] == '':
+        if self.cleaned_data['case_number'] == '':
             raise forms.ValidationError('Case number is mandatory if you are currently participating in an assistance'
                                         ' program')
         else:
@@ -47,15 +47,26 @@ class AssistanceProgramForm(ModelForm):
     class Meta:
         model = Application
         fields = ['assistance_program', 'case_number']
-        widgets = {
-            'assistance_program': forms.RadioSelect
-        }
-        labels = {
-            'assistance_program': "Participate in any Assistance Program?"
-        }
-        help_texts = {
-            'case_number': "Provide case number if you participate."
-        }
+
+
+class FosterChildForm(ModelForm):
+    delete = forms.BooleanField()
+
+    class Meta:
+        model = Application
+        fields = ['app_for_foster_child']
+
+    def clean(self):
+        cleaned_data = super(FosterChildForm, self).clean()
+        if 'delete' in self.cleaned_data:
+            delete = self.cleaned_data['delete']
+        else:
+            delete = False
+
+        if Child.children.filter(application=self.instance).exists() and not delete:
+            raise forms.ValidationError("Already existing child information will be deleted.")
+        else:
+            return cleaned_data
 
 
 class RaceForm(ModelForm):
