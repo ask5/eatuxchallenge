@@ -50,7 +50,7 @@ class AssistanceProgramForm(ModelForm):
 
 
 class FosterChildForm(ModelForm):
-    delete = forms.BooleanField()
+    delete = forms.BooleanField(required=False)
 
     class Meta:
         model = Application
