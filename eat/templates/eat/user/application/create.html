@@ -3,15 +3,48 @@
 {% block application_content_main %}
     <h4>Hi {{ user.first_name }},</h4>
     <p>
+        Please let us know the number of people living in your household, which includes:
+        you, any children or anybody contributing to the income or expense of the household.
+    </p>
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            {{ form.non_field_errors }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="{{ form.total_children.id_for_label }}" class="col-sm-3 control-label">
+            Total Children <span class="mandatory">*</span></label>
+        <div class="col-sm-3 frm-control">
+            {{ form.total_children }}
+        </div>
+        {{ form.total_children.errors }}
+    </div>
+    <div class="form-group">
+        <label for="{{ form.total_adults.id_for_label }}" class="col-sm-3 control-label">
+            Total Adults <span class="mandatory">*</span></label>
+        <div class="col-sm-3 frm-control">
+            {{ form.total_adults }}
+        </div>
+        {{ form.total_adults.errors }}
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <div class="checkbox">
+                <label>
+                  {{ form.statements }} I have read the below statements.
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <input type="submit" value="Start my application" class="btn btn-primary"/>
+        </div>
+    </div>
+    <p>
         Please take a moment to read the USDA Non-Discrimination Statement and the Use of Information Statement
         displayed below before starting the application.
     </p>
-    <form method="post" action="{% url 'eat.views.application_create' %}">
-        {% csrf_token %}
-        <p>
-            <input type="submit" value="Start my application" class="btn btn-primary"/>
-        </p>
-    </form>
     <div class="statements">
         <h4>USDA Non-Discrimination Statement</h4>
         <div>
@@ -107,3 +140,5 @@
     </div>
 {% endblock %}
 
+{% block application_content_right %}
+{% endblock %}

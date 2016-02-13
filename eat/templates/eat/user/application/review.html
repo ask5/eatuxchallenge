@@ -3,6 +3,7 @@
 {% load humanize %}
 {% load tags %}
 {% block application_content_main %}
+    <h4>Application progress: <strong>{{ percent|floatformat:"0" }}%</strong> complete!</h4>
     {% if issues %}
         <div class="bg-danger app-section">
             <h4 class="text-danger">{{ user.first_name }}, we found following issues in you application:</h4>

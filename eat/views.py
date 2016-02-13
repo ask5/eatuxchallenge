@@ -84,22 +84,29 @@ def login_view(request):
 
 @login_required
 def application_create(request):
-    result = render(request, "eat/user/application/create.html")
-    if request.POST:
-        app = Application(
-            user=request.user,
-            status=1
-        )
-        app.save()
-        result = redirect('assistance_program')
-    return result
+    args = dict()
+    if request.method == 'POST':
+        form = CreateApplicatinForm(request.POST)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.user = request.user
+            application.status = 1
+            application.save()
+            return redirect('assistance_program')
+    else:
+        form = CreateApplicatinForm()
+
+    args['form'] = form
+    return render(request, "eat/user/application/create.html", args)
 
 
 @login_required
 def application_welcome_back(request):
-    result = render(request, "eat/user/application/welcome_back.html")
+    args = dict()
+    app = AppUtil.get_by_user(user=request.user)
+    args['percent'] = AppUtil.get_app_progress(app[0])
+    result = render(request, "eat/user/application/welcome_back.html", args)
     if request.POST:
-        app = AppUtil.get_by_user(user=request.user)
         if app[0].last_page:
             result = redirect(app[0].last_page)
         else:
@@ -202,17 +209,24 @@ def review(request):
 
     if not _children.exists():
         issues.append("Household children information could not be found.")
+    elif _children.count() < app[0].total_children:
+        issues.append("Number of children found is less than the "
+                      "total number of children mentioned during the creation of the application.")
 
     if not app[0].assistance_program and not app[0].app_for_foster_child and not _adults.exists():
         issues.append("Household Adults information could not be found.")
+    elif not app[0].assistance_program  and not app[0].app_for_foster_child and _adults.count() < app[0].total_adults:
+        issues.append("Number of adults found is less than the "
+                      "total number of adults mentioned during the creation of the application.")
 
-    if not app[0].assistance_program  and not app[0].app_for_foster_child and total_adults_earnings <=0:
-        issues.append("Total household adults'' earnings can't be zero.")
+    if not app[0].assistance_program  and not app[0].app_for_foster_child and total_adults_earnings <= 0:
+        issues.append("Total household adults' earnings can't be zero.")
 
     if not app[0].contact_form_complete:
         issues.append("Contact form is not complete")
 
     args['children'] = _children
+    args['percent'] = AppUtil.get_app_progress(app[0])
     args['adults'] = _adults
     args['issues'] = issues
     args['nav'] = AppUtil.get_nav(nav=nav, url='review')
@@ -541,6 +555,21 @@ def race(request):
 def admin_dashboard(request):
     args = dict()
     args['total_users'] = User.objects.all().count()
-    args['total_apps'] = Application.objects.all().count()
-    args['apps_assistance_program'] = Application.objects.filter(assistance_program=True).count()
-    args['apps_foster_child'] = Application.objects.filter(app_for_foster_child=True).count()
+
+    total_applications = Application.applications.all().count()
+    apps_assistance_program = Application.applications.filter(assistance_program=True).count()
+    apps_foster_child = Application.applications.filter(app_for_foster_child=True).count()
+    other_applications = total_applications - (apps_assistance_program + apps_foster_child)
+
+    args['total_applications'] = total_applications
+    args['apps_assistance_program'] = apps_assistance_program
+    args['apps_foster_child'] = apps_foster_child
+    args['other_applications'] = other_applications
+
+    args['total_children'] = Child.children.all().count()
+    args['students'] = Child.children.filter(is_student=True).count()
+    args['non_students'] = Child.children.filter(is_student=False).count()
+    args['foster_children'] = Child.children.filter(foster_child=True).count()
+    args['hmr_children'] = Child.children.filter(hmr=True).count()
+    args['head_start_children'] = Child.children.filter(is_head_start_participant=True).count()
+    return render(request, "eat/user/application/admin_dashboard.html", args)

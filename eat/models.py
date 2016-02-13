@@ -90,8 +90,11 @@ class Application(models.Model):
     enabled = models.BooleanField(verbose_name='Enabled', default=True)
     create_date = models.DateField(verbose_name='Create date', default=datetime.date.today)
     modified_date = models.DateField(verbose_name='Last modified date', blank=True, null=True)
-    total_household_members = models.IntegerField(verbose_name='Total Household Members',
-                                                  help_text='Total household members including children and adults',
+    total_children = models.IntegerField(verbose_name='Total Household Children',
+                                                  help_text='Total household members who are children',
+                                                  blank=True, null=True)
+    total_adults = models.IntegerField(verbose_name='Total Household Adults',
+                                                  help_text='Total household members who are adults',
                                                   blank=True, null=True)
 
     assistance_program = models.BooleanField(verbose_name='Participate in Assistance Program', choices=YES_NO,

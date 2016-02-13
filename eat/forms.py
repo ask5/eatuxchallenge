@@ -49,6 +49,29 @@ class AssistanceProgramForm(ModelForm):
         fields = ['assistance_program', 'case_number']
 
 
+class CreateApplicatinForm(ModelForm):
+    statements = forms.BooleanField()
+
+    class Meta:
+        model = Application
+        fields = ['total_children', 'total_adults']
+
+    def clean(self):
+        cleaned_data = super(CreateApplicatinForm, self).clean()
+        errors = []
+
+        if cleaned_data.get("total_children") == '':
+            errors.append(forms.ValidationError("Total number of children cannot be blank."))
+
+        if cleaned_data.get("total_adults") == '':
+            errors.append(forms.ValidationError("Total number of adults cannot be blank."))
+
+        if errors:
+            raise forms.ValidationError(errors)
+        else:
+            return cleaned_data
+
+
 class FosterChildForm(ModelForm):
     delete = forms.BooleanField(required=False)
 
@@ -70,6 +93,7 @@ class FosterChildForm(ModelForm):
                 return cleaned_data
         else:
             return cleaned_data
+
 
 class RaceForm(ModelForm):
     class Meta:

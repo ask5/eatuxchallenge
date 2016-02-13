@@ -101,4 +101,6 @@ urlpatterns = [
     #Contacts
     url(r'^app/contact', views.contact, name='contact'),
     url(r'^app/race', views.race, name='race'),
+
+    url(r'^app/dashboard', views.admin_dashboard, name='admin_dashboard')
 ]
