@@ -174,7 +174,7 @@ ol.breadcrumb > li.active a {
 }
 
 .child-row, .adult-row {
-    border-bottom: 1px solid #cccccc;
+    border-bottom: 1px solid #f1f1f1;
     padding-bottom: 0.5em;
 }
 

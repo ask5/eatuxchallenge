@@ -405,6 +405,15 @@ def add_adult(request):
 
 
 @login_required
+def adult_confirm(request):
+    if request.method == 'POST':
+        app = AppUtil.get_by_user(user=request.user)
+        AppUtil.all_adults_entered(app[0])
+        return redirect('contact')
+    return render(request, "eat/user/application/adult/confirm.html")
+
+
+@login_required
 def edit_adult(request, adult_id):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
@@ -526,3 +535,12 @@ def race(request):
     args['nav'] = AppUtil.get_nav(nav=nav, url='race')
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/race.html", args)
+
+
+@login_required
+def admin_dashboard(request):
+    args = dict()
+    args['total_users'] = User.objects.all().count()
+    args['total_apps'] = Application.objects.all().count()
+    args['apps_assistance_program'] = Application.objects.filter(assistance_program=True).count()
+    args['apps_foster_child'] = Application.objects.filter(app_for_foster_child=True).count()

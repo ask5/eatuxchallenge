@@ -1,0 +1,18 @@
+{% extends "eat/user/application/base.html" %}
+{% load staticfiles %}
+{% block application_content_main %}
+    <p>
+        Before we proceed just want to make sure that you have listed all adults in the household.
+        It is important to list all household members who share income and expenses.
+    </p>
+    <p>
+        <input type="submit" value="Yes, I am done." class="btn btn-primary"/>
+        <a class="btn btn-primary" role="button" href="{% url 'adults' %}">I want to add more</a>
+    </p>
+{% endblock %}
+
+{% block application_bottom_nav_wrapper %}
+{% endblock %}
+
+{% block application_content_right %}
+{% endblock %}

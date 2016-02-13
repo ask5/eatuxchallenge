@@ -26,6 +26,11 @@ class AppUtil(object):
         app.save()
 
     @classmethod
+    def all_adults_entered(cls, app):
+        app.all_adults_entered = True
+        app.save()
+
+    @classmethod
     def get_earnings_pages(self, entity):
         p = EarningsPage.objects.get(name=entity)
         e = []

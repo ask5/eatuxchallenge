@@ -56,6 +56,7 @@ urlpatterns = [
     url(r'^app/adults/(?P<adult_id>[0-9a-z-]+)/edit', views.edit_adult, name='edit_adult'),
     url(r'^app/adults/(?P<adult_id>[0-9a-z-]+)/delete', views.delete_adult, name='delete_adult'),
     url(r'^app/children/(?P<child_id>[0-9a-z-]+)/salary', views.child_earnings, name='child_salary'),
+    url(r'^app/adults/confirm', views.adult_confirm, name='adult_confirm'),
 
     #Adult earnings
     url(r'^app/adults/(?P<adult_id>[0-9a-z-]+)/salary', views.adult_earnings, name='adult_salary'),

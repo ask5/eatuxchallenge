@@ -76,8 +76,13 @@
     <a class="btn btn-default pull-left" role="button"
        href="{% url 'children' %}">Back</a>
 
-    <a class="btn btn-default pull-right" role="button"
-       href="{% url 'eat.views.contact' %}">Continue</a>
+    {% if app.all_adults_entered or app.assistance_program or app.app_for_foster_child%}
+        <a class="btn btn-default pull-right" role="button"
+           href="{% url 'contact' %}">Continue</a>
+    {% else %}
+        <a class="btn btn-default pull-right" role="button"
+           href="{% url 'adult_confirm' %}">Continue</a>
+    {% endif %}
 {% endblock %}
 
 {% block application_help_tip %}
