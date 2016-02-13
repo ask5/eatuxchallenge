@@ -58,16 +58,18 @@ class FosterChildForm(ModelForm):
 
     def clean(self):
         cleaned_data = super(FosterChildForm, self).clean()
-        if 'delete' in self.cleaned_data:
-            delete = self.cleaned_data['delete']
-        else:
-            delete = False
+        if 'submit' in self.data:
+            if 'delete' in self.cleaned_data:
+                delete = self.cleaned_data['delete']
+            else:
+                delete = False
 
-        if Child.children.filter(application=self.instance).exists() and not delete:
-            raise forms.ValidationError("Already existing child information will be deleted.")
+            if Child.children.filter(application=self.instance).exists() and not delete:
+                raise forms.ValidationError("Already existing household information will be deleted.")
+            else:
+                return cleaned_data
         else:
             return cleaned_data
-
 
 class RaceForm(ModelForm):
     class Meta:

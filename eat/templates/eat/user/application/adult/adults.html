@@ -3,10 +3,10 @@
 {% load humanize %}
 {% load tags %}
 {% block application_content_main %}
-    {% if not app.assistance_program %}
-        <h3>
-            Adult household members, including yourself.
-        </h3>
+    <h3>
+        Adult household members, including yourself.
+    </h3>
+    {% if not app.assistance_program and not app.app_for_foster_child %}
         <a class="btn btn-primary pull-right" role="button" href="{% url 'add_adult' %}">Add an Adult</a>
         <div class="clearfix"></div>
         <hr>
@@ -15,48 +15,60 @@
                 <div class="adult-row">
                     <a class="btn btn-danger pull-right" role="button"
                        href="{% url 'delete_adult' adult_id=adult.id %}">Delete</a>
-                    <span class="adult-name">{{ forloop.counter }}. {{ adult.first_name }} {{ adult.last_name }}<span>
+                    <span class="adult-name">{{ forloop.counter }}. {{ adult.first_name }} {{ adult.last_name }}</span>
                     <a class="earnings-dropdown-label" role="button" data-toggle="collapse" href="#collapseExample-{{ adult.id }}"
                        aria-expanded="false" aria-controls="collapseExample">
                         Earnings <span class="caret"></span>
                     </a>
                     <div class="earnings-div collapse" id="collapseExample-{{ adult.id }}">
                         <ul>
-                        {% for source in earnings %}
-                            <li>
-                                <strong class="page_display_title">{{ source.name }}</strong>
-                                <ul>
-                                    {% for page in source.pages %}
-                                        <li class="stripped">
-                                            <span class="pull-left page_display_title">{{ page.display_title }}</span>
-                                            <span class="pull-right">
-                                                <span class="earnings-value">
-                                                    {% if adult|getvalue:page.value_field %}
-                                                        $ {{ adult|getvalue:page.value_field|intcomma }} -
-                                                        {{ adult|getvalue:page.frequency_field|frequencylabel }}
-                                                    {% endif %}
+                            {% for source in earnings %}
+                                <li>
+                                    <strong class="page_display_title">{{ source.name }}</strong>
+                                    <ul>
+                                        {% for page in source.pages %}
+                                            <li class="stripped">
+                                                <span class="pull-left page_display_title">{{ page.display_title }}</span>
+                                                <span class="pull-right">
+                                                    <span class="earnings-value">
+                                                        {% if adult|getvalue:page.value_field %}
+                                                            $ {{ adult|getvalue:page.value_field|intcomma }} -
+                                                            {{ adult|getvalue:page.frequency_field|frequencylabel }}
+                                                        {% endif %}
+                                                    </span>
+                                                    <a class="btn btn-default"
+                                                       href="{% url page.name  adult_id=adult.id %}">
+                                                        Change
+                                                    </a>
                                                 </span>
-                                                <a class="btn btn-default"
-                                                   href="{% url page.name  adult_id=adult.id %}">
-                                                    Change
-                                                </a>
-                                            </span>
-                                            <div class="clearfix"></div>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                                                <div class="clearfix"></div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                     <div class="clearfix"></div>
                 </div>
             {% endfor %}
         {% endif %}
     {% else %}
-        <p>
-            Since you are participating in assistance program, you don't need to enter adult household members!
-        </p>
+        <div>
+            {{ user.first_name }}, you don't need to enter adult household information because:
+            <ul>
+            {% if app.assistance_program %}
+                <li>
+                    You participate in an assistance program
+                </li>
+            {% endif %}
+            {% if app.app_for_foster_child %}
+                <li>
+                    You are filling the application for a foster child.
+                </li>
+            {% endif %}
+            </ul>
+        </div>
     {% endif %}
 {% endblock %}
 

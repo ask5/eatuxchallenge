@@ -4,6 +4,17 @@
     <h3>
         Assistance Program
     </h3>
+    {% if app.assistance_program %}
+        <p class="warning">
+            You answered 'Yes', and your case number is <strong>{{ app.case_number }}</strong>. You can
+            change your answer anytime!
+        </p>
+    {% elif adults%}
+        <p class="bg-danger text-danger warning">
+            You have previously entered household information about adults.
+            That information will be deleted if you answer 'Yes' here.
+        </p>
+    {% endif %}
     <div class="well large">
         {{ user.first_name }}, do any of your household members, including you, currently participate in
         one or more of the following assistance programs: <strong>SNAP, TANF OR FDPIR</strong>?

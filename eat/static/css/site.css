@@ -162,3 +162,46 @@ ol.breadcrumb > li.active a {
 .mandatory {
     color: red;
 }
+
+.warning{
+    padding: 0.5em;
+    font-weight: 500;
+}
+
+.child-name, .adult-name{
+    font-weight: 500;
+    float: left;
+}
+
+.child-row, .adult-row {
+    border-bottom: 1px solid #cccccc;
+    padding-bottom: 0.5em;
+}
+
+ul.child-info{
+    float: left;
+    padding: 0;
+    margin-left: 1em;
+}
+
+ul.child-info li{
+    display: inline;
+}
+
+ul.child-info li:before{
+    content: ", ";
+}
+
+ul.child-info li:first-child:before {
+    content: '( ';
+}
+ul.child-info li:last-child:after {
+    content: ' )';
+}
+
+.app-section{
+    border-radius: 4px;
+    border: 1px solid #c5c5c5;
+    padding: 1em;
+    margin-bottom: 1em;
+}

@@ -4,7 +4,7 @@
 {% load tags %}
 {% block application_content_main %}
     {% if issues %}
-        <div class="bg-danger">
+        <div class="bg-danger app-section">
             <h4 class="text-danger">{{ user.first_name }}, we found following issues in you application:</h4>
             <ul class="text-danger">
                 {% for issue in issues %}
@@ -16,27 +16,35 @@
             <p class="text-danger">Please correct the above so that we can successfully process your application</p>
         </div>
     {% else %}
-            <p class="bg-success" style="padding: 1.5em">Congratulations, {{ user.first_name }}!
+            <p class="bg-success app-section" style="padding: 1.5em">Congratulations, {{ user.first_name }}!
             Your application is ready to be submitted to USDA!</p>
     {% endif  %}
 
-    <h3>Assistance Program</h3>
-    {% if app.assistance_program %}
-        <p>
-            Case Number: {{ app.case_number }}
-        </p>
-    {% else %}
-        <p>
-            You mentioned that none of your household members participates in any Assistance Program.
-        </p>
-    {% endif %}
-    <hr>
+    <div class="app-section">
+        <h4>Assistance Program</h4>
+        {% if app.assistance_program %}
+            <p>
+                Case Number: {{ app.case_number }}
+            </p>
+        {% else %}
+            <p>
+                You mentioned that none of your household members participates in any Assistance Program.
+            </p>
+        {% endif %}
+    </div>
 
-    <h3>Household Children</h3>
-    {% if children %}
+    <div class="app-section">
+        <h4>Household Children</h4>
+        {% if children %}
         {% for child in children %}
             <div class="child-row">
                 <span class="child-name">{{ forloop.counter }}. {{ child.first_name }} {{ child.last_name }}</span>
+                <ul class="child-info">
+                    {% if child.is_student %} <li>Student</li> {% endif %}
+                    {% if child.foster_child %}<li>Foster child</li> {% endif %}
+                    {% if child.is_head_start_participant %}<li>Head Start Participant</li> {% endif %}
+                    {% if child.hmr %}<li>Homeless, Migrant or Runaway</li> {% endif %}
+                </ul>
                 {% if not child.application.assistance_program and not child.foster_child %}
                     <a role="button" data-toggle="collapse" href="#child-earnings-{{ child.id }}"
                        aria-expanded="true" aria-controls="child-earnings-{{ child.id }}">
@@ -69,9 +77,12 @@
             </div>
         {% endfor %}
     {% endif %}
+    </div>
 
-    <h3>Household Adults</h3>
-    {% if not app.assistance_program %}
+    <div class="app-section">
+        <h4>Household Adults</h4>
+
+        {% if not app.assistance_program and not app.app_for_foster_child %}
         {% if adults %}
             {% for adult in adults %}
                 <div class="adult-row">
@@ -116,13 +127,27 @@
             {% endfor %}
         {% endif %}
     {% else %}
-        <p>
-            Since you are participating in assistance program, you don't need to enter adult household members!
-        </p>
+        <div>
+            You don't need to enter adult household information because:
+            <ul>
+            {% if app.assistance_program %}
+                <li>
+                    You participate in an assistance program
+                </li>
+            {% endif %}
+            {% if app.app_for_foster_child %}
+                <li>
+                    You are filling the application for a foster child.
+                </li>
+            {% endif %}
+            </ul>
+        </div>
     {% endif %}
+    </div>
 
-    <h3>Contact Information</h3>
-    <table class="table table-condensed table-bordered">
+    <div class="app-section">
+        <h4>Contact Information</h4>
+        <table class="table table-condensed table-bordered">
         <tr>
             <th>First Name</th>
             <td>{{ app.first_name }}</td>
@@ -155,6 +180,7 @@
             <td>{{ app.ssn_four_digit }}</td>
         </tr>
     </table>
+    </div>
 
 {% endblock %}
 

@@ -113,6 +113,8 @@ def assistance_program(request):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     args['nav'] = AppUtil.get_nav(nav=nav, url='assistance_program')
+    args['app'] = app[0]
+    args['adults'] = Adult.adults.filter(application=app)
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/assistance_program.html", args)
 
@@ -127,6 +129,10 @@ def assistance_program_participate(request):
             _app = form.save(commit=False)
             _app.assistance_program = True
             _app.save()
+
+            if Adult.adults.filter(application=app).exists():
+                Adult.adults.filter(application=app).delete()
+
             return redirect('foster_child')
     else:
         form = AssistanceProgramForm(instance=app[0])
@@ -154,18 +160,31 @@ def foster_child(request):
         form = FosterChildForm(request.POST, instance=app[0])
         if form.is_valid():
             _app = form.save(commit=False)
-            _app.app_for_foster_child = True
-            _app.save()
-            Child.children.filter(application=app).delete()
-            return redirect('add_child')
+            if 'submit' in request.POST:
+                _app.app_for_foster_child = True
+                _app.save()
+
+                if Child.children.filter(application=app).exists():
+                    Child.children.filter(application=app).delete()
+
+                if Adult.adults.filter(application=app).exists():
+                    Adult.adults.filter(application=app).delete()
+
+                return redirect('add_child')
+            elif 'cancel' in request.POST:
+                _app.app_for_foster_child = False
+                _app.save()
+                return redirect('children')
+
     else:
         form = FosterChildForm(instance=app[0])
 
     args['form'] = form
+    args['children'] = Child.children.filter(application=app)
+    args['adults'] = Adult.adults.filter(application=app)
     args['nav'] = AppUtil.get_nav(nav=nav, url='foster_child')
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/foster_child.html", args)
-
 
 
 @login_required
@@ -175,7 +194,7 @@ def review(request):
     _children = Child.children.filter(application=app[0])
     _adults = Adult.adults.filter(application=app[0])
     total_adults_earnings = 0
-    for adult in adults:
+    for adult in _adults:
         total_adults_earnings += adult.get_total_earning()
 
     issues = []
@@ -184,15 +203,14 @@ def review(request):
     if not _children.exists():
         issues.append("Household children information could not be found.")
 
-    if not app[0].assistance_program and not _adults.exists():
+    if not app[0].assistance_program and not app[0].app_for_foster_child and not _adults.exists():
         issues.append("Household Adults information could not be found.")
 
-    if not app[0].assistance_program and total_adults_earnings <=0:
+    if not app[0].assistance_program  and not app[0].app_for_foster_child and total_adults_earnings <=0:
         issues.append("Total household adults'' earnings can't be zero.")
 
     if not app[0].contact_form_complete:
         issues.append("Contact form is not complete")
-
 
     args['children'] = _children
     args['adults'] = _adults
@@ -211,6 +229,7 @@ def children(request):
     args['app'] = app[0]
     args['nav'] = AppUtil.get_nav(nav=nav, url='children')
     args['children'] = _children
+    args['total_children'] = _children.count()
     args['earnings_pages'] = AppUtil.get_earnings_pages('children')
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/child/children.html", args)
@@ -226,6 +245,9 @@ def add_child(request):
             child = form.save(commit=False)
             child.application = app[0]
             child.save()
+            if app[0].app_for_foster_child:
+                return redirect('children')
+
             if app[0].assistance_program or child.foster_child:
                 return redirect('exempt_child', child_id=child.id)
             else:
