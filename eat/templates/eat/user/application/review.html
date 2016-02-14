@@ -18,7 +18,7 @@
         </div>
     {% else %}
             <p class="bg-success app-section" style="padding: 1.5em">Congratulations, {{ user.first_name }}!
-            Your application is ready to be submitted to USDA!</p>
+            Your application is ready to be submitted to USDA! You can still go back and make changes.</p>
     {% endif  %}
 
     <div class="app-section">
@@ -47,11 +47,11 @@
                     {% if child.hmr %}<li>Homeless, Migrant or Runaway</li> {% endif %}
                 </ul>
                 {% if not child.application.assistance_program and not child.foster_child %}
-                    <a role="button" data-toggle="collapse" href="#child-earnings-{{ child.id }}"
+                    <a class="earnings-dropdown-label" role="button" data-toggle="collapse" href="#child-earnings-{{ child.id }}"
                        aria-expanded="true" aria-controls="child-earnings-{{ child.id }}">
                         Earnings <span class="caret"></span>
                     </a>
-                    <div class="earnings-div" id="child-earnings-{{ child.id }}">
+                    <div class="earnings-div collapse" id="child-earnings-{{ child.id }}">
                         <ul>
                             {% for page in child_earnings_pages %}
                                 <li  class="stripped">
@@ -87,16 +87,15 @@
         {% if adults %}
             {% for adult in adults %}
                 <div class="adult-row">
-                    <a class="btn btn-danger pull-right" role="button"
-                       href="{% url 'delete_adult' adult_id=adult.id %}">Delete</a>
-                    <span class="adult-name">{{ forloop.counter }}. {{ adult.first_name }} {{ adult.last_name }}<span>
-                    <a class="" role="button" data-toggle="collapse" href="#adult-earnings-{{ adult.id }}"
+                    <span class="adult-name">{{ forloop.counter }}. {{ adult.first_name }} {{ adult.last_name }}</span>
+                    <a class="earnings-dropdown-label" role="button" data-toggle="collapse"
+                       href="#adult-earnings-{{ adult.id }}"
                        aria-expanded="true" aria-controls="adult-earnings-{{ adult.id }}">
                         Earnings <span class="caret"></span>
                     </a>
                     <div class="earnings-div collapse" id="adult-earnings-{{ adult.id }}">
                         <ul>
-                        {% for source in adult_earnings_pages %}
+                            {% for source in adult_earnings_pages %}
                             <li>
                                 <strong class="page_display_title">{{ source.name }}</strong>
                                 <ul>
@@ -121,7 +120,7 @@
                                 </ul>
                             </li>
                         {% endfor %}
-                    </ul>
+                        </ul>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -129,7 +128,7 @@
         {% endif %}
     {% else %}
         <div>
-            You don't need to enter adult household information because:
+            You don't need to provide household adults information because:
             <ul>
             {% if app.assistance_program %}
                 <li>
@@ -186,6 +185,15 @@
 {% endblock %}
 
 {% block application_content_right %}
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title">Danger Zone</h3>
+        <div>
+        <div class="panel-body">
+            Click below if you want to discard the application and start over<br><br>
+            <a class="btn btn-danger" role="button" href="{% url 'start_over' %}">Start Over</a>
+        </div>
+    </div>
 {% endblock %}
 
 

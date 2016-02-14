@@ -3,42 +3,59 @@
 {% block application_content_main %}
     <h4>Hi {{ user.first_name }},</h4>
     <p>
-        Please let us know the number of people living in your household, which includes:
-        you, any children or anybody contributing to the income or expense of the household.
+        Let us know few things before we kick start your application.
     </p>
     <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-9">
+        <div class="col-sm-offset-5 col-sm-7">
             {{ form.non_field_errors }}
         </div>
     </div>
     <div class="form-group">
-        <label for="{{ form.total_children.id_for_label }}" class="col-sm-3 control-label">
-            Total Children <span class="mandatory">*</span></label>
+        <label for="{{ form.total_children.id_for_label }}" class="col-sm-5 control-label">
+            Total number of children in your household</label>
         <div class="col-sm-3 frm-control">
             {{ form.total_children }}
         </div>
         {{ form.total_children.errors }}
     </div>
     <div class="form-group">
-        <label for="{{ form.total_adults.id_for_label }}" class="col-sm-3 control-label">
-            Total Adults <span class="mandatory">*</span></label>
+        <label for="{{ form.total_adults.id_for_label }}" class="col-sm-5 control-label">
+            Total number of adults in your household</label>
         <div class="col-sm-3 frm-control">
             {{ form.total_adults }}
         </div>
         {{ form.total_adults.errors }}
     </div>
     <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-9">
+        <label for="{{ form.assistance_program.id_for_label }}" class="col-sm-5 control-label">
+            Does any household member participate in any of the following assistance programs:
+            SNAP, TANF OR FDPIR?</label>
+        <div class="col-sm-7 list-inline">
+            {{ form.assistance_program }}
+        </div>
+        {{ form.assistance_program.errors }}
+    </div>
+    <div class="form-group">
+        <label for="{{ form.app_for_foster_child.id_for_label }}" class="col-sm-5 control-label">
+            Is this application only for a Foster Child?</label>
+        <div class="col-sm-7 list-inline">
+            {{ form.app_for_foster_child }}
+        </div>
+        {{ form.app_for_foster_child.errors }}
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-5">
             <div class="checkbox">
                 <label>
                   {{ form.statements }} I have read the below statements.
                 </label>
             </div>
+            <span id="statements_error" class="text-danger">Please select this box</span>
         </div>
     </div>
     <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-9">
-            <input type="submit" value="Start my application" class="btn btn-primary"/>
+        <div class="col-sm-offset-5 col-sm-7">
+            <input type="submit" value="Start my application" id="start" class="btn btn-primary"/>
         </div>
     </div>
     <p>
@@ -141,4 +158,22 @@
 {% endblock %}
 
 {% block application_content_right %}
+{% endblock %}
+
+{% block js %}
+    <script>
+        $( document ).ready(function() {
+            $('#statements_error').hide();
+            $('#start').click(function() {
+                if (!$('#id_statements').prop("checked")) {
+                    $('#statements_error').show();
+                    return false;
+                }
+                else {
+                    $('#statements_error').hide();
+                    return true;
+                }
+            });
+        });
+    </script>
 {% endblock %}

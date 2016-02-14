@@ -64,14 +64,15 @@
 {% endblock %}
 
 {% block application_bottom_nav %}
-    <a class="btn btn-default pull-left" role="button"
-       href="{% url 'eat.views.assistance_program' %}">Back</a>
-
+    {% if child.application.assistance_program %}
+        <a class="btn btn-default pull-left" role="button"
+           href="{% url 'participate' %}">Back</a>
+    {% endif %}
     <a class="btn btn-default pull-right" role="button"
-            {% if not app.assistance_program %}
-       href="{% url 'eat.views.adults' %}"
+            {% if not app.assistance_program and not app.app_for_foster_child %}
+       href="{% url 'adults' %}"
             {% else %}
-       href="{% url 'eat.views.contact' %}"
+       href="{% url 'contact' %}"
             {% endif %}
     >Continue
     </a>

@@ -17,12 +17,12 @@ urlpatterns = [
     url(r'^app/welcome', views.application_welcome_back, name='application_welcome_back'),
     url(r'^app/create', views.application_create, name='application_create'),
     url(r'^app/review', views.review, name='review'),
-    url(r'^app/assistance_program/$', views.assistance_program, name='assistance_program'),
+    #url(r'^app/assistance_program/$', views.assistance_program, name='assistance_program'),
     url(r'^app/assistance_program/participate', views.assistance_program_participate, name='participate'),
-    url(r'^app/assistance_program/no_participation', views.assistance_program_no_participation, name='no_participation'),
-    url(r'^app/foster_child/$', views.foster_child, name='foster_child'),
+    #url(r'^app/assistance_program/no_participation', views.assistance_program_no_participation, name='no_participation'),
+    #url(r'^app/foster_child/$', views.foster_child, name='foster_child'),
     #url(r'^app/assistance_program/confirm', views.confirm_assistance_program, name='confirm_assistance_program'),
-
+    url(r'^app/start_over', views.start_over, name='start_over'),
 
     # Child URLs
     url(r'^app/children/$', views.children, name='children'),

@@ -54,17 +54,27 @@ class CreateApplicatinForm(ModelForm):
 
     class Meta:
         model = Application
-        fields = ['total_children', 'total_adults']
+        fields = ['total_children', 'total_adults', 'assistance_program', 'app_for_foster_child']
+        widgets = {
+            'assistance_program': forms.RadioSelect,
+            'app_for_foster_child': forms.RadioSelect,
+        }
 
     def clean(self):
         cleaned_data = super(CreateApplicatinForm, self).clean()
         errors = []
 
-        if cleaned_data.get("total_children") == '':
+        if cleaned_data.get("total_children") is None:
             errors.append(forms.ValidationError("Total number of children cannot be blank."))
 
-        if cleaned_data.get("total_adults") == '':
+        if cleaned_data.get("total_adults") is None:
             errors.append(forms.ValidationError("Total number of adults cannot be blank."))
+
+        if cleaned_data.get("assistance_program") == "":
+            errors.append(forms.ValidationError("Please let us know if you participate in any assistance program."))
+
+        if cleaned_data.get("app_for_foster_child") == "":
+            errors.append(forms.ValidationError("Please let us know if this application is for foster child."))
 
         if errors:
             raise forms.ValidationError(errors)

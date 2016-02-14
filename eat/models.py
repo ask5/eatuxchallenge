@@ -99,6 +99,8 @@ class Application(models.Model):
 
     assistance_program = models.BooleanField(verbose_name='Participate in Assistance Program', choices=YES_NO,
                                              default=False)
+    app_for_foster_child = models.BooleanField(verbose_name='Is this App for Foster Child only?', choices=YES_NO,
+                                               default=False)
     ssn_four_digit = models.CharField(max_length=4,
                                       verbose_name='Last 4 digits of SSN',
                                       help_text='Last four digits of the Social Security number of an '
@@ -143,7 +145,6 @@ class Application(models.Model):
     contact_form_complete = models.BooleanField(verbose_name='Contact form complete', default=False)
     all_adults_entered = models.BooleanField(verbose_name='All adults were entered', default=False)
     all_children_entered = models.BooleanField(verbose_name='All children were entered', default=False)
-    app_for_foster_child = models.BooleanField(verbose_name='Is this App for Foster Child only?', default=False)
 
 
 class Child(models.Model):
@@ -242,15 +243,33 @@ class Child(models.Model):
 
     def get_total_earning(self):
         t = 0
-        t += self.salary
-        t += self.ssi_disability
-        t += self.ssi_parent_disability
-        t += self.spending_money_income
-        t += self.other_friend_income
-        t += self.pension_income
-        t += self.annuity_income
-        t += self.trust_income
-        t += self.other_income
+        if self.salary is not None:
+            t += self.salary
+
+        if self.ssi_disability is not None:
+            t += self.ssi_disability
+
+        if self.ssi_parent_disability is not None:
+            t += self.ssi_parent_disability
+
+        if self.spending_money_income is not None:
+            t += self.spending_money_income
+
+        if self.other_friend_income is not None:
+            t += self.other_friend_income
+
+        if self.pension_income is not None:
+            t += self.pension_income
+
+        if self.annuity_income is not None:
+            t += self.annuity_income
+
+        if self.trust_income is not None:
+            t += self.trust_income
+
+        if self.other_income is not None:
+            t += self.other_income
+
         return t
 
 
@@ -558,42 +577,42 @@ class Adult(models.Model):
 
     def get_total_earning(self):
         t = 0
-        t += self.salary
-        t += self.wages
-        t += self.cash_bonuses
-        t += self.self_employment_income
-        t += self.strike_benefits
-        t += self.unemployment_insurance
-        t += self.other_earned_income
-        t += self.military_basic_pay
-        t += self.military_bonus
-        t += self.military_allowance
-        t += self.military_food
-        t += self.military_clothing
-        t += self.general_assistance
-        t += self.cash_assistance
-        t += self.alimony
-        t += self.child_support
-        t += self.social_security_income
-        t += self.railroad_income
-        t += self.pension_income
-        t += self.annuity_income
-        t += self.survivors_benefits
-        t += self.ssi_disability_benefits
-        t += self.private_disability_benefits
-        t += self.black_lung_benefits
-        t += self.workers_compensation
-        t += self.veterans_benefits
-        t += self.other_retirement_sources
-        t += self.interest_income
-        t += self.investment_income
-        t += self.dividends
-        t += self.trust_or_estates_income
-        t += self.rental_income
-        t += self.royalties_income
-        t += self.prize_winnings
-        t += self.savings_withdrawn
-        t += self.cash_gifts
+        t += self.salary if self.salary is not None else 0
+        t += self.wages if self.wages is not None else 0
+        t += self.cash_bonuses if self.cash_bonuses is not None else 0
+        t += self.self_employment_income if self.self_employment_income is not None else 0
+        t += self.strike_benefits if self.strike_benefits is not None else 0
+        t += self.unemployment_insurance if self.unemployment_insurance is not None else 0
+        t += self.other_earned_income if self.other_earned_income is not None else 0
+        t += self.military_basic_pay if self.military_basic_pay is not None else 0
+        t += self.military_bonus if self.military_bonus is not None else 0
+        t += self.military_allowance if self.military_allowance is not None else 0
+        t += self.military_food if self.military_food is not None else 0
+        t += self.military_clothing if self.military_clothing is not None else 0
+        t += self.general_assistance if self.general_assistance is not None else 0
+        t += self.cash_assistance if self.cash_assistance is not None else 0
+        t += self.alimony if self.alimony is not None else 0
+        t += self.child_support if self.child_support is not None else 0
+        t += self.social_security_income if self.social_security_income is not None else 0
+        t += self.railroad_income if self.railroad_income is not None else 0
+        t += self.pension_income if self.pension_income is not None else 0
+        t += self.annuity_income if self.annuity_income is not None else 0
+        t += self.survivors_benefits if self.survivors_benefits is not None else 0
+        t += self.ssi_disability_benefits if self.ssi_disability_benefits is not None else 0
+        t += self.private_disability_benefits if self.private_disability_benefits is not None else 0
+        t += self.black_lung_benefits if self.black_lung_benefits is not None else 0
+        t += self.workers_compensation if self.workers_compensation is not None else 0
+        t += self.veterans_benefits if self.veterans_benefits is not None else 0
+        t += self.other_retirement_sources if self.other_retirement_sources is not None else 0
+        t += self.interest_income if self.interest_income is not None else 0
+        t += self.investment_income if self.investment_income is not None else 0
+        t += self.dividends if self.dividends is not None else 0
+        t += self.trust_or_estates_income if self.trust_or_estates_income is not None else 0
+        t += self.rental_income if self.rental_income is not None else 0
+        t += self.royalties_income if self.royalties_income is not None else 0
+        t += self.prize_winnings if self.prize_winnings is not None else 0
+        t += self.savings_withdrawn if self.savings_withdrawn is not None else 0
+        t += self.cash_gifts if self.cash_gifts is not None else 0
         return t
 
 

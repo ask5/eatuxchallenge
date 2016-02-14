@@ -1,9 +1,11 @@
 <ol class="breadcrumb">
     {% for n in nav %}
-        <li {% if n.current %} class="active" {% endif %}>
-            <a href="{% url n.url %}">
-                {{ n.caption }}
-            </a>
-        </li>
+        {% if n.display %}
+            <li {% if n.current %} class="active" {% endif %}>
+                <a href="{% url n.url %}">
+                    {{ n.caption }}
+                </a>
+            </li>
+        {% endif %}
     {% endfor %}
 </ol>

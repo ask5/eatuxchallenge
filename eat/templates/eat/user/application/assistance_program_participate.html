@@ -2,15 +2,12 @@
 {% load staticfiles %}
 {% block application_content_main %}
     <h3>
-        Assistance Program
+        Assistance Program Case Number
     </h3>
-    <p  class="well large">
-        Please provide the Case Number of the assistance program.
-    </p>
     <div>
         <div class="form-group">
             <label for="{{ form.case_number.id_for_label }}" class="col-sm-5 control-label">
-                Assistance Program Case Number
+                Case Number of the assistance program
             </label>
             <div class="col-sm-3 frm-control">
                 {{ form.case_number }}
@@ -21,7 +18,6 @@
 {% endblock %}
 
 {% block application_bottom_nav %}
-    <a class="btn btn-default pull-left" role="button" href="{% url 'assistance_program' %}">Back</a>
     <button type="submit" class="btn btn-default pull-right">Continue</button>
 {% endblock %}
 

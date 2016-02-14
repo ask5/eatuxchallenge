@@ -92,9 +92,15 @@ def application_create(request):
             application.user = request.user
             application.status = 1
             application.save()
-            return redirect('assistance_program')
+
+            if application.assistance_program:
+                return redirect('participate')
+            elif not application.assistance_program and application.app_for_foster_child:
+                return redirect('add_child')
+            else:
+                return redirect('children')
     else:
-        form = CreateApplicatinForm()
+        form = CreateApplicatinForm(initial={ "assistance_program": None, 'app_for_foster_child': None })
 
     args['form'] = form
     return render(request, "eat/user/application/create.html", args)
@@ -116,17 +122,6 @@ def application_welcome_back(request):
 
 
 @login_required
-def assistance_program(request):
-    args = dict()
-    app = AppUtil.get_by_user(user=request.user)
-    args['nav'] = AppUtil.get_nav(nav=nav, url='assistance_program')
-    args['app'] = app[0]
-    args['adults'] = Adult.adults.filter(application=app)
-    AppUtil.set_last_page(app[0], request.get_full_path())
-    return render(request, "eat/user/application/assistance_program.html", args)
-
-
-@login_required
 def assistance_program_participate(request):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
@@ -140,99 +135,17 @@ def assistance_program_participate(request):
             if Adult.adults.filter(application=app).exists():
                 Adult.adults.filter(application=app).delete()
 
-            return redirect('foster_child')
+            if _app.app_for_foster_child:
+                return redirect('add_child')
+            else:
+                return redirect('children')
     else:
         form = AssistanceProgramForm(instance=app[0])
 
     args['form'] = form
-    args['nav'] = AppUtil.get_nav(nav=nav, url='assistance_program')
+    args['nav'] = AppUtil.get_nav(nav=nav, url='participate', app=app[0])
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/assistance_program_participate.html", args)
-
-
-@login_required
-def assistance_program_no_participation(request):
-    args = dict()
-    app = AppUtil.get_by_user(user=request.user)
-    AppUtil.reset_assistance_program(app[0])
-    args['nav'] = AppUtil.get_nav(nav=nav, url='assistance_program')
-    return render(request, "eat/user/application/assistance_program_no_participation.html", args)
-
-
-@login_required
-def foster_child(request):
-    args = dict()
-    app = AppUtil.get_by_user(user=request.user)
-    if request.method == 'POST':
-        form = FosterChildForm(request.POST, instance=app[0])
-        if form.is_valid():
-            _app = form.save(commit=False)
-            if 'submit' in request.POST:
-                _app.app_for_foster_child = True
-                _app.save()
-
-                if Child.children.filter(application=app).exists():
-                    Child.children.filter(application=app).delete()
-
-                if Adult.adults.filter(application=app).exists():
-                    Adult.adults.filter(application=app).delete()
-
-                return redirect('add_child')
-            elif 'cancel' in request.POST:
-                _app.app_for_foster_child = False
-                _app.save()
-                return redirect('children')
-
-    else:
-        form = FosterChildForm(instance=app[0])
-
-    args['form'] = form
-    args['children'] = Child.children.filter(application=app)
-    args['adults'] = Adult.adults.filter(application=app)
-    args['nav'] = AppUtil.get_nav(nav=nav, url='foster_child')
-    AppUtil.set_last_page(app[0], request.get_full_path())
-    return render(request, "eat/user/application/foster_child.html", args)
-
-
-@login_required
-def review(request):
-    args = dict()
-    app = AppUtil.get_by_user(user=request.user)
-    _children = Child.children.filter(application=app[0])
-    _adults = Adult.adults.filter(application=app[0])
-    total_adults_earnings = 0
-    for adult in _adults:
-        total_adults_earnings += adult.get_total_earning()
-
-    issues = []
-    args['app'] = app[0]
-
-    if not _children.exists():
-        issues.append("Household children information could not be found.")
-    elif _children.count() < app[0].total_children:
-        issues.append("Number of children found is less than the "
-                      "total number of children mentioned during the creation of the application.")
-
-    if not app[0].assistance_program and not app[0].app_for_foster_child and not _adults.exists():
-        issues.append("Household Adults information could not be found.")
-    elif not app[0].assistance_program  and not app[0].app_for_foster_child and _adults.count() < app[0].total_adults:
-        issues.append("Number of adults found is less than the "
-                      "total number of adults mentioned during the creation of the application.")
-
-    if not app[0].assistance_program  and not app[0].app_for_foster_child and total_adults_earnings <= 0:
-        issues.append("Total household adults' earnings can't be zero.")
-
-    if not app[0].contact_form_complete:
-        issues.append("Contact form is not complete")
-
-    args['children'] = _children
-    args['percent'] = AppUtil.get_app_progress(app[0])
-    args['adults'] = _adults
-    args['issues'] = issues
-    args['nav'] = AppUtil.get_nav(nav=nav, url='review')
-    args['child_earnings_pages'] = AppUtil.get_earnings_pages('children')
-    args['adult_earnings_pages'] = AppUtil.get_earnings_pages('adults')
-    return render(request, "eat/user/application/review.html", args)
 
 
 @login_required
@@ -241,7 +154,7 @@ def children(request):
     app = AppUtil.get_by_user(user=request.user)
     _children = Child.children.filter(application=app[0])
     args['app'] = app[0]
-    args['nav'] = AppUtil.get_nav(nav=nav, url='children')
+    args['nav'] = AppUtil.get_nav(nav=nav, url='children', app=app[0])
     args['children'] = _children
     args['total_children'] = _children.count()
     args['earnings_pages'] = AppUtil.get_earnings_pages('children')
@@ -267,9 +180,9 @@ def add_child(request):
             else:
                 return redirect('child_salary', child_id=child.id)
     else:
-        form = AddChildForm(initial={ "foster_child": app[0].app_for_foster_child })
+        form = AddChildForm(initial={"foster_child": app[0].app_for_foster_child })
     args['form'] = form
-    args['nav'] = AppUtil.get_nav(nav=nav, url='children')
+    args['nav'] = AppUtil.get_nav(nav=nav, url='children', app=app[0])
     return render(request, "eat/user/application/child/add_edit.html", args)
 
 
@@ -292,7 +205,7 @@ def edit_child(request, child_id):
         form = AddChildForm(instance=child)
     args['form'] = form
     args['child'] = child
-    args['nav'] = AppUtil.get_nav(nav=nav, url='children')
+    args['nav'] = AppUtil.get_nav(nav=nav, url='children', app=app[0])
     return render(request, "eat/user/application/child/add_edit.html", args)
 
 
@@ -315,7 +228,7 @@ def delete_child(request, child_id):
         child.delete()
         return redirect('children')
     args['child'] = child
-    args['nav'] = AppUtil.get_nav(nav=nav, url='children')
+    args['nav'] = AppUtil.get_nav(nav=nav, url='children', app=app[0])
     return render(request, "eat/user/application/child/delete.html", args)
 
 
@@ -369,7 +282,7 @@ def child_earnings(request, child_id):
     args['skip_to_page'] = page.skip_to
     args['heading'] = page.headline.format(child.first_name)
     args['tip'] = page.help_tip
-    args['nav'] = AppUtil.get_nav(nav=nav, url='children')
+    args['nav'] = AppUtil.get_nav(nav=nav, url='children', app=app[0])
     AppUtil.set_last_page(child.application, request.get_full_path())
     return render(request, page.template, args)
 
@@ -381,7 +294,7 @@ def adults(request):
     _adults = Adult.adults.filter(application=app[0])
     args['app'] = app[0]
     args['adults'] = _adults
-    args['nav'] = AppUtil.get_nav(nav=nav, url='adults')
+    args['nav'] = AppUtil.get_nav(nav=nav, url='adults', app=app[0])
     AppUtil.set_last_page(app[0], request.get_full_path())
     args['earnings_pages'] = AppUtil.get_earnings_pages('adults')
     earnings_sources = EarningSource.sources.all()
@@ -414,7 +327,7 @@ def add_adult(request):
     else:
         form = AddAdultForm()
     args['form'] = form
-    args['nav'] = AppUtil.get_nav(nav=nav, url='adults')
+    args['nav'] = AppUtil.get_nav(nav=nav, url='adults', app=app[0])
     return render(request, "eat/user/application/adult/add_edit.html", args)
 
 
@@ -441,7 +354,7 @@ def edit_adult(request, adult_id):
     else:
         form = AddAdultForm(instance=adult)
     args['form'] = form
-    args['nav'] = AppUtil.get_nav(nav=nav, url='adults')
+    args['nav'] = AppUtil.get_nav(nav=nav, url='adults', app=app[0])
     return render(request, "eat/user/application/adult/add_edit.html", args)
 
 
@@ -454,7 +367,7 @@ def delete_adult(request, adult_id):
         adult.delete()
         return redirect('adults')
     args['adult'] = adult
-    args['nav'] = AppUtil.get_nav(nav=nav, url='adults')
+    args['nav'] = AppUtil.get_nav(nav=nav, url='adults', app=app[0])
     return render(request, "eat/user/application/adult/delete.html", args)
 
 
@@ -507,7 +420,7 @@ def adult_earnings(request, adult_id):
     args['skip_to_page'] = page.skip_to
     args['heading'] = page.headline.format(adult.first_name)
     args['tip'] = page.help_tip
-    args['nav'] = AppUtil.get_nav(nav=nav, url='adults')
+    args['nav'] = AppUtil.get_nav(nav=nav, url='adults', app=app[0])
     AppUtil.set_last_page(adult.application, request.get_full_path())
     return render(request, page.template, args)
 
@@ -528,7 +441,7 @@ def contact(request):
     else:
         form = ContactForm(instance=app[0])
     args['form'] = form
-    args['nav'] = AppUtil.get_nav(nav=nav, url='contact')
+    args['nav'] = AppUtil.get_nav(nav=nav, url='contact', app=app[0])
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/contact.html", args)
 
@@ -546,9 +459,73 @@ def race(request):
         form = RaceForm(instance=app[0])
 
     args['form'] = form
-    args['nav'] = AppUtil.get_nav(nav=nav, url='race')
+    args['nav'] = AppUtil.get_nav(nav=nav, url='race', app=app[0])
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/race.html", args)
+
+
+@login_required
+def review(request):
+    args = dict()
+    app = AppUtil.get_by_user(user=request.user)
+    _children = Child.children.filter(application=app[0])
+    _adults = Adult.adults.filter(application=app[0])
+    total_adults_earnings = 0
+    for adult in _adults:
+        total_adults_earnings += adult.get_total_earning()
+
+    issues = []
+    args['app'] = app[0]
+
+    if not _children.exists():
+        issues.append("Household children information could not be found.")
+    elif not app[0].app_for_foster_child and _children.count() < app[0].total_children:
+        issues.append("Number of children found is less than the "
+                      "total number of children mentioned during the creation of the application.")
+
+    if not app[0].assistance_program and not app[0].app_for_foster_child and not _adults.exists():
+        issues.append("Household Adults information could not be found.")
+    elif not app[0].assistance_program  and not app[0].app_for_foster_child and _adults.count() < app[0].total_adults:
+        issues.append("Number of adults found is less than the "
+                      "total number of adults mentioned during the creation of the application.")
+
+    if not app[0].assistance_program  and not app[0].app_for_foster_child and total_adults_earnings <= 0:
+        issues.append("Total household adults' earnings can't be zero.")
+
+    if not app[0].contact_form_complete:
+        issues.append("Contact form is not complete")
+
+    args['children'] = _children
+    args['percent'] = AppUtil.get_app_progress(app[0])
+    args['adults'] = _adults
+    args['issues'] = issues
+    args['nav'] = AppUtil.get_nav(nav=nav, url='review', app=app[0])
+    args['child_earnings_pages'] = AppUtil.get_earnings_pages('children')
+    earnings_sources = EarningSource.sources.all()
+
+    earnings = []
+    for source in earnings_sources:
+        pages = EarningsPage.objects.filter(source=source, entity='adult', page_type='form')
+        if pages.exists():
+            earnings.append({
+                'name': source,
+                'pages': pages.order_by('display_title')
+            })
+
+    args['adult_earnings_pages'] = earnings
+
+    return render(request, "eat/user/application/review.html", args)
+
+
+@login_required
+def start_over(request):
+    if request.method == 'POST':
+        app = AppUtil.get_by_user(user=request.user)
+        Child.children.filter(application=app).delete()
+        Adult.adults.filter(application=app).delete()
+        app.delete()
+        return redirect('application_create')
+    return render(request, "eat/user/application/start_over.html")
 
 
 @login_required

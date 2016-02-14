@@ -46,7 +46,7 @@ class AppUtil(object):
         if app.assistance_program or app.app_for_foster_child:
             total_steps = 2
             children = Child.children.filter(application=app)
-            if children.count() >= app.total_children:
+            if children.count() > 0:
                 completed_steps += 1
             if app.street_address:
                 completed_steps += 0.5
@@ -72,11 +72,19 @@ class AppUtil(object):
                 completed_steps += 0.5
 
         percent = (completed_steps / total_steps) * 100
-        return  percent
+        return percent
 
     @classmethod
-    def get_nav(cls, nav, url):
+    def get_nav(cls, nav, url, app):
         t = []
+        if app.assistance_program:
+            nav['assistance']['display'] = True
+        else:
+            nav['assistance']['display'] = False
+
+        if app.assistance_program or app.app_for_foster_child:
+            nav['adults']['display'] = False
+
         for k, v in nav.items():
             v['current'] = True if v['url'] == url else False
             t.append(v)
