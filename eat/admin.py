@@ -1,5 +1,6 @@
 from django.contrib import admin
 from eat.models import EarningSource, EarningsPage
+from django.contrib.admin import AdminSite
 
 
 # Register your models here.
@@ -16,6 +17,7 @@ class EarningsPageAdmin(admin.ModelAdmin):
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('id', 'entity', 'source', 'name', 'next', 'skip_to', 'page_type', 'value_field', 'frequency_field')
     ordering = ('entity', 'source', 'name')
+
 
 #admin.site.register(EarningSource, EarningSourceAdmin)
 #admin.site.register(EarningsPage, EarningsPageAdmin)

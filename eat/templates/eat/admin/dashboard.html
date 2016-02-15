@@ -1,0 +1,70 @@
+{% extends "eat/admin/base.html" %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="active">Dashboard</li>
+    </ol>
+{% endblock %}
+
+{% block application_content_main %}
+    <h3>
+        Admin Dashboard
+    </h3>
+    <div class="row">
+        <div class="col-lg-4">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="{% url 'admin_applications' %}">All Applications</a>
+                    <span class="badge">{{ total_applications }}</span>
+
+                    <span class="label label-default pull-right">
+                        <a href="{% url 'admin_applications_export' %}">
+                            <span class="glyphicon glyphicon-save-file"></span> Export
+                        </a>
+                    </span>
+
+                </li>
+                <li class="list-group-item">
+                    <a href="{% url 'admin_applications_assistance_program' %}">Applications with Assistance Program</a>
+                    <span class="badge">{{ apps_assistance_program }}</span>
+                </li>
+                <li class="list-group-item">
+                    <a href="{% url 'admin_applications_foster_child' %}">Applications for Foster child</a>
+                    <span class="badge">{{ apps_foster_child }}</span>
+                </li>
+                <li class="list-group-item">
+                    <a href="{% url 'admin_users' %}">Users</a>
+                    <span class="badge">{{ total_users }}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-8">
+            <div id="piechart" style="width: 300px; height: 300px;"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+        google.charts.load('current', {'packages': ['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Applications', 'Number'],
+                ['Assistance Program', {{ apps_assistance_program }}],
+                ['Foster child', {{ apps_foster_child }}],
+                ['Other', {{ other_applications }}]
+            ]);
+
+            var options = {};
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(data, options);
+        }
+    </script>
+{% endblock %}

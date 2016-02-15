@@ -1,0 +1,39 @@
+{% extends "eat/admin/base.html" %}
+{% load staticfiles %}
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+        <li class="active">Users</li>
+    </ol>
+{% endblock %}
+
+{% block application_content_main %}
+    <h3>
+        Users
+    </h3>
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table">
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Applications</th>
+                    <th>Last Login</th>
+                    <th>Active</th>
+                </tr>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.application_set.count }}</td>
+                        <td>{{ user.last_login }}</td>
+                        <td>{{ user.is_active }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
+

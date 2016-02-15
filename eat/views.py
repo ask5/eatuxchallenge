@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from datetime import datetime
 from os.path import split
 from urllib import parse
@@ -13,6 +14,7 @@ from eat.util import *
 from . import *
 import operator
 from django.shortcuts import get_object_or_404
+import csv
 
 # Create your views here.
 def register(request):
@@ -528,7 +530,7 @@ def start_over(request):
     return render(request, "eat/user/application/start_over.html")
 
 
-@login_required
+@staff_member_required
 def admin_dashboard(request):
     args = dict()
     args['total_users'] = User.objects.all().count()
@@ -538,6 +540,7 @@ def admin_dashboard(request):
     apps_foster_child = Application.applications.filter(app_for_foster_child=True).count()
     other_applications = total_applications - (apps_assistance_program + apps_foster_child)
 
+    args['applications'] = Application.applications.all()
     args['total_applications'] = total_applications
     args['apps_assistance_program'] = apps_assistance_program
     args['apps_foster_child'] = apps_foster_child
@@ -549,4 +552,90 @@ def admin_dashboard(request):
     args['foster_children'] = Child.children.filter(foster_child=True).count()
     args['hmr_children'] = Child.children.filter(hmr=True).count()
     args['head_start_children'] = Child.children.filter(is_head_start_participant=True).count()
-    return render(request, "eat/user/application/admin_dashboard.html", args)
+    return render(request, "eat/admin/dashboard.html", args)
+
+
+@staff_member_required
+def admin_users(request):
+    pass
+
+
+@staff_member_required
+def admin_applications(request):
+    args = dict()
+    args['applications'] = Application.applications.all()
+    args['title'] = 'All Applications'
+    return render(request, "eat/admin/applications.html", args)
+
+
+@staff_member_required
+def admin_applications_foster_child(request):
+    args = dict()
+    args['applications'] = Application.applications.filter(app_for_foster_child=True)
+    args['title'] = 'Applications for Foster Child'
+    return render(request, "eat/admin/applications.html", args)
+
+
+@staff_member_required
+def admin_applications_assistance_program(request):
+    args = dict()
+    args['applications'] = Application.applications.filter(assistance_program=True)
+    args['title'] = 'Applications with Assistance Program'
+    return render(request, "eat/admin/applications.html", args)
+
+
+@staff_member_required
+def admin_application_view(request, application_id):
+    args = dict()
+    app = AppUtil.get(application_id)
+    _children = Child.children.filter(application=app)
+    _adults = Adult.adults.filter(application=app)
+    total_adults_earnings = 0
+    for adult in _adults:
+        total_adults_earnings += adult.get_total_earning()
+
+    args['app'] = app
+
+    args['children'] = _children
+    args['percent'] = AppUtil.get_app_progress(app)
+    args['adults'] = _adults
+    args['child_earnings_pages'] = AppUtil.get_earnings_pages('children')
+    earnings_sources = EarningSource.sources.all()
+
+    earnings = []
+    for source in earnings_sources:
+        pages = EarningsPage.objects.filter(source=source, entity='adult', page_type='form')
+        if pages.exists():
+            earnings.append({
+                'name': source,
+                'pages': pages.order_by('display_title')
+            })
+
+    args['adult_earnings_pages'] = earnings
+    return render(request, "eat/admin/application.html", args)
+
+
+@staff_member_required
+def admin_users(request):
+    args = dict()
+    args['users'] = User.objects.filter(is_superuser=0)
+    return render(request, "eat/admin/users.html", args)
+
+
+@staff_member_required
+def admin_applications_export(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="applications.csv"'
+    fields = ["id", "status", "enabled", "create_date", "modified_date", "total_children", "total_adults",
+              "assistance_program", "app_for_foster_child", "ssn_four_digit", "no_ssn", "case_number", "first_name",
+              "last_name", "middle_name", "signature", "todays_date", "street_address", "apt", "city", "state", "zip",
+              "phone", "email", "ethnicity", "is_american_indian", "is_asian", "is_black", "is_hawaiian", "is_white",
+              "active", "contact_form_complete", "all_adults_entered", "all_children_entered"]
+    writer = csv.writer(response)
+    writer.writerow(Application._meta.get_all_field_names())
+    for app in Application.applications.all():
+        row = ""
+        for field in fields:
+             row += str(getattr(app, field)) + ","
+        writer.writerow(row)
+    return response

@@ -1,0 +1,142 @@
+{% extends "eat/admin/base.html" %}
+{% load staticfiles %}
+{% load humanize %}
+{% load tags %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+        <li class="active">Application</li>
+    </ol>
+{% endblock %}
+
+{% block application_content_main %}
+    <h4>Application progress: <strong>{{ percent|floatformat:"0" }}%</strong> complete!</h4>
+
+    <div class="app-section">
+        <h4>Assistance Program</h4>
+        {% if app.assistance_program %}
+            <p>
+                Case Number: {{ app.case_number }}
+            </p>
+        {% else %}
+            <p>
+                No Assistance Program.
+            </p>
+        {% endif %}
+    </div>
+
+    <div class="app-section">
+        <h4>Household Children</h4>
+        {% if children %}
+        {% for child in children %}
+            <div class="child-row">
+                <span class="child-name">{{ forloop.counter }}. {{ child.first_name }} {{ child.last_name }}</span>
+                <ul class="child-info">
+                    {% if child.is_student %} <li>Student</li> {% endif %}
+                    {% if child.foster_child %}<li>Foster child</li> {% endif %}
+                    {% if child.is_head_start_participant %}<li>Head Start Participant</li> {% endif %}
+                    {% if child.hmr %}<li>Homeless, Migrant or Runaway</li> {% endif %}
+                </ul>
+            <div class="clearfix"></div>
+                <div class="earnings-div" id="child-earnings-{{ child.id }}">
+                    <ul>
+                        {% for page in child_earnings_pages %}
+                            <li  class="stripped">
+                                {{ page.display_title }}
+                            <span class="pull-right">
+                                <span class="earnings-value">
+                                    $ {{ child|getvalue:page.value_field|intcomma }} -
+                                    {{ child|getvalue:page.frequency_field|frequencylabel }}
+                                </span>
+                            </span>
+                                <div class="clearfix"></div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    </div>
+
+    <div class="app-section">
+        <h4>Household Adults</h4>
+        {% if adults %}
+            {% for adult in adults %}
+                <div class="adult-row">
+                    <span class="adult-name">{{ forloop.counter }}. {{ adult.first_name }} {{ adult.last_name }}</span>
+                    <div class="earnings-div" id="adult-earnings-{{ adult.id }}">
+                        <ul>
+                            {% for source in adult_earnings_pages %}
+                            <li>
+                                <strong class="page_display_title">{{ source.name }}</strong>
+                                <ul>
+                                    {% for page in source.pages %}
+                                        <li class="stripped">
+                                            <span class="pull-left page_display_title">{{ page.display_title }}</span>
+                                            <span class="pull-right">
+                                                <span class="earnings-value">
+                                                    {% if adult|getvalue:page.value_field %}
+                                                        $ {{ adult|getvalue:page.value_field|intcomma }} -
+                                                        {{ adult|getvalue:page.frequency_field|frequencylabel }}
+                                                    {% endif %}
+                                                </span>
+                                                <a class="btn btn-default"
+                                                   href="{% url page.name  adult_id=adult.id %}">
+                                                    Change
+                                                </a>
+                                            </span>
+                                            <div class="clearfix"></div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="app-section">
+        <h4>Contact Information</h4>
+        <table class="table table-condensed table-bordered">
+        <tr>
+            <th>First Name</th>
+            <td>{{ app.first_name }}</td>
+        </tr>
+        <tr>
+            <th>Last Name</th>
+            <td>{{ app.last_name }}</td>
+        </tr>
+        <tr>
+            <th>Address</th>
+            <td>
+                <address>
+                  {{ app.street_address }} {% if app.apt %}, {{ app.apt }} {% endif %}<br>
+                  {{ app.city }}, {{ app.state }} {{ app.zip }}<br>
+                  {% if app.phone %}Phone: {{ app.phone }}<br>{% endif %}
+                  {% if app.email %}Email: {{ app.email }}<br>{% endif %}
+                </address>
+            </td>
+        </tr>
+        <tr>
+            <th>Signature</th>
+            <td>{{ app.signature }}</td>
+        </tr>
+        <tr>
+            <th>Date Completed</th>
+            <td>{{ app.todays_date }}</td>
+        </tr>
+        <tr>
+            <th>Last 4 digits of SSN</th>
+            <td>{{ app.ssn_four_digit }}</td>
+        </tr>
+    </table>
+    </div>
+
+{% endblock %}

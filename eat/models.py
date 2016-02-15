@@ -83,7 +83,7 @@ STATES = (
 class Application(models.Model):
     applications = models.Manager()
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.IntegerField(choices=APPLICATION_STATUSES, verbose_name='Application Status',
                                  help_text='Application Status', default=0)
     last_page = models.CharField(max_length=50, verbose_name='Last Page', blank=True, null=True)

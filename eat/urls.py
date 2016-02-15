@@ -102,5 +102,19 @@ urlpatterns = [
     url(r'^app/contact', views.contact, name='contact'),
     url(r'^app/race', views.race, name='race'),
 
-    url(r'^app/dashboard', views.admin_dashboard, name='admin_dashboard')
+    #Admin
+    url(r'^admin/dashboard', views.admin_dashboard, name='admin_dashboard'),
+    url(r'^admin/applications/$', views.admin_applications, name='admin_applications'),
+    url(r'^admin/applications/foster_child/', views.admin_applications_foster_child,
+        name='admin_applications_foster_child'),
+    url(r'^admin/applications/assistance_program/', views.admin_applications_assistance_program,
+        name='admin_applications_assistance_program'),
+
+    url(r'^admin/applications/export/', views.admin_applications_export,
+        name='admin_applications_export'),
+
+    url(r'^admin/application/(?P<application_id>[0-9a-z-]+)', views.admin_application_view,
+        name='admin_application_view'),
+    url(r'^admin/users', views.admin_users, name='admin_users'),
+
 ]
