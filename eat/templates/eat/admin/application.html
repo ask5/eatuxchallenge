@@ -67,6 +67,7 @@
             {% for adult in adults %}
                 <div class="adult-row">
                     <span class="adult-name">{{ forloop.counter }}. {{ adult.first_name }} {{ adult.last_name }}</span>
+                    <div class="clearfix"></div>
                     <div class="earnings-div" id="adult-earnings-{{ adult.id }}">
                         <ul>
                             {% for source in adult_earnings_pages %}
@@ -78,15 +79,9 @@
                                             <span class="pull-left page_display_title">{{ page.display_title }}</span>
                                             <span class="pull-right">
                                                 <span class="earnings-value">
-                                                    {% if adult|getvalue:page.value_field %}
                                                         $ {{ adult|getvalue:page.value_field|intcomma }} -
                                                         {{ adult|getvalue:page.frequency_field|frequencylabel }}
-                                                    {% endif %}
                                                 </span>
-                                                <a class="btn btn-default"
-                                                   href="{% url page.name  adult_id=adult.id %}">
-                                                    Change
-                                                </a>
                                             </span>
                                             <div class="clearfix"></div>
                                         </li>

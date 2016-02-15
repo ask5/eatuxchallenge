@@ -13,17 +13,11 @@
     </h3>
     <div class="row">
         <div class="col-lg-4">
+            <h4>Statistics</h4>
             <ul class="list-group">
                 <li class="list-group-item">
                     <a href="{% url 'admin_applications' %}">All Applications</a>
                     <span class="badge">{{ total_applications }}</span>
-
-                    <span class="label label-default pull-right">
-                        <a href="{% url 'admin_applications_export' %}">
-                            <span class="glyphicon glyphicon-save-file"></span> Export
-                        </a>
-                    </span>
-
                 </li>
                 <li class="list-group-item">
                     <a href="{% url 'admin_applications_assistance_program' %}">Applications with Assistance Program</a>
@@ -40,7 +34,60 @@
             </ul>
         </div>
         <div class="col-lg-8">
-            <div id="piechart" style="width: 300px; height: 300px;"></div>
+            <h4>Statistics</h4>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div id="applications_chart"></div>
+                </div>
+                <div class="col-lg-6">
+                    <div id="children_chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12"></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            {% if applications %}
+                <a class="pull-right" href="{% url 'admin_applications_export' %}">
+                    <span class="glyphicon glyphicon-save-file"></span> Export Applications
+                </a>
+                <h4>Applications</h4>
+                <table class="table">
+                <tr>
+                    <th>Create Date</th>
+                    <th>Status</th>
+                    <th>Applicant</th>
+                    <th>Children</th>
+                    <th>Adults</th>
+                    <th>View</th>
+                </tr>
+                {% for application in applications %}
+                    <tr>
+                        <td>{{ application.create_date }}</td>
+                        <td>{{ application.status }}</td>
+                        <td>
+                            {% if application.first_name %}
+                                {{ application.first_name }} {{ application.last_name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ application.child_set.count }}
+                        </td>
+                        <td>
+                            {{ application.adult_set.count }}
+                        </td>
+                        <td>
+                            <a href="{% url 'admin_application_view' application_id=application.id %}">View</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                No applications found.
+            {% endif %}
         </div>
     </div>
 {% endblock %}
@@ -53,18 +100,35 @@
         google.charts.setOnLoadCallback(drawChart);
         function drawChart() {
 
-            var data = google.visualization.arrayToDataTable([
+            var applications_data = google.visualization.arrayToDataTable([
                 ['Applications', 'Number'],
                 ['Assistance Program', {{ apps_assistance_program }}],
                 ['Foster child', {{ apps_foster_child }}],
                 ['Other', {{ other_applications }}]
             ]);
 
-            var options = {};
+            var applications_options = {
+                title: 'Applications'
+            };
+            var applications_chart = new google.visualization.PieChart(document.getElementById('applications_chart'));
+            applications_chart.draw(applications_data, applications_options);
 
-            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
-            chart.draw(data, options);
+            var children_data = google.visualization.arrayToDataTable([
+                ['Children', 'Number'],
+                ['Students', {{ students }}],
+                ['Non Students', {{ non_students }}],
+                ['Foster Children', {{ foster_children }}],
+                ['HMR Children', {{ hmr_children }}],
+                ['Head Start Children', {{ head_start_children }}]
+            ]);
+
+            var children_options = {
+                title: 'Children',
+                pieHole: 0.4
+            };
+            var children_chart = new google.visualization.PieChart(document.getElementById('children_chart'));
+            children_chart.draw(children_data, children_options);
         }
     </script>
 {% endblock %}
