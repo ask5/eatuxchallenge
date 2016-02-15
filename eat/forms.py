@@ -138,14 +138,14 @@ class AddChildForm(ModelForm):
             'is_head_start_participant': "Is the child Head Start participant?",
         }
 
-    def clean(self):
-        cleaned_data = super(AddChildForm, self).clean()
-        fname = cleaned_data.get("first_name")
-        lname = cleaned_data.get("last_name")
-        if Child.children.filter(first_name=fname, last_name=lname).exists():
-            raise forms.ValidationError("Child with the same name already exits")
-        else:
-            return cleaned_data
+    #def clean(self):
+    #    cleaned_data = super(AddChildForm, self).clean()
+    #    fname = cleaned_data.get("first_name")
+    #    lname = cleaned_data.get("last_name")
+    #    if Child.children.filter(first_name=fname, last_name=lname).exists():
+    #        raise forms.ValidationError("Child with the same name already exits")
+    #    else:
+    #        return cleaned_data
 
 
 class AddAdultForm(ModelForm):

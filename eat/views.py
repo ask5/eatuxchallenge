@@ -171,16 +171,21 @@ def add_child(request):
     if request.method == 'POST':
         form = AddChildForm(request.POST)
         if form.is_valid():
-            child = form.save(commit=False)
-            child.application = app[0]
-            child.save()
-            if app[0].app_for_foster_child:
-                return redirect('children')
+            fname = form.cleaned_data["first_name"]
+            lname = form.cleaned_data["last_name"]
+            if not Child.children.filter(first_name=fname, last_name=lname, application=app[0]).exists():
+                child = form.save(commit=False)
+                child.application = app[0]
+                child.save()
+                if app[0].app_for_foster_child:
+                    return redirect('children')
 
-            if app[0].assistance_program or child.foster_child:
-                return redirect('exempt_child', child_id=child.id)
+                if app[0].assistance_program or child.foster_child:
+                    return redirect('exempt_child', child_id=child.id)
+                else:
+                    return redirect('child_salary', child_id=child.id)
             else:
-                return redirect('child_salary', child_id=child.id)
+                form.add_error('first_name', "Child with the same first and last name already exists")
     else:
         form = AddChildForm(initial={"foster_child": app[0].app_for_foster_child })
     args['form'] = form
