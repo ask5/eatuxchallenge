@@ -17,11 +17,7 @@ urlpatterns = [
     url(r'^app/welcome', views.application_welcome_back, name='application_welcome_back'),
     url(r'^app/create', views.application_create, name='application_create'),
     url(r'^app/review', views.review, name='review'),
-    #url(r'^app/assistance_program/$', views.assistance_program, name='assistance_program'),
     url(r'^app/assistance_program/participate', views.assistance_program_participate, name='participate'),
-    #url(r'^app/assistance_program/no_participation', views.assistance_program_no_participation, name='no_participation'),
-    #url(r'^app/foster_child/$', views.foster_child, name='foster_child'),
-    #url(r'^app/assistance_program/confirm', views.confirm_assistance_program, name='confirm_assistance_program'),
     url(r'^app/start_over', views.start_over, name='start_over'),
 
     # Child URLs
@@ -112,6 +108,10 @@ urlpatterns = [
 
     url(r'^admin/applications/export/', views.admin_applications_export,
         name='admin_applications_export'),
+    url(r'^admin/applications/children/export/', views.admin_children_export,
+        name='admin_children_export'),
+    url(r'^admin/applications/adults/export/', views.admin_adults_export,
+        name='admin_adults_export'),
 
     url(r'^admin/application/(?P<application_id>[0-9a-z-]+)', views.admin_application_view,
         name='admin_application_view'),

@@ -27,8 +27,8 @@
     </div>
 
     <div class="app-section">
-        <h4>Household Children</h4>
-        {% if children %}
+    <h4>Household Children</h4>
+    {% if children %}
         {% for child in children %}
             <div class="child-row">
                 <span class="child-name">{{ forloop.counter }}. {{ child.first_name }} {{ child.last_name }}</span>
@@ -46,8 +46,12 @@
                                 {{ page.display_title }}
                             <span class="pull-right">
                                 <span class="earnings-value">
-                                    $ {{ child|getvalue:page.value_field|intcomma }} -
-                                    {{ child|getvalue:page.frequency_field|frequencylabel }}
+                                    {% if child|getvalue:page.value_field %}
+                                        $ {{ child|getvalue:page.value_field|intcomma }} -
+                                        {{ child|getvalue:page.frequency_field|frequencylabel }}
+                                    {% else %}
+                                        0
+                                    {% endif %}
                                 </span>
                             </span>
                                 <div class="clearfix"></div>
@@ -58,6 +62,8 @@
                 <div class="clearfix"></div>
             </div>
         {% endfor %}
+    {% else %}
+        <p>No household children information found.</p>
     {% endif %}
     </div>
 
@@ -79,8 +85,12 @@
                                             <span class="pull-left page_display_title">{{ page.display_title }}</span>
                                             <span class="pull-right">
                                                 <span class="earnings-value">
+                                                    {% if adult|getvalue:page.value_field %}
                                                         $ {{ adult|getvalue:page.value_field|intcomma }} -
                                                         {{ adult|getvalue:page.frequency_field|frequencylabel }}
+                                                    {% else %}
+                                                        0
+                                                    {% endif %}
                                                 </span>
                                             </span>
                                             <div class="clearfix"></div>
@@ -94,6 +104,8 @@
                     <div class="clearfix"></div>
                 </div>
             {% endfor %}
+        {% else %}
+            <p>No household adults information found.</p>
         {% endif %}
     </div>
 
@@ -102,18 +114,20 @@
         <table class="table table-condensed table-bordered">
         <tr>
             <th>First Name</th>
-            <td>{{ app.first_name }}</td>
+            <td>{{ app.first_name|default_if_none:"" }}</td>
         </tr>
         <tr>
             <th>Last Name</th>
-            <td>{{ app.last_name }}</td>
+            <td>{{ app.last_name|default_if_none:"" }}</td>
         </tr>
         <tr>
             <th>Address</th>
             <td>
                 <address>
-                  {{ app.street_address }} {% if app.apt %}, {{ app.apt }} {% endif %}<br>
-                  {{ app.city }}, {{ app.state }} {{ app.zip }}<br>
+                  {{ app.street_address|default_if_none:"" }} {% if app.apt|default_if_none:"" %},
+                    {{ app.apt|default_if_none:"" }} {% endif %}<br>
+                  {{ app.city|default_if_none:"" }}, {{ app.state|default_if_none:"" }}
+                    {{ app.zip|default_if_none:"" }}<br>
                   {% if app.phone %}Phone: {{ app.phone }}<br>{% endif %}
                   {% if app.email %}Email: {{ app.email }}<br>{% endif %}
                 </address>
@@ -121,17 +135,39 @@
         </tr>
         <tr>
             <th>Signature</th>
-            <td>{{ app.signature }}</td>
+            <td>{{ app.signature|default_if_none:"" }}</td>
         </tr>
         <tr>
             <th>Date Completed</th>
-            <td>{{ app.todays_date }}</td>
+            <td>{{ app.todays_date|default_if_none:"" }}</td>
         </tr>
         <tr>
             <th>Last 4 digits of SSN</th>
-            <td>{{ app.ssn_four_digit }}</td>
+            <td>
+                {{ app.ssn_four_digit|default_if_none:"" }}
+                {% if app.no_ssn %}Applicant has No SSN#{% endif %}
+            </td>
         </tr>
     </table>
     </div>
 
+    <div class="app-section">
+        <h4>Ethnicity & Race</h4>
+        <table class="table table-condensed table-bordered">
+        <tr>
+            <th>Ethnicity</th>
+            <td>{{ app.ethnicity|default_if_none:"" }}</td>
+        </tr>
+        <tr>
+            <th>Race</th>
+            <td>
+                {% if app.is_american_indian %}American Indian or Alaskan Native {% endif %}
+                {% if app.is_asian %}Asian {% endif %}
+                {% if app.is_black %}African America {% endif %}
+                {% if app.is_hawaiian %}Hawaiian or Other Pacific Islander {% endif %}
+                {% if app.is_white %}White {% endif %}
+            </td>
+        </tr>
+    </table>
+    </div>
 {% endblock %}

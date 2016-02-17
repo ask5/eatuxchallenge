@@ -7,9 +7,9 @@ register = template.Library()
 @register.filter(name='getvalue')
 def getvalue(object, property):
     if object and property:
-        return getattr(object, property)
+        return "" if getattr(object, property) is None else getattr(object, property)
     else:
-        return None
+        return ""
 
 @register.filter(name='frequencylabel')
 def frequencylabel(value):

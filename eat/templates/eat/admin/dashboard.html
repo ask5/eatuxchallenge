@@ -13,7 +13,6 @@
     </h3>
     <div class="row">
         <div class="col-lg-4">
-            <h4>Statistics</h4>
             <ul class="list-group">
                 <li class="list-group-item">
                     <a href="{% url 'admin_applications' %}">All Applications</a>
@@ -35,24 +34,39 @@
         </div>
         <div class="col-lg-8">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-5">
                     <div id="applications_chart"></div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-7">
                     <div id="children_chart"></div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-12"></div>
+        <div class="col-lg-12"><hr></div>
     </div>
     <div class="row">
         <div class="col-lg-12">
             {% if applications %}
-                <a class="pull-right" href="{% url 'admin_applications_export' %}">
-                    <span class="glyphicon glyphicon-save-file"></span> Export Applications
-                </a>
+                <ul class="nav nav-pills pull-right">
+                  <li role="presentation">
+                        <a class="pull-right" href="{% url 'admin_applications_export' %}">
+                            <span class="glyphicon glyphicon-save-file"></span> Export Applications
+                        </a>
+                  </li>
+                  <li role="presentation">
+                        <a class="pull-right" href="{% url 'admin_children_export' %}">
+                            <span class="glyphicon glyphicon-save-file"></span> Export Children Data
+                        </a>
+                  </li>
+                  <li role="presentation">
+                        <a class="pull-right" href="{% url 'admin_adults_export' %}">
+                            <span class="glyphicon glyphicon-save-file"></span> Export Adults Data
+                        </a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
                 <h4>Applications</h4>
                 <table class="table">
                 <tr>
@@ -107,9 +121,9 @@
             ]);
 
             var applications_options = {
-                title: 'Applications'
+                legend: { position: "none" }
             };
-            var applications_chart = new google.visualization.PieChart(document.getElementById('applications_chart'));
+            var applications_chart = new google.visualization.ColumnChart(document.getElementById('applications_chart'));
             applications_chart.draw(applications_data, applications_options);
 
 
@@ -117,16 +131,17 @@
                 ['Children', 'Number'],
                 ['Students', {{ students }}],
                 ['Non Students', {{ non_students }}],
-                ['Foster Children', {{ foster_children }}],
-                ['HMR Children', {{ hmr_children }}],
-                ['Head Start Children', {{ head_start_children }}]
+                ['Foster', {{ foster_children }}],
+                ['H.M.R', {{ hmr_children }}],
+                ['Head Start', {{ head_start_children }}]
             ]);
 
             var children_options = {
                 title: 'Children',
-                pieHole: 0.4
+                pieHole: 0.4,
+                legend: { position: "none" }
             };
-            var children_chart = new google.visualization.PieChart(document.getElementById('children_chart'));
+            var children_chart = new google.visualization.ColumnChart(document.getElementById('children_chart'));
             children_chart.draw(children_data, children_options);
         }
     </script>

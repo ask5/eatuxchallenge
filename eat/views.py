@@ -33,7 +33,7 @@ def register(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('application_home')
+                    return redirect('application_create')
     else:
         form = RegistrationForm()
     result = dict()
@@ -630,17 +630,74 @@ def admin_users(request):
 @staff_member_required
 def admin_applications_export(request):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="applications.csv"'
+    response['Content-Disposition'] = 'attachment; filename="application_{}.csv"'.format(datetime.datetime.now())
     fields = ["id", "status", "enabled", "create_date", "modified_date", "total_children", "total_adults",
               "assistance_program", "app_for_foster_child", "ssn_four_digit", "no_ssn", "case_number", "first_name",
               "last_name", "middle_name", "signature", "todays_date", "street_address", "apt", "city", "state", "zip",
               "phone", "email", "ethnicity", "is_american_indian", "is_asian", "is_black", "is_hawaiian", "is_white",
               "active", "contact_form_complete", "all_adults_entered", "all_children_entered"]
     writer = csv.writer(response)
-    writer.writerow(Application._meta.get_all_field_names())
+    writer.writerow(fields)
     for app in Application.applications.all():
-        row = ""
+        row = []
         for field in fields:
-             row += str(getattr(app, field)) + ","
+             row.append("" if getattr(app, field) is None else str(getattr(app, field)))
+        writer.writerow(row)
+    return response
+
+
+@staff_member_required
+def admin_children_export(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="children_{}.csv"'.format(datetime.datetime.now())
+    fields = ["id", "application_id", "first_name", "last_name", "middle_name", "is_student", "is_head_start_participant",
+              "foster_child", "hmr", "salary", "salary_frequency", "ssi_disability", "ssi_disability_frequency",
+              "ssi_parent_disability", "ssi_parent_disability_frequency", "spending_money_income",
+              "spending_money_income_frequency", "other_friend_income", "other_friend_income_frequency",
+              "pension_income", "pension_income_frequency", "annuity_income", "annuity_income_frequency",
+              "trust_income", "trust_income_frequency", "other_income", "other_income_frequency"]
+
+    writer = csv.writer(response)
+    writer.writerow(fields)
+    for child in Child.children.all():
+        row = []
+        for field in fields:
+             row.append("" if getattr(child, field) is None else str(getattr(child, field)))
+        writer.writerow(row)
+    return response
+
+
+
+@staff_member_required
+def admin_adults_export(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="adults_{}.csv"'.format(datetime.datetime.now())
+    fields = ["id", "application_id", "first_name", "middle_name", "last_name", "salary", "salary_frequency", "wages",
+              "wages_frequency", "cash_bonuses", "cash_bonuses_frequency", "self_employment_income",
+              "self_employment_income_frequency", "strike_benefits", "strike_benefits_frequency",
+              "unemployment_insurance", "unemployment_insurance_frequency", "other_earned_income",
+              "other_earned_income_frequency", "military_basic_pay", "military_basic_pay_frequency", "military_bonus",
+              "military_bonus_frequency", "military_allowance", "military_allowance_frequency", "military_food",
+              "military_food_frequency", "military_clothing", "military_clothing_frequency", "general_assistance",
+              "general_assistance_frequency", "cash_assistance", "cash_assistance_frequency", "alimony",
+              "alimony_frequency", "child_support", "child_support_frequency", "social_security_income",
+              "social_security_income_frequency", "railroad_income", "railroad_income_frequency", "pension_income",
+              "pension_income_frequency", "annuity_income", "annuity_income_frequency", "survivors_benefits",
+              "survivors_benefits_frequency", "ssi_disability_benefits", "ssi_disability_benefits_frequency",
+              "private_disability_benefits", "private_disability_benefits_frequency", "black_lung_benefits",
+              "black_lung_benefits_frequency", "workers_compensation", "workers_compensation_frequency",
+              "veterans_benefits", "veterans_benefits_frequency", "other_retirement_sources",
+              "other_retirement_sources_frequency", "interest_income", "interest_income_frequency", "investment_income",
+              "investment_income_frequency", "dividends", "dividends_frequency", "trust_or_estates_income",
+              "trust_or_estates_income_frequency", "rental_income", "rental_income_frequency", "royalties_income",
+              "royalties_income_frequency", "prize_winnings", "prize_winnings_frequency", "savings_withdrawn",
+              "savings_withdrawn_frequency", "cash_gifts", "cash_gifts_frequency"]
+
+    writer = csv.writer(response)
+    writer.writerow(Adult._meta.get_all_field_names())
+    for adult in Adult.adults.all():
+        row = []
+        for field in fields:
+             row.append("" if getattr(adult, field) is None else str(getattr(adult, field)))
         writer.writerow(row)
     return response
