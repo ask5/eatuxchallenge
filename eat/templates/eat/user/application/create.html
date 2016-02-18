@@ -29,7 +29,9 @@
     <div class="form-group">
         <label for="{{ form.assistance_program.id_for_label }}" class="col-sm-5 control-label">
             Does any household member participate in any of the following assistance programs:
-            SNAP, TANF OR FDPIR?</label>
+            <abbr title="The Supplemental Nutrition Assistance Program">SNAP</abbr>,
+            <abbr title="Temporary Assistance for Needy Families">TANF</abbr> OR
+            <abbr title="The Food Distribution Program on Indian Reservations">FDPIR</abbr>?</label>
         <div class="col-sm-7 list-inline">
             {{ form.assistance_program }}
         </div>
@@ -157,7 +159,39 @@
     </div>
 {% endblock %}
 
-{% block application_content_right %}
+{% block application_help_tip %}
+    <strong>Who should I count as a Child?</strong>
+    <p>
+        A child is anyone age 18 or under and are supported with the household’s income; or in your care under a foster
+        arrangement,
+        or qualify as homeless, migrant, or runaway youth;
+        or students attending high school grade or under, regardless of age.
+    </p>
+    <strong>Who should I count as an Adult?</strong>
+    <p>
+        All members in your household who are living with you and share income and expenses,
+        even if not related and even if they do not receive income of their own.
+    </p>
+    <em>Do not include:</em>
+    <ul>
+        <li>
+            Children and students.
+        </li>
+        <li>
+             People who live with you but are not supported by your household’s income and do not contribute income to
+            your household.
+        </li>
+    </ul>
+    <strong>Assistance Program</strong>
+    <p>
+        If anyone in your household participates in the assistance programs listed below,
+        your children are eligible for free school meals:
+    </p>
+    <ul>
+        <li>The Supplemental Nutrition Assistance Program (SNAP)</li>
+        <li>Temporary Assistance for Needy Families (TANF)</li>
+        <li>The Food Distribution Program on Indian Reservations (FDPIR)</li>
+    </ul>
 {% endblock %}
 
 {% block js %}
