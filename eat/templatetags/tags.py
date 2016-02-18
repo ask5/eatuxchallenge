@@ -1,5 +1,5 @@
 from django import template
-from eat.models import PAY_FREQUENCIES
+from eat.models import PayFrequency
 
 register = template.Library()
 
@@ -11,9 +11,10 @@ def getvalue(object, property):
     else:
         return ""
 
+
 @register.filter(name='frequencylabel')
 def frequencylabel(value):
     if value:
-        return dict(PAY_FREQUENCIES).get(value)
+        return PayFrequency.objects.get(pk=value)
     else:
         return ""

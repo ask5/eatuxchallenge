@@ -16,6 +16,7 @@ import operator
 from django.shortcuts import get_object_or_404
 import csv
 
+
 # Create your views here.
 def register(request):
     """
@@ -694,7 +695,7 @@ def admin_adults_export(request):
               "savings_withdrawn_frequency", "cash_gifts", "cash_gifts_frequency"]
 
     writer = csv.writer(response)
-    writer.writerow(Adult._meta.get_all_field_names())
+    writer.writerow(fields)
     for adult in Adult.adults.all():
         row = []
         for field in fields:

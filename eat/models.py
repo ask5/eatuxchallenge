@@ -9,13 +9,6 @@ APPLICATION_STATUSES = (
     (2, 'Complete'),
 )
 
-PAY_FREQUENCIES = (
-    (1, 'Weekly'),
-    (2, 'Bi-Weekly'),
-    (3, '2x Month'),
-    (4, 'Monthly')
-)
-
 ETHNICITIES = (
     ('Hispanic or Latino', 'Hispanic or Latino'),
     ('Not Hispanic or Latino', 'Not Hispanic or Latino'),
@@ -147,6 +140,13 @@ class Application(models.Model):
     all_children_entered = models.BooleanField(verbose_name='All children were entered', default=False)
 
 
+class PayFrequency(models.Model):
+    name = models.CharField(max_length=50, verbose_name='Name')
+
+    def __str__(self):
+        return self.name
+
+
 class Child(models.Model):
     children = models.Manager()
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -167,79 +167,51 @@ class Child(models.Model):
                                  help_text='Salary or Wages from a Job',
                                  blank=True,
                                  null=True)
-    salary_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                           verbose_name='Frequency Of Salary',
-                                           help_text='How often are earnings received',
-                                           blank=True,
-                                           null=True)
+    salary_frequency = models.ForeignKey(PayFrequency, blank=True, null=True, related_name='salary_frequency')
     ssi_disability = models.IntegerField(verbose_name='Social Security Income for Disability',
                                          help_text='Social security income for childs blindness or disability',
                                          blank=True,
                                          null=True)
-    ssi_disability_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                   verbose_name='Frequency Of Social Security Income for Disability',
-                                                   help_text='How often are earnings received',
-                                                   blank=True,
-                                                   null=True)
+    ssi_disability_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                 related_name='ssi_disability_frequency')
     ssi_parent_disability = models.IntegerField(verbose_name='Social Security Income for Parents Disability',
-                                                help_text='Social security income received if parent is disabled/retired/deceased',
-                                                blank=True,
-                                                null=True)
-    ssi_parent_disability_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                          verbose_name='Frequency Of Social Security Income for Parent Disabilty',
-                                                          help_text='How often are earnings received',
-                                                          blank=True,
-                                                          null=True)
+                                    help_text='Social security income received if parent is disabled/retired/deceased',
+                                    blank=True,
+                                    null=True)
+    ssi_parent_disability_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                        related_name='ssi_parent_disability_frequency')
     spending_money_income = models.IntegerField(verbose_name='Spending Money Income',
                                                 help_text='Spending money received from a person outside the household',
                                                 blank=True,
                                                 null=True)
-    spending_money_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                          verbose_name='Frequency Of Spending Money Income',
-                                                          help_text='How often are earnings received',
-                                                          blank=True,
-                                                          null=True)
+    spending_money_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                        related_name='spending_money_income_frequency')
     other_friend_income = models.IntegerField(verbose_name='Other Regular Income From Friends',
                                               blank=True,
                                               null=True)
-    other_friend_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                        verbose_name='Frequency Of Other Regular Income From Friends',
-                                                        help_text='How often are earnings received',
-                                                        blank=True,
-                                                        null=True)
+    other_friend_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                      related_name='other_friend_income_frequency')
     pension_income = models.IntegerField(verbose_name='Pension Income',
                                          blank=True,
                                          null=True)
-    pension_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                   verbose_name='Pension Income Frequency',
-                                                   help_text='How often are earnings received',
-                                                   blank=True,
-                                                   null=True)
+    pension_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                 related_name='pension_income_frequency')
     annuity_income = models.IntegerField(verbose_name='Annuity Income',
                                          blank=True,
                                          null=True)
-    annuity_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                   verbose_name='Annuity Income Frequency',
-                                                   help_text='How often are earnings received',
-                                                   blank=True,
-                                                   null=True)
+    annuity_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                 related_name='annuity_income_frequency')
     trust_income = models.IntegerField(verbose_name='Trust Income',
                                        blank=True,
                                        null=True)
-    trust_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                 verbose_name='Trust Income Frequency',
-                                                 help_text='How often are earnings received',
-                                                 blank=True,
-                                                 null=True)
+    trust_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                               related_name='trust_income_frequency')
     other_income = models.IntegerField(verbose_name='Other Income',
                                        help_text='Any other income',
                                        blank=True,
                                        null=True)
-    other_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                 verbose_name='Other Income Frequency',
-                                                 help_text='How often are earnings received',
-                                                 blank=True,
-                                                 null=True)
+    other_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                               related_name='other_income_frequency')
 
     def get_total_earning(self):
         t = 0
@@ -287,293 +259,183 @@ class Adult(models.Model):
                                  help_text='Salary from a Job',
                                  blank=True,
                                  null=True)
-    salary_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                           verbose_name='Frequency Of Salary',
-                                           help_text='How often are earnings received',
-                                           blank=True,
-                                           null=True)
+    salary_frequency = models.ForeignKey(PayFrequency, blank=True, null=True, related_name='adult_salary_frequency')
     wages = models.IntegerField(verbose_name='Wages',
                                 help_text='Wages from a Job',
                                 blank=True,
                                 null=True)
-    wages_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                          verbose_name='Frequency Of Wages',
-                                          help_text='How often are earnings received',
-                                          blank=True,
-                                          null=True)
+    wages_frequency = models.ForeignKey(PayFrequency, blank=True, null=True, related_name='wages_frequency')
     cash_bonuses = models.IntegerField(verbose_name='Cash Bonuses',
                                        blank=True,
                                        null=True)
-    cash_bonuses_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                 verbose_name='Frequency Of Cash Bonuses',
-                                                 help_text='How often are earnings received',
-                                                 blank=True,
-                                                 null=True)
+    cash_bonuses_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                               related_name='cash_bonuses_frequency')
     self_employment_income = models.IntegerField(verbose_name='Self Employment Income',
                                                  help_text='Net income from self employment',
                                                  blank=True,
                                                  null=True)
-    self_employment_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                           verbose_name='Frequency Of Self Employment Income',
-                                                           help_text='How often are earnings received',
-                                                           blank=True,
-                                                           null=True)
+    self_employment_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                         related_name='self_employment_income_frequency')
     strike_benefits = models.IntegerField(verbose_name='Strike Benefits',
                                           blank=True,
                                           null=True)
-    strike_benefits_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                    verbose_name='Frequency Of Strike Benefits',
-                                                    help_text='How often are earnings received',
-                                                    blank=True,
-                                                    null=True)
+    strike_benefits_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                  related_name='strike_benefits_frequency')
     unemployment_insurance = models.IntegerField(verbose_name='Unemployment Insurance',
                                                  blank=True,
                                                  null=True)
-    unemployment_insurance_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                           verbose_name='Frequency Of Unemployment Insurance',
-                                                           help_text='How often are earnings received',
-                                                           blank=True,
-                                                           null=True)
+    unemployment_insurance_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                         related_name='unemployment_insurance_frequency')
     other_earned_income = models.IntegerField(verbose_name='Other Earned Income',
                                               blank=True,
                                               null=True)
-    other_earned_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                        verbose_name='Frequency Of Other Earned Income',
-                                                        help_text='How often are earnings received',
-                                                        blank=True,
-                                                        null=True)
+    other_earned_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                      related_name='other_earned_income_frequency')
     military_basic_pay = models.IntegerField(verbose_name='Military Basic Pay',
                                              blank=True,
                                              null=True)
-    military_basic_pay_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                       verbose_name='Frequency Of Military Basic Pay',
-                                                       help_text='How often are earnings received',
-                                                       blank=True,
-                                                       null=True)
+    military_basic_pay_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                     related_name='military_basic_pay_frequency')
     military_bonus = models.IntegerField(verbose_name='Military Bonus',
                                          blank=True,
                                          null=True)
-    military_bonus_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                   verbose_name='Frequency Of Military Bonus',
-                                                   help_text='How often are earnings received',
-                                                   blank=True,
-                                                   null=True)
+    military_bonus_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                 related_name='military_bonus_frequency')
     military_allowance = models.IntegerField(verbose_name='Military Allowance',
                                              blank=True,
                                              null=True)
-    military_allowance_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                       verbose_name='Frequency Of Military Allowance',
-                                                       help_text='How often are earnings received',
-                                                       blank=True,
-                                                       null=True)
+    military_allowance_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                     related_name='military_allowance_frequency')
     military_food = models.IntegerField(verbose_name='Military Food',
                                         blank=True,
                                         null=True)
-    military_food_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                  verbose_name='Frequency Of Military Food',
-                                                  help_text='How often are earnings received',
-                                                  blank=True,
-                                                  null=True)
+    military_food_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                related_name='military_food_frequency')
     military_clothing = models.IntegerField(verbose_name='Military Clothing',
                                             blank=True,
                                             null=True)
-    military_clothing_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                      verbose_name='Frequency Of Military Clothing',
-                                                      help_text='How often are earnings received',
-                                                      blank=True,
-                                                      null=True)
+    military_clothing_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                    related_name='military_clothing_frequency')
     general_assistance = models.IntegerField(verbose_name='General Assistance',
                                              help_text='General assistance excluding SNAP or TANF',
                                              blank=True,
                                              null=True)
-    general_assistance_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                       verbose_name='Frequency Of General Assistance',
-                                                       help_text='How often are earnings received',
-                                                       blank=True,
-                                                       null=True)
+    general_assistance_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                     related_name='general_assistance_frequency')
     cash_assistance = models.IntegerField(verbose_name='Cash assistance from State or local government',
                                            blank=True,
                                            null=True)
-    cash_assistance_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                     verbose_name='Frequency Of Csah Assistance',
-                                                     help_text='How often are earnings received',
-                                                     blank=True,
-                                                     null=True)
+    cash_assistance_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                  related_name='cash_assistance_frequency')
     alimony = models.IntegerField(verbose_name='Alimony Received',
                                   blank=True,
                                   null=True)
-    alimony_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                            verbose_name='Frequency Of Alimony',
-                                            help_text='How often are earnings received',
-                                            blank=True,
-                                            null=True)
+    alimony_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                          related_name='alimony_frequency')
     child_support = models.IntegerField(verbose_name='Child Support',
                                         blank=True,
                                         null=True)
-    child_support_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                  verbose_name='Frequency Of Child Support',
-                                                  help_text='How often are earnings received',
-                                                  blank=True,
-                                                  null=True)
+    child_support_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                related_name='child_support_frequency')
     social_security_income = models.IntegerField(verbose_name='Social Security Income',
                                                  blank=True,
                                                  null=True)
-    social_security_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                           verbose_name='Frequency Of Social Security Income',
-                                                           help_text='How often are earnings received',
-                                                           blank=True,
-                                                           null=True)
+    social_security_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                         related_name='social_security_income_frequency')
     railroad_income = models.IntegerField(verbose_name='Railroad Retirement Income',
                                           blank=True,
                                           null=True)
-    railroad_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                    verbose_name='Frequency Of Railroad Retirement Income',
-                                                    help_text='How often are earnings received',
-                                                    blank=True,
-                                                    null=True)
+    railroad_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                  related_name='railroad_income_frequency')
     pension_income = models.IntegerField(verbose_name='Pension Income',
                                          blank=True,
                                          null=True)
-    pension_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                   verbose_name='Frequency Of Pension Income',
-                                                   help_text='How often are earnings received',
-                                                   blank=True,
-                                                   null=True)
+    pension_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                 related_name='adult_pension_income_frequency')
     annuity_income = models.IntegerField(verbose_name='Annuity Income',
                                          blank=True,
                                          null=True)
-    annuity_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                   verbose_name='Frequency Of Annuity Income',
-                                                   help_text='How often are earnings received',
-                                                   blank=True,
-                                                   null=True)
+    annuity_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                 related_name='adult_annuity_income_frequency')
     survivors_benefits = models.IntegerField(verbose_name='Survivor''s Benefits',
                                              blank=True,
                                              null=True)
-    survivors_benefits_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                       verbose_name='Frequency Of Survivor''s Benefits',
-                                                       help_text='How often are earnings received',
-                                                       blank=True,
-                                                       null=True)
+    survivors_benefits_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                     related_name='survivors_benefits_frequency')
     ssi_disability_benefits = models.IntegerField(verbose_name='Disability Benefits From Supplemental Security Income',
                                                   blank=True,
                                                   null=True)
-    ssi_disability_benefits_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                            verbose_name='Frequency Of SSI Disability Benefits',
-                                                            help_text='How often are earnings received',
-                                                            blank=True,
-                                                            null=True)
+    ssi_disability_benefits_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                          related_name='ssi_disability_benefits_frequency')
     private_disability_benefits = models.IntegerField(verbose_name='Private Disability Benefits',
                                                       blank=True,
                                                       null=True)
-    private_disability_benefits_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                                verbose_name='Frequency Of Private Disability Benefits',
-                                                                help_text='How often are earnings received',
-                                                                blank=True,
-                                                                null=True)
+    private_disability_benefits_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                              related_name='private_disability_benefits_frequency')
     black_lung_benefits = models.IntegerField(verbose_name='Black Lung Benefits',
                                               blank=True,
                                               null=True)
-    black_lung_benefits_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                        verbose_name='Frequency Of Black Lung Benefits',
-                                                        help_text='How often are earnings received',
-                                                        blank=True,
-                                                        null=True)
+    black_lung_benefits_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                      related_name='black_lung_benefits_frequency')
     workers_compensation = models.IntegerField(verbose_name='Worker''s Compensation',
                                                blank=True,
                                                null=True)
-    workers_compensation_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                         verbose_name='Frequency Of Worker''s Compensation',
-                                                         help_text='How often are earnings received',
-                                                         blank=True,
-                                                         null=True)
+    workers_compensation_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                       related_name='workers_compensation_frequency')
     veterans_benefits = models.IntegerField(verbose_name='Veteran''s Benefits',
                                             blank=True,
                                             null=True)
-    veterans_benefits_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                      verbose_name='Frequency Of Veteran''s Benefits',
-                                                      help_text='How often are earnings received',
-                                                      blank=True,
-                                                      null=True)
+    veterans_benefits_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                    related_name='veterans_benefits_frequency')
     other_retirement_sources = models.IntegerField(verbose_name='Other Retirement Sources',
                                                    blank=True,
                                                    null=True)
-    other_retirement_sources_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                             verbose_name='Frequency Of Other Retirement Sources',
-                                                             help_text='How often are earnings received',
-                                                             blank=True,
-                                                             null=True)
+    other_retirement_sources_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                           related_name='other_retirement_sources_frequency')
     interest_income = models.IntegerField(verbose_name='Interest Income',
                                           blank=True,
                                           null=True)
-    interest_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                    verbose_name='Frequency Of Interest Income',
-                                                    help_text='How often are earnings received',
-                                                    blank=True,
-                                                    null=True)
+    interest_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                  related_name='interest_income_frequency')
     investment_income = models.IntegerField(verbose_name='Investment Income',
                                           blank=True,
                                           null=True)
-    investment_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                    verbose_name='Frequency Of Investment Income',
-                                                    help_text='How often are earnings received',
-                                                    blank=True,
-                                                    null=True)
+    investment_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                    related_name='investment_income_frequency')
     dividends = models.IntegerField(verbose_name='Dividends',
                                     blank=True,
                                     null=True)
-    dividends_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                              verbose_name='Frequency Of Dividends',
-                                              help_text='How often are earnings received',
-                                              blank=True,
-                                              null=True)
+    dividends_frequency = models.ForeignKey(PayFrequency, blank=True, null=True, related_name='dividends_frequency')
     trust_or_estates_income = models.IntegerField(verbose_name='Trust Or Estates Income',
                                                   blank=True,
                                                   null=True)
-    trust_or_estates_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                            verbose_name='Frequency Of Trust Or Estates Income',
-                                                            help_text='How often are earnings received',
-                                                            blank=True,
-                                                            null=True)
+    trust_or_estates_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                          related_name='trust_or_estates_income_frequency')
     rental_income = models.IntegerField(verbose_name='Rental Income',
                                         blank=True,
                                         null=True)
-    rental_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                  verbose_name='Frequency Of Rental Income',
-                                                  help_text='How often are earnings received',
-                                                  blank=True,
-                                                  null=True)
+    rental_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                related_name='rental_income_frequency')
     royalties_income = models.IntegerField(verbose_name='Royalties Income',
                                            blank=True,
                                            null=True)
-    royalties_income_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                     verbose_name='Frequency Of Royalties Income',
-                                                     help_text='How often are earnings received',
-                                                     blank=True,
-                                                     null=True)
+    royalties_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                   related_name='royalties_income_frequency')
     prize_winnings = models.IntegerField(verbose_name='Prize Winnings',
                                          blank=True,
                                          null=True)
-    prize_winnings_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                   verbose_name='Frequency Of Prize Winnings',
-                                                   help_text='How often are earnings received',
-                                                   blank=True,
-                                                   null=True)
+    prize_winnings_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                 related_name='prize_winnings_frequency')
     savings_withdrawn = models.IntegerField(verbose_name='Savings Withdrawn',
                                             blank=True,
                                             null=True)
-    savings_withdrawn_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                                      verbose_name='Frequency Of Savings Withdrawn',
-                                                      help_text='How often are earnings received',
-                                                      blank=True,
-                                                      null=True)
+    savings_withdrawn_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                                    related_name='savings_withdrawn_frequency')
     cash_gifts = models.IntegerField(verbose_name='Cash Gifts from Friends',
                                      blank=True,
                                      null=True)
-    cash_gifts_frequency = models.IntegerField(choices=PAY_FREQUENCIES,
-                                               verbose_name='Frequency Of Cash Gifts',
-                                               help_text='How often are earnings received',
-                                               blank=True, null=True)
+    cash_gifts_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
+                                             related_name='cash_gifts_frequency')
 
     def get_total_earning(self):
         t = 0
@@ -650,3 +512,4 @@ class EarningsPage(models.Model):
 
     def __str__(self):
         return '%s.%s' % (self.entity, self.name)
+

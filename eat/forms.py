@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from eat.models import Application, Child, Adult
+from eat.models import Application, Child, Adult, PayFrequency
 from django.forms import ModelForm
 
 class RegistrationForm(UserCreationForm):
@@ -158,15 +158,9 @@ class AddAdultForm(ModelForm):
 
 class EarningsForm(forms.Form):
 
-    PAY_FREQUENCIES = (
-        (1, 'Weekly'),
-        (2, 'Bi-Weekly'),
-        (3, '2x Month'),
-        (4, 'Monthly')
-    )
-
     earning = forms.IntegerField(label="Earnings $", required=False)
-    frequency = forms.ChoiceField(choices=PAY_FREQUENCIES, label="How often?", widget=forms.RadioSelect, required=False)
+    frequency = forms.ModelChoiceField(queryset=PayFrequency.objects.all(), label="How often?",
+                                       widget=forms.RadioSelect, empty_label=None)
 
     def clean_frequency(self):
         if self.cleaned_data['earning'] is not None and self.cleaned_data['earning'] != 0\

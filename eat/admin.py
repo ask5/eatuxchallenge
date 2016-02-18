@@ -1,10 +1,14 @@
 from django.contrib import admin
-from eat.models import EarningSource, EarningsPage
+from eat.models import EarningSource, EarningsPage, PayFrequency
 from django.contrib.admin import AdminSite
 
 
 # Register your models here.
 class EarningSourceAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    fields = ('name',)
+
+class PayFrequencyAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     fields = ('name',)
 
@@ -21,3 +25,5 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 #admin.site.register(EarningSource, EarningSourceAdmin)
 #admin.site.register(EarningsPage, EarningsPageAdmin)
+#admin.site.register(PayFrequency, PayFrequencyAdmin)
+
