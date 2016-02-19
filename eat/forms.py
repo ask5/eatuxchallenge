@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from eat.models import Application, Child, Adult, PayFrequency
+from eat.models import Application, Child, Adult, PayFrequency, Ethnicity
 from django.forms import ModelForm
 
 class RegistrationForm(UserCreationForm):
@@ -106,17 +106,21 @@ class FosterChildForm(ModelForm):
 
 
 class RaceForm(ModelForm):
+
+    ethnicity = forms.ModelChoiceField(queryset=Ethnicity.objects.all(), label="Ethnicity",
+                                       widget=forms.RadioSelect, required=False, empty_label=None)
+
     class Meta:
         model = Application
         fields = ['ethnicity', 'is_american_indian', 'is_asian', 'is_black', 'is_hawaiian', 'is_white']
         widgets = {
-            'ethnicity': forms.RadioSelect(),
             'is_american_indian': forms.CheckboxInput,
             'is_asian': forms.CheckboxInput,
             'is_black': forms.CheckboxInput,
             'is_hawaiian': forms.CheckboxInput,
             'is_white': forms.CheckboxInput
         }
+
 
 class AddChildForm(ModelForm):
 
@@ -137,15 +141,6 @@ class AddChildForm(ModelForm):
             'hmr': "Is the child Homeless, Migrant or Runaway?",
             'is_head_start_participant': "Is the child Head Start participant?",
         }
-
-    #def clean(self):
-    #    cleaned_data = super(AddChildForm, self).clean()
-    #    fname = cleaned_data.get("first_name")
-    #    lname = cleaned_data.get("last_name")
-    #    if Child.children.filter(first_name=fname, last_name=lname).exists():
-    #        raise forms.ValidationError("Child with the same name already exits")
-    #    else:
-    #        return cleaned_data
 
 
 class AddAdultForm(ModelForm):

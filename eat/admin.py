@@ -1,5 +1,5 @@
 from django.contrib import admin
-from eat.models import EarningSource, EarningsPage, PayFrequency
+from eat.models import EarningSource, EarningsPage, PayFrequency, Ethnicity
 from django.contrib.admin import AdminSite
 
 
@@ -9,6 +9,11 @@ class EarningSourceAdmin(admin.ModelAdmin):
     fields = ('name',)
 
 class PayFrequencyAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    fields = ('name',)
+
+
+class EthnicityAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     fields = ('name',)
 
@@ -26,4 +31,4 @@ class ApplicationAdmin(admin.ModelAdmin):
 #admin.site.register(EarningSource, EarningSourceAdmin)
 #admin.site.register(EarningsPage, EarningsPageAdmin)
 #admin.site.register(PayFrequency, PayFrequencyAdmin)
-
+admin.site.register(Ethnicity, EthnicityAdmin)

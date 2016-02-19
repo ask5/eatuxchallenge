@@ -1,5 +1,14 @@
 {% extends "eat/user/application/base.html" %}
 {% load staticfiles %}
+{% block css %}
+    <style>
+        #id_ethnicity{
+            margin: 0;
+            padding: 0;
+            list-style: outside none none;
+        }
+    </style>
+{% endblock %}
 {% block application_content_main %}
     <h3>
         Children's Racial and Ethnic Identities
@@ -11,38 +20,42 @@
     </p>
     <div class="row">
         <div class="col-lg-6">
-            <strong>Ethnicity</strong>
-            <div class="radio">
-                {{ form.ethnicity }}
-            </div>
+            <fieldset>
+                <legend>Ethnicity</legend>
+                <div class="radio">
+                    {{ form.ethnicity }}
+                </div>
+            </fieldset>
         </div>
         <div class="col-lg-6">
-            <strong>Race (check one or more)</strong>
-            <div class="checkbox">
-                <label>
-                    {{ form.is_american_indian }} American Indian or Alaskan Native.
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    {{ form.is_asian }} Asian.
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    {{ form.is_black }} Black or African American.
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    {{ form.is_hawaiian }} Native Hawaiian or Other Pacific Islander.
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    {{ form.is_white }} White.
-                </label>
-            </div>
+            <fieldset>
+                <legend>Race (check one or more)</legend>
+                <div class="checkbox">
+                    <label>
+                        {{ form.is_american_indian }} American Indian or Alaskan Native.
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        {{ form.is_asian }} Asian.
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        {{ form.is_black }} Black or African American.
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        {{ form.is_hawaiian }} Native Hawaiian or Other Pacific Islander.
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        {{ form.is_white }} White.
+                    </label>
+                </div>
+            </fieldset>
         </div>
     </div>
 {% endblock %}

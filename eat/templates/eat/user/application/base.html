@@ -22,6 +22,11 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
+                {% if progress %}
+                    <li>
+                        <a href="#">Application Progress: {{ progress|floatformat:"0" }}% complete</a>
+                    </li>
+                {% endif %}
                 <li>
                     <a href="#">Welcome {{ user.first_name }}!</a>
                 </li>

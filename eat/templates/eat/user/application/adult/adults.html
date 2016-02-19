@@ -4,7 +4,7 @@
 {% load tags %}
 {% block application_content_main %}
     <h3>
-        Adult household members, including yourself.
+        Adults in the household.
     </h3>
     {% if not app.assistance_program and not app.app_for_foster_child %}
         <a class="btn btn-primary pull-right" role="button" href="{% url 'add_adult' %}">Add an Adult</a>

@@ -9,10 +9,6 @@ APPLICATION_STATUSES = (
     (2, 'Complete'),
 )
 
-ETHNICITIES = (
-    ('Hispanic or Latino', 'Hispanic or Latino'),
-    ('Not Hispanic or Latino', 'Not Hispanic or Latino'),
-)
 
 YES_NO = (
     (True, 'Yes',),
@@ -73,6 +69,13 @@ STATES = (
 )
 
 
+class Ethnicity(models.Model):
+    name = models.CharField(max_length=50, verbose_name='Name')
+
+    def __str__(self):
+        return self.name
+
+
 class Application(models.Model):
     applications = models.Manager()
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -127,8 +130,7 @@ class Application(models.Model):
                            verbose_name='Zip', blank=True, null=True)
     phone = models.CharField(max_length=15, verbose_name='Phone', blank=True, null=True)
     email = models.EmailField(max_length=255, verbose_name='Email', blank=True, null=True)
-    ethnicity = models.CharField(max_length=25, choices=ETHNICITIES,
-                                 verbose_name='Ethnicity', blank=True, null=True, default=None)
+    ethnicity = models.ForeignKey(Ethnicity, blank=True, null=True)
     is_american_indian = models.NullBooleanField(verbose_name='Is American Indian or Alaskan Native')
     is_asian = models.NullBooleanField(verbose_name='Is Asian')
     is_black = models.NullBooleanField(verbose_name='Is Black or African American')

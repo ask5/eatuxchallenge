@@ -21,8 +21,9 @@
             <div class="child-row">
                 <a class="btn btn-danger pull-right" role="button"
                    href="{% url 'delete_child' child_id=child.id %}">Delete</a>
-                <span class="child-name">{{ forloop.counter }}. {{ child.first_name }} {{ child.last_name }}</span>
-
+                <span class="child-name">{{ forloop.counter }}.
+                    {{ child.first_name }} {% if child.middle_name %}{{ child.middle_name }}{% endif %} {{ child.last_name }}
+                </span>
                 <ul class="child-info">
                     {% if child.is_student %} <li>Student</li> {% endif %}
                     {% if child.foster_child %}<li>Foster child</li> {% endif %}

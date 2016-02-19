@@ -161,6 +161,7 @@ def children(request):
     args['children'] = _children
     args['total_children'] = _children.count()
     args['earnings_pages'] = AppUtil.get_earnings_pages('children')
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/child/children.html", args)
 
@@ -190,6 +191,7 @@ def add_child(request):
     else:
         form = AddChildForm(initial={"foster_child": app[0].app_for_foster_child })
     args['form'] = form
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     args['nav'] = AppUtil.get_nav(nav=nav, url='children', app=app[0])
     return render(request, "eat/user/application/child/add_edit.html", args)
 
@@ -213,6 +215,7 @@ def edit_child(request, child_id):
         form = AddChildForm(instance=child)
     args['form'] = form
     args['child'] = child
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     args['nav'] = AppUtil.get_nav(nav=nav, url='children', app=app[0])
     return render(request, "eat/user/application/child/add_edit.html", args)
 
@@ -223,6 +226,7 @@ def exempt_child(request, child_id):
     app = AppUtil.get_by_user(user=request.user)
     child = get_object_or_404(Child, pk=child_id, application=app[0])
     args['app'] = app[0]
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     args['child'] = child
     return render(request, "eat/user/application/child/exempt_child.html", args)
 
@@ -237,6 +241,7 @@ def delete_child(request, child_id):
         return redirect('children')
     args['child'] = child
     args['nav'] = AppUtil.get_nav(nav=nav, url='children', app=app[0])
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     return render(request, "eat/user/application/child/delete.html", args)
 
 
@@ -291,6 +296,7 @@ def child_earnings(request, child_id):
     args['heading'] = page.headline.format(child.first_name)
     args['tip'] = page.help_tip
     args['nav'] = AppUtil.get_nav(nav=nav, url='children', app=app[0])
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     AppUtil.set_last_page(child.application, request.get_full_path())
     return render(request, page.template, args)
 
@@ -317,7 +323,7 @@ def adults(request):
             })
 
     args['earnings'] = earnings
-
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     return render(request, "eat/user/application/adult/adults.html", args)
 
 
@@ -336,6 +342,7 @@ def add_adult(request):
         form = AddAdultForm()
     args['form'] = form
     args['nav'] = AppUtil.get_nav(nav=nav, url='adults', app=app[0])
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     return render(request, "eat/user/application/adult/add_edit.html", args)
 
 
@@ -363,6 +370,7 @@ def edit_adult(request, adult_id):
         form = AddAdultForm(instance=adult)
     args['form'] = form
     args['nav'] = AppUtil.get_nav(nav=nav, url='adults', app=app[0])
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     return render(request, "eat/user/application/adult/add_edit.html", args)
 
 
@@ -376,6 +384,7 @@ def delete_adult(request, adult_id):
         return redirect('adults')
     args['adult'] = adult
     args['nav'] = AppUtil.get_nav(nav=nav, url='adults', app=app[0])
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     return render(request, "eat/user/application/adult/delete.html", args)
 
 
@@ -429,6 +438,7 @@ def adult_earnings(request, adult_id):
     args['heading'] = page.headline.format(adult.first_name)
     args['tip'] = page.help_tip
     args['nav'] = AppUtil.get_nav(nav=nav, url='adults', app=app[0])
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     AppUtil.set_last_page(adult.application, request.get_full_path())
     return render(request, page.template, args)
 
@@ -450,6 +460,7 @@ def contact(request):
         form = ContactForm(instance=app[0])
     args['form'] = form
     args['nav'] = AppUtil.get_nav(nav=nav, url='contact', app=app[0])
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/contact.html", args)
 
@@ -468,6 +479,7 @@ def race(request):
 
     args['form'] = form
     args['nav'] = AppUtil.get_nav(nav=nav, url='race', app=app[0])
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     AppUtil.set_last_page(app[0], request.get_full_path())
     return render(request, "eat/user/application/race.html", args)
 
@@ -504,10 +516,10 @@ def review(request):
         issues.append("Contact form is not complete")
 
     args['children'] = _children
-    args['percent'] = AppUtil.get_app_progress(app[0])
     args['adults'] = _adults
     args['issues'] = issues
     args['nav'] = AppUtil.get_nav(nav=nav, url='review', app=app[0])
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
     args['child_earnings_pages'] = AppUtil.get_earnings_pages('children')
     earnings_sources = EarningSource.sources.all()
 
