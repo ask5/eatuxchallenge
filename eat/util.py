@@ -1,7 +1,6 @@
 from eat.models import EarningsPage
-from django.core.urlresolvers import resolve
 from eat.forms import *
-from . import *
+
 
 class AppUtil(object):
 
@@ -91,11 +90,3 @@ class AppUtil(object):
         s = sorted(t, key=lambda k:k['position'])
         return s
 
-
-class Echo(object):
-    """An object that implements just the write method of the file-like
-    interface.
-    """
-    def write(self, value):
-        """Write the value by returning it, instead of storing in a buffer."""
-        return value

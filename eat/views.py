@@ -2,22 +2,16 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
 from django.http import HttpResponse
-from datetime import datetime
-from os.path import split
 from urllib import parse
 from django.core.urlresolvers import reverse, resolve
 from eat.models import *
-from eat.forms import *
 from eat.util import *
 from . import *
-import operator
 from django.shortcuts import get_object_or_404
 import csv
 
 
-# Create your views here.
 def register(request):
     """
     User registration page
@@ -87,6 +81,11 @@ def login_view(request):
 
 @login_required
 def application_create(request):
+    """
+    Create a new Application
+    :param request:
+    :return:
+    """
     args = dict()
     if request.method == 'POST':
         form = CreateApplicatinForm(request.POST)
@@ -96,8 +95,10 @@ def application_create(request):
             application.status = 1
             application.save()
 
+            # if household participates in assistance program then redirect to the case number page
             if application.assistance_program:
                 return redirect('participate')
+            # if the application is being made for only a foster child goto Add Child
             elif not application.assistance_program and application.app_for_foster_child:
                 return redirect('add_child')
             else:
@@ -111,6 +112,11 @@ def application_create(request):
 
 @login_required
 def application_welcome_back(request):
+    """
+    Welcome back screen
+    :param request:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     args['percent'] = AppUtil.get_app_progress(app[0])
@@ -126,6 +132,11 @@ def application_welcome_back(request):
 
 @login_required
 def assistance_program_participate(request):
+    """
+    if household participates in assistance program, ask for case number
+    :param request:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     if request.method == 'POST':
@@ -153,6 +164,11 @@ def assistance_program_participate(request):
 
 @login_required
 def children(request):
+    """
+    Displays the list of children
+    :param request:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     _children = Child.children.filter(application=app[0])
@@ -168,6 +184,11 @@ def children(request):
 
 @login_required
 def add_child(request):
+    """
+    Add a child
+    :param request:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     if request.method == 'POST':
@@ -198,6 +219,12 @@ def add_child(request):
 
 @login_required
 def edit_child(request, child_id):
+    """
+    edit a child. NOT USED
+    :param request:
+    :param child_id:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     child = get_object_or_404(Child, pk=child_id, application=app[0])
@@ -222,6 +249,12 @@ def edit_child(request, child_id):
 
 @login_required
 def exempt_child(request, child_id):
+    """
+    displays a message for foster child or a child belonging to a household participating in an assistance program
+    :param request:
+    :param child_id:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     child = get_object_or_404(Child, pk=child_id, application=app[0])
@@ -233,6 +266,12 @@ def exempt_child(request, child_id):
 
 @login_required
 def delete_child(request, child_id):
+    """
+    displays warning screen before deleting a child record
+    :param request:
+    :param child_id:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     child = get_object_or_404(Child, pk=child_id, application=app[0])
@@ -247,6 +286,12 @@ def delete_child(request, child_id):
 
 @login_required
 def child_earnings(request, child_id):
+    """
+    Handles child earnings questions
+    :param request:
+    :param child_id:
+    :return:
+    """
     args = dict()
     direct = False
     app = AppUtil.get_by_user(user=request.user)
@@ -303,6 +348,11 @@ def child_earnings(request, child_id):
 
 @login_required
 def adults(request):
+    """
+    Displays the list of adults
+    :param request:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     _adults = Adult.adults.filter(application=app[0])
@@ -329,6 +379,11 @@ def adults(request):
 
 @login_required
 def add_adult(request):
+    """
+    Add an new adult record
+    :param request:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     if request.method == 'POST':
@@ -348,6 +403,11 @@ def add_adult(request):
 
 @login_required
 def adult_confirm(request):
+    """
+    confirmation screen for adults
+    :param request:
+    :return:
+    """
     if request.method == 'POST':
         app = AppUtil.get_by_user(user=request.user)
         AppUtil.all_adults_entered(app[0])
@@ -357,6 +417,12 @@ def adult_confirm(request):
 
 @login_required
 def edit_adult(request, adult_id):
+    """
+    Adult Edit screen. NOT USED
+    :param request:
+    :param adult_id:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     adult = get_object_or_404(Adult, pk=adult_id, application=app[0])
@@ -376,6 +442,12 @@ def edit_adult(request, adult_id):
 
 @login_required
 def delete_adult(request, adult_id):
+    """
+    Warning screen before deleting adult record
+    :param request:
+    :param adult_id:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     adult = get_object_or_404(Adult, pk=adult_id, application=app[0])
@@ -390,6 +462,12 @@ def delete_adult(request, adult_id):
 
 @login_required
 def adult_earnings(request, adult_id):
+    """
+    Handles adult earnings questions
+    :param request:
+    :param adult_id:
+    :return:
+    """
     args = dict()
     direct = False
     app = AppUtil.get_by_user(user=request.user)
@@ -445,19 +523,34 @@ def adult_earnings(request, adult_id):
 
 @login_required
 def contact(request):
+    """
+    Contact Form
+    :param request:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     if request.method == 'POST':
         app[0].contact_form_complete = False
         app[0].save()
-        form = ContactForm(request.POST, instance=app[0])
+
+        # skip social security number if the household receives assistance or the application is being made for
+        # foster child
+        if app[0].assistance_program or app[0].app_for_foster_child:
+            form = ContactFormWithOutSSN(request.POST, instance=app[0])
+        else:
+            form = ContactForm(request.POST, instance=app[0])
+
         if form.is_valid():
             _app = form.save(commit=False)
             _app.contact_form_complete = True
             _app.save()
             return redirect('race')
     else:
-        form = ContactForm(instance=app[0])
+        if app[0].assistance_program or app[0].app_for_foster_child:
+            form = ContactFormWithOutSSN(instance=app[0])
+        else:
+            form = ContactForm(instance=app[0])
     args['form'] = form
     args['nav'] = AppUtil.get_nav(nav=nav, url='contact', app=app[0])
     args['progress'] = AppUtil.get_app_progress(app=app[0])
@@ -467,6 +560,11 @@ def contact(request):
 
 @login_required
 def race(request):
+    """
+    Race and Ethnicity form
+    :param request:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     if request.method == 'POST':
@@ -486,6 +584,11 @@ def race(request):
 
 @login_required
 def review(request):
+    """
+    Application review page
+    :param request:
+    :return:
+    """
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     _children = Child.children.filter(application=app[0])
@@ -539,6 +642,12 @@ def review(request):
 
 @login_required
 def start_over(request):
+    """
+    confirmation page before starting over the application.
+    deletes all the current application data on post
+    :param request:
+    :return:
+    """
     if request.method == 'POST':
         app = AppUtil.get_by_user(user=request.user)
         Child.children.filter(application=app).delete()
@@ -550,6 +659,11 @@ def start_over(request):
 
 @staff_member_required
 def admin_dashboard(request):
+    """
+    Admin dashboard screen
+    :param request:
+    :return:
+    """
     args = dict()
     args['total_users'] = User.objects.all().count()
 
@@ -571,11 +685,6 @@ def admin_dashboard(request):
     args['hmr_children'] = Child.children.filter(hmr=True).count()
     args['head_start_children'] = Child.children.filter(is_head_start_participant=True).count()
     return render(request, "eat/admin/dashboard.html", args)
-
-
-@staff_member_required
-def admin_users(request):
-    pass
 
 
 @staff_member_required
@@ -642,6 +751,11 @@ def admin_users(request):
 
 @staff_member_required
 def admin_applications_export(request):
+    """
+    Application CSV export
+    :param request:
+    :return:
+    """
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="application_{}.csv"'.format(datetime.datetime.now())
     fields = ["id", "status", "enabled", "create_date", "modified_date", "total_children", "total_adults",
@@ -661,6 +775,11 @@ def admin_applications_export(request):
 
 @staff_member_required
 def admin_children_export(request):
+    """
+    Children data CSV export
+    :param request:
+    :return:
+    """
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="children_{}.csv"'.format(datetime.datetime.now())
     fields = ["id", "application_id", "first_name", "last_name", "middle_name", "is_student", "is_head_start_participant",
@@ -680,9 +799,13 @@ def admin_children_export(request):
     return response
 
 
-
 @staff_member_required
 def admin_adults_export(request):
+    """
+    Adult data CSV export
+    :param request:
+    :return:
+    """
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="adults_{}.csv"'.format(datetime.datetime.now())
     fields = ["id", "application_id", "first_name", "middle_name", "last_name", "salary", "salary_frequency", "wages",
