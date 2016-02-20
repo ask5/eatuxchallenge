@@ -552,6 +552,7 @@ def contact(request):
         else:
             form = ContactForm(instance=app[0])
     args['form'] = form
+    args['app'] = app[0]
     args['nav'] = AppUtil.get_nav(nav=nav, url='contact', app=app[0])
     args['progress'] = AppUtil.get_app_progress(app=app[0])
     AppUtil.set_last_page(app[0], request.get_full_path())

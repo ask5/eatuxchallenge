@@ -83,6 +83,8 @@ class AppUtil(object):
 
         if app.assistance_program or app.app_for_foster_child:
             nav['adults']['display'] = False
+        else:
+            nav['adults']['display'] = True
 
         for k, v in nav.items():
             v['current'] = True if v['url'] == url else False
