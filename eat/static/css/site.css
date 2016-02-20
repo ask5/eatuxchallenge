@@ -216,3 +216,22 @@ ul.child-info li:last-child:after {
     padding: 1em;
     margin-bottom: 1em;
 }
+
+
+ul.race {
+    margin: 0;
+    padding: 0;
+    list-style: outside none none;
+}
+
+ul.race li{
+    display: inline;
+}
+
+ul.race li:before{
+    content: ", ";
+}
+
+ul.race li:first-child:before {
+    content: '';
+}

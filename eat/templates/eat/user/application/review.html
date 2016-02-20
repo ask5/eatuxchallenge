@@ -191,11 +191,13 @@
         <tr>
             <th>Race</th>
             <td>
-                {% if app.is_american_indian %}American Indian or Alaskan Native {% endif %}
-                {% if app.is_asian %}Asian {% endif %}
-                {% if app.is_black %}African America {% endif %}
-                {% if app.is_hawaiian %}Hawaiian or Other Pacific Islander {% endif %}
-                {% if app.is_white %}White {% endif %}
+                <ul class="race">
+                {% if app.is_american_indian %}<li>American Indian or Alaskan Native</li>{% endif %}
+                {% if app.is_asian %}<li>Asian</li>{% endif %}
+                {% if app.is_black %}<li>African American</li>{% endif %}
+                {% if app.is_hawaiian %}<li>Hawaiian or Other Pacific Islander</li>{% endif %}
+                {% if app.is_white %}<li>White</li>{% endif %}
+                </ul>
             </td>
         </tr>
     </table>
@@ -206,7 +208,7 @@
 {% block application_content_right %}
     <div class="panel panel-warning">
         <div class="panel-heading">
-            <h3 class="panel-title">Danger Zone</h3>
+            <h3 class="panel-title"><span class="glyphicon glyphicon-warning-sign"></span> Danger Zone</h3>
         <div>
         <div class="panel-body">
             Click below if you want to delete the application and start over<br><br>
