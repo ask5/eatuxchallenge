@@ -155,7 +155,7 @@ class EarningsForm(forms.Form):
 
     earning = forms.IntegerField(label="Earnings $", required=False)
     frequency = forms.ModelChoiceField(queryset=PayFrequency.objects.all(), label="How often?",
-                                       widget=forms.RadioSelect, empty_label=None)
+                                       widget=forms.RadioSelect, empty_label=None, required=False)
 
     def clean_frequency(self):
         if self.cleaned_data['earning'] is not None and self.cleaned_data['earning'] != 0\

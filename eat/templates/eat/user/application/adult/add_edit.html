@@ -1,9 +1,8 @@
 {% extends "eat/user/application/base.html" %}
 {% load staticfiles %}
 {% block application_content_main %}
-    <h3>Add an Adult Household Member</h3>
-    <form class="form-horizontal" method="post">
-        {% csrf_token %}
+    <fieldset>
+        <legend>Add an Adult Household Member</legend>
         {{ form.non_field_errors }}
         <div class="form-group">
 
@@ -36,7 +35,7 @@
                 <a class="btn btn-default" role="button" href="{% url 'adults' %}">Cancel</a>
             </div>
         </div>
-    </form>
+    </fieldset>
 {% endblock %}
 
 {% block application_bottom_nav_wrapper %}

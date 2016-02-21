@@ -19,7 +19,7 @@ class EthnicityAdmin(admin.ModelAdmin):
 
 
 class EarningsPageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'entity', 'source', 'name', 'next', 'skip_to', 'page_type', 'value_field', 'frequency_field')
+    list_display = ('id', 'display_order', 'entity', 'source', 'name', 'next', 'skip_to', 'page_type', 'value_field', 'frequency_field')
     ordering = ('entity', 'source', 'name')
 
 
@@ -29,6 +29,6 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 
 #admin.site.register(EarningSource, EarningSourceAdmin)
-#admin.site.register(EarningsPage, EarningsPageAdmin)
+admin.site.register(EarningsPage, EarningsPageAdmin)
 #admin.site.register(PayFrequency, PayFrequencyAdmin)
 admin.site.register(Ethnicity, EthnicityAdmin)

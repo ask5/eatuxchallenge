@@ -1,10 +1,10 @@
 {% extends "eat/user/application/base.html" %}
 {% load staticfiles %}
 {% block application_content_main %}
-    <div>
-        <h3>{{ heading }}</h3>
+    <fieldset>
+        <legend>{{ heading }}</legend>
             <div class="form-group">
-                <label for="{{ form.earning.id_for_label }}" class="col-sm-3 control-label">Earning ($)</label>
+                <label for="{{ form.earning.id_for_label }}" class="col-sm-3 control-label">Earnings ($)</label>
                 <div class="col-sm-3 frm-control">
                     {{ form.earning }}
                 </div>
@@ -17,7 +17,7 @@
                     {{ form.frequency.errors }}
                 </div>
             </div>
-    </div>
+    </fieldset>
 {% endblock %}
 
 {% block application_bottom_nav %}

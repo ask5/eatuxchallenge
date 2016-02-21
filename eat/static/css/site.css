@@ -131,7 +131,7 @@ ol.breadcrumb > li.active a {
 }
 
 .tips .body{
-    margin-top: 20px;
+    margin-top: 0;
     padding: 1em;
     border-left: 1px solid #f5f5f5;
 }

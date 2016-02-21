@@ -369,7 +369,7 @@ def adults(request):
         if pages.exists():
             earnings.append({
                 'name': source,
-                'pages': pages.order_by('display_title')
+                'pages': pages.order_by('display_order')
             })
 
     args['earnings'] = earnings

@@ -1,19 +1,20 @@
 {% extends "eat/user/application/base.html" %}
 {% load staticfiles %}
 {% block application_content_main %}
-    <p class="well-large">
-        <h2>{{ heading }}</h2>
-    </p>
-    <div>
-        {% if previous_page.page_arg %}
-            <a class="btn btn-default" role="button" href="{% url previous_page.name adult_id=adult_id %}">Back</a>
-        {% else %}
-            <a class="btn btn-default" role="button" href="{% url previous_page.name %}">Back</a>
-        {% endif %}
-        <a class="btn btn-default pull-right" role="button" href="{% url next_page.name adult_id=adult_id %}">Yes</a>
-        <a class="btn btn-default pull-right" role="button" href="{% url skip_to_page.name adult_id=adult_id %}">No</a>
-    </div>
+    <fieldset>
+        <legend>{{ heading }}</legend>
+    </fieldset>
 {% endblock %}
 
 {% block application_content_right %}
+{% endblock %}
+
+{% block application_bottom_nav %}
+    {% if previous_page.page_arg %}
+        <a class="btn btn-default" role="button" href="{% url previous_page.name adult_id=adult_id %}">Back</a>
+    {% else %}
+        <a class="btn btn-default" role="button" href="{% url previous_page.name %}">Back</a>
+    {% endif %}
+    <a class="btn btn-default pull-right" role="button" href="{% url next_page.name adult_id=adult_id %}"> Yes </a>
+    <a class="btn btn-default pull-right" style="margin-right: 0.5em" role="button" href="{% url skip_to_page.name adult_id=adult_id %}"> No </a>
 {% endblock %}

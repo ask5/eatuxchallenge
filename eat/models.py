@@ -511,6 +511,7 @@ class EarningsPage(models.Model):
                                 default='eat/user/application/child/earnings.html')
     next = models.ForeignKey('self', blank=True, null=True, related_name='next_page')
     skip_to = models.ForeignKey('self', blank=True, null=True, related_name='skip_page')
+    display_order = models.IntegerField(verbose_name='Display Order', blank=True, null=True)
 
     def __str__(self):
         return '%s.%s' % (self.entity, self.name)
