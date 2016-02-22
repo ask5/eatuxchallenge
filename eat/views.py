@@ -633,7 +633,7 @@ def review(request):
         if pages.exists():
             earnings.append({
                 'name': source,
-                'pages': pages.order_by('display_title')
+                'pages': pages.order_by('display_order')
             })
 
     args['adult_earnings_pages'] = earnings
@@ -736,7 +736,7 @@ def admin_application_view(request, application_id):
         if pages.exists():
             earnings.append({
                 'name': source,
-                'pages': pages.order_by('display_title')
+                'pages': pages.order_by('display_order')
             })
 
     args['adult_earnings_pages'] = earnings

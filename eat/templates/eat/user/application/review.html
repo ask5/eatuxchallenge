@@ -51,7 +51,7 @@
                        aria-expanded="true" aria-controls="child-earnings-{{ child.id }}">
                         Earnings <span class="caret"></span>
                     </a>
-                    <div class="earnings-div collapse" id="child-earnings-{{ child.id }}">
+                    <div class="earnings-div" id="child-earnings-{{ child.id }}">
                         <ul>
                             {% for page in child_earnings_pages %}
                                 <li  class="stripped">
@@ -93,7 +93,7 @@
                        aria-expanded="true" aria-controls="adult-earnings-{{ adult.id }}">
                         Earnings <span class="caret"></span>
                     </a>
-                    <div class="earnings-div collapse" id="adult-earnings-{{ adult.id }}">
+                    <div class="earnings-div" id="adult-earnings-{{ adult.id }}">
                         <ul>
                             {% for source in adult_earnings_pages %}
                             <li>
@@ -150,18 +150,18 @@
         <table class="table table-condensed">
         <tr>
             <th>First Name</th>
-            <td>{{ app.first_name }}</td>
+            <td>{{ app.first_name|default_if_none:"" }}</td>
         </tr>
         <tr>
             <th>Last Name</th>
-            <td>{{ app.last_name }}</td>
+            <td>{{ app.last_name|default_if_none:"" }}</td>
         </tr>
         <tr>
             <th>Address</th>
             <td>
                 <address>
-                  {{ app.street_address }} {% if app.apt %}, {{ app.apt }} {% endif %}<br>
-                  {{ app.city }}, {{ app.state }} {{ app.zip }}<br>
+                  {{ app.street_address|default_if_none:"" }} {% if app.apt %}, {{ app.apt }} {% endif %}<br>
+                  {{ app.city|default_if_none:"" }} {{ app.state|default_if_none:"" }} {{ app.zip|default_if_none:"" }}<br>
                   {% if app.phone %}Phone: {{ app.phone }}<br>{% endif %}
                   {% if app.email %}Email: {{ app.email }}<br>{% endif %}
                 </address>
@@ -169,15 +169,15 @@
         </tr>
         <tr>
             <th>Signature</th>
-            <td>{{ app.signature }}</td>
+            <td>{{ app.signature|default_if_none:"" }}</td>
         </tr>
         <tr>
             <th>Date Completed</th>
-            <td>{{ app.todays_date }}</td>
+            <td>{{ app.todays_date|default_if_none:"" }}</td>
         </tr>
         <tr>
             <th>Last 4 digits of SSN</th>
-            <td>{{ app.ssn_four_digit }}</td>
+            <td>{{ app.ssn_four_digit|default_if_none:"" }}</td>
         </tr>
     </table>
     </div>
@@ -186,7 +186,7 @@
         <table class="table table-condensed">
         <tr>
             <th>Ethnicity</th>
-            <td>{{ app.ethnicity }}</td>
+            <td>{{ app.ethnicity|default_if_none:"" }}</td>
         </tr>
         <tr>
             <th>Race</th>

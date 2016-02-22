@@ -124,9 +124,9 @@
             <th>Address</th>
             <td>
                 <address>
-                  {{ app.street_address|default_if_none:"-" }} {% if app.apt %},
+                  {{ app.street_address|default_if_none:"" }} {% if app.apt %},
                     {{ app.apt }} {% endif %}<br>
-                  {{ app.city|default_if_none:"" }}, {{ app.state|default_if_none:"" }}
+                  {{ app.city|default_if_none:"" }} {{ app.state|default_if_none:"" }}
                     {{ app.zip|default_if_none:"" }}<br>
                   {% if app.phone %}Phone: {{ app.phone }}<br>{% endif %}
                   {% if app.email %}Email: {{ app.email }}<br>{% endif %}
