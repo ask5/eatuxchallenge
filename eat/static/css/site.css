@@ -211,8 +211,6 @@ ul.child-info li:last-child:after {
 }
 
 .app-section{
-    border-radius: 4px;
-    border: 1px solid #c5c5c5;
     padding: 1em;
     margin-bottom: 1em;
 }

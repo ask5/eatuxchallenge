@@ -21,8 +21,8 @@
             Your application is ready to be submitted to USDA! You can still go back and make changes.</p>
     {% endif  %}
 
-    <div class="app-section">
-        <h4>Assistance Program</h4>
+    <fieldset class="app-section">
+        <legend>Assistance Program</legend>
         {% if app.assistance_program %}
             <p>
                 Case Number: {{ app.case_number }}
@@ -32,10 +32,10 @@
                 You mentioned that none of your household members participates in any Assistance Program.
             </p>
         {% endif %}
-    </div>
+    </fieldset>
 
-    <div class="app-section">
-        <h4>Household Children</h4>
+    <fieldset class="app-section">
+        <legend>Household Children</legend>
         {% if children %}
         {% for child in children %}
             <div class="child-row">
@@ -78,10 +78,10 @@
             </div>
         {% endfor %}
     {% endif %}
-    </div>
+    </fieldset>
 
-    <div class="app-section">
-        <h4>Household Adults</h4>
+    <fieldset class="app-section">
+        <legend>Household Adults</legend>
 
         {% if not app.assistance_program and not app.app_for_foster_child %}
         {% if adults %}
@@ -143,10 +143,10 @@
             </ul>
         </div>
     {% endif %}
-    </div>
+    </fieldset>
 
-    <div class="app-section">
-        <h4>Contact Information</h4>
+    <fieldset class="app-section">
+        <legend>Contact Information</legend>
         <table class="table table-condensed">
         <tr>
             <th>First Name</th>
@@ -180,9 +180,9 @@
             <td>{{ app.ssn_four_digit|default_if_none:"" }}</td>
         </tr>
     </table>
-    </div>
-    <div class="app-section">
-        <h4>Ethnicity & Race</h4>
+    </fieldset>
+    <fieldset class="app-section">
+        <legend>Ethnicity & Race</legend>
         <table class="table table-condensed">
         <tr>
             <th>Ethnicity</th>
@@ -201,7 +201,7 @@
             </td>
         </tr>
     </table>
-    </div>
+    </fieldset>
 
 {% endblock %}
 

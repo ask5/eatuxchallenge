@@ -13,8 +13,8 @@
 {% block application_content_main %}
     <h4>Application progress: <strong>{{ percent|floatformat:"0" }}%</strong> complete!</h4>
 
-    <div class="app-section">
-        <h4>Assistance Program</h4>
+    <fieldset class="app-section">
+        <legend>Assistance Program</legend>
         {% if app.assistance_program %}
             <p>
                 Case Number: {{ app.case_number }}
@@ -24,10 +24,10 @@
                 No Assistance Program.
             </p>
         {% endif %}
-    </div>
+    </fieldset>
 
-    <div class="app-section">
-    <h4>Household Children</h4>
+    <fieldset class="app-section">
+    <legend>Household Children</legend>
     {% if children %}
         {% for child in children %}
             <div class="child-row">
@@ -65,10 +65,10 @@
     {% else %}
         <p>No household children information found.</p>
     {% endif %}
-    </div>
+    </fieldset>
 
-    <div class="app-section">
-        <h4>Household Adults</h4>
+    <fieldset class="app-section">
+        <legend>Household Adults</legend>
         {% if adults %}
             {% for adult in adults %}
                 <div class="adult-row">
@@ -107,10 +107,10 @@
         {% else %}
             <p>No household adults information found.</p>
         {% endif %}
-    </div>
+    </fieldset>
 
-    <div class="app-section">
-        <h4>Contact Information</h4>
+    <fieldset class="app-section">
+        <legend>Contact Information</legend>
         <table class="table table-condensed table-bordered">
         <tr>
             <th>First Name</th>
@@ -149,10 +149,10 @@
             </td>
         </tr>
     </table>
-    </div>
+    </fieldset>
 
-    <div class="app-section">
-        <h4>Ethnicity & Race</h4>
+    <fieldset class="app-section">
+        <legend>Ethnicity & Race</legend>
         <table class="table table-condensed table-bordered">
         <tr>
             <th>Ethnicity</th>
@@ -171,5 +171,5 @@
             </td>
         </tr>
     </table>
-    </div>
+    </fieldset>
 {% endblock %}
