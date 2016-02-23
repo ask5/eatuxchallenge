@@ -55,7 +55,7 @@
         {% endif %}
     {% else %}
         <div>
-            {{ user.first_name }}, based on the information you provided so far, your don't need to enter
+            {{ user.first_name }}, based on the information you have provided so far you don't need to submit
             adult household information!
         </div>
     {% endif %}
@@ -65,7 +65,7 @@
     <a class="btn btn-default pull-left" role="button"
        href="{% url 'children' %}">Back</a>
 
-    {% if app.all_adults_entered or app.assistance_program or app.app_for_foster_child%}
+    {% if app.all_adults_entered or skip %}
         <a class="btn btn-default pull-right" role="button"
            href="{% url 'contact' %}">Continue</a>
     {% else %}

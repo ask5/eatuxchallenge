@@ -303,12 +303,17 @@ def child_earnings(request, child_id):
                         parse.urlparse(request.META.get('HTTP_REFERER')).path == reverse('review'):
             direct = True
 
+    # get the current child object
     child = get_object_or_404(Child, pk=child_id, application=app[0])
 
+    # load the FORM if the current earnings page type is 'form'
     if page.page_type == 'form':
+
         if request.method == 'POST':
+            # process the form data after it is POSTED
             form = EarningsForm(request.POST)
             if form.is_valid():
+
                 earning = form.cleaned_data['earning']
                 frequency = form.cleaned_data['frequency']
                 is_direct = request.POST.get('is_direct')
@@ -318,6 +323,8 @@ def child_earnings(request, child_id):
                 setattr(child, page.value_field, earning)
                 setattr(child, page.frequency_field, frequency)
                 child.save()
+
+                # redirect the user to appropriate page
                 if is_direct == 'True':
                     return redirect('children')
                 else:
@@ -326,6 +333,7 @@ def child_earnings(request, child_id):
                     else:
                         return redirect(page.next.name)
         else:
+            # when the form is initially loaded, fill the controls with initial values from database, if found.
             data = {
                 'earning': getattr(child, page.value_field),
                 'frequency': getattr(child, page.frequency_field)
@@ -349,7 +357,11 @@ def child_earnings(request, child_id):
 @login_required
 def adults(request):
     """
-    Displays the list of adults
+    Displays the list of adults.
+    For certain household scenarios this section may not appear in the workflow or will be disabled
+    especially when at least one of the following is true
+         1. the household participates in an assistance program
+         2. all the household children are either foster child or head start participant or homeless, migrant, runaway.
     :param request:
     :return:
     """
@@ -381,7 +393,7 @@ def adults(request):
 @login_required
 def add_adult(request):
     """
-    Add an new adult record
+    Add a new adult record
     :param request:
     :return:
     """
@@ -600,6 +612,7 @@ def review(request):
     for adult in _adults:
         total_adults_earnings += adult.get_total_earning()
 
+    # Identify the issues in the application
     issues = []
     args['app'] = app[0]
 
@@ -726,7 +739,6 @@ def admin_application_view(request, application_id):
         total_adults_earnings += adult.get_total_earning()
 
     args['app'] = app
-
     args['children'] = _children
     args['percent'] = AppUtil.get_app_progress(app)
     args['adult_skip'] = AppUtil.skip_household_income(app)
