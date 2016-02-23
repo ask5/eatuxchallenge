@@ -6,7 +6,7 @@
     <h3>
         Adults in the household
     </h3>
-    {% if not app.assistance_program and not app.app_for_foster_child %}
+    {% if not skip %}
         <a class="btn btn-primary pull-right" role="button" href="{% url 'add_adult' %}">Add an Adult</a>
         <div class="clearfix"></div>
         <hr>
@@ -55,19 +55,8 @@
         {% endif %}
     {% else %}
         <div>
-            {{ user.first_name }}, you don't need to enter adult household information because:
-            <ul>
-            {% if app.assistance_program %}
-                <li>
-                    You participate in an assistance program
-                </li>
-            {% endif %}
-            {% if app.app_for_foster_child %}
-                <li>
-                    You are filling the application for a foster child.
-                </li>
-            {% endif %}
-            </ul>
+            {{ user.first_name }}, based on the information you provided so far, your don't need to enter
+            adult household information!
         </div>
     {% endif %}
 {% endblock %}

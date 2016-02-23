@@ -22,15 +22,20 @@
                 <a class="btn btn-danger pull-right" role="button"
                    href="{% url 'delete_child' child_id=child.id %}">Delete</a>
                 <span class="child-name">{{ forloop.counter }}.
-                    {{ child.first_name }} {% if child.middle_name %}{{ child.middle_name }}{% endif %} {{ child.last_name }}
+                    {{ child.first_name }} {% if child.middle_name %}
+                        {{ child.middle_name }}{% endif %} {{ child.last_name }}
                 </span>
                 <ul class="child-info">
-                    {% if child.is_student %} <li>Student</li> {% endif %}
-                    {% if child.foster_child %}<li>Foster child</li> {% endif %}
-                    {% if child.is_head_start_participant %}<li>Head Start Participant</li> {% endif %}
-                    {% if child.hmr %}<li>Homeless, Migrant or Runaway</li> {% endif %}
+                    {% if child.is_student %}
+                        <li>Student</li> {% endif %}
+                    {% if child.foster_child %}
+                        <li>Foster child</li> {% endif %}
+                    {% if child.is_head_start_participant %}
+                        <li>Head Start Participant</li> {% endif %}
+                    {% if child.hmr %}
+                        <li>Homeless, Migrant or Runaway</li> {% endif %}
                 </ul>
-                {% if not child.application.assistance_program and not child.foster_child %}
+                {% if not child.application.assistance_program and not child.foster_child and not child.hmr and not child.is_head_start_participant %}
                     <a class="earnings-dropdown-label" role="button" data-toggle="collapse"
                        href="#collapseExample-{{ child.id }}"
                        aria-expanded="false" aria-controls="collapseExample">
@@ -39,7 +44,7 @@
                     <div class="earnings-div collapse" id="collapseExample-{{ child.id }}">
                         <ul>
                             {% for page in earnings_pages %}
-                                <li  class="stripped">
+                                <li class="stripped">
                                     {{ page.display_title }}
                                 <span class="pull-right">
                                     <span class="earnings-value">
@@ -81,7 +86,7 @@
 {% endblock %}
 
 {% block application_help_tip %}
-    <strong>Who should I list here?</strong>
+    <strong>Who should I list here?</strong><br>
     When filling out this section, please include all members in your household who are:
     <ul>
         <li>Children age 18 or under and are supported with the household’s income</li>

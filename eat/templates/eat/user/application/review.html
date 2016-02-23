@@ -46,7 +46,7 @@
                     {% if child.is_head_start_participant %}<li>Head Start Participant</li> {% endif %}
                     {% if child.hmr %}<li>Homeless, Migrant or Runaway</li> {% endif %}
                 </ul>
-                {% if not child.application.assistance_program and not child.foster_child %}
+                    {% if not child.application.assistance_program and not child.foster_child and not child.hmr and not child.is_head_start_participant %}
                     <a class="earnings-dropdown-label" role="button" data-toggle="collapse" href="#child-earnings-{{ child.id }}"
                        aria-expanded="true" aria-controls="child-earnings-{{ child.id }}">
                         Earnings <span class="caret"></span>
@@ -82,9 +82,7 @@
 
     <fieldset class="app-section">
         <legend>Household Adults</legend>
-
-        {% if not app.assistance_program and not app.app_for_foster_child %}
-        {% if adults %}
+        {% if not adult_skip and adults %}
             {% for adult in adults %}
                 <div class="adult-row">
                     <span class="adult-name">{{ forloop.counter }}. {{ adult.first_name }} {{ adult.last_name }}</span>
@@ -125,24 +123,13 @@
                     <div class="clearfix"></div>
                 </div>
             {% endfor %}
+        {% else %}
+            {% if adult_skip %}
+                <p>No household adults information required</p>
+            {% else %}
+                <p>Household adults information not found</p>
+            {% endif %}
         {% endif %}
-    {% else %}
-        <div>
-            You don't need to provide household adults information because:
-            <ul>
-            {% if app.assistance_program %}
-                <li>
-                    You participate in an assistance program
-                </li>
-            {% endif %}
-            {% if app.app_for_foster_child %}
-                <li>
-                    You are filling the application for a foster child.
-                </li>
-            {% endif %}
-            </ul>
-        </div>
-    {% endif %}
     </fieldset>
 
     <fieldset class="app-section">

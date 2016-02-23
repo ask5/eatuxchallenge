@@ -200,11 +200,11 @@ def add_child(request):
                 child = form.save(commit=False)
                 child.application = app[0]
                 child.save()
-                if app[0].app_for_foster_child:
-                    return redirect('children')
+                #if app[0].app_for_foster_child:
+                #    return redirect('children')
 
-                if app[0].assistance_program or child.foster_child:
-                    return redirect('exempt_child', child_id=child.id)
+                if app[0].assistance_program or child.foster_child or child.hmr or child.is_head_start_participant:
+                    return redirect('children')
                 else:
                     return redirect('child_salary', child_id=child.id)
             else:
@@ -361,6 +361,7 @@ def adults(request):
     args['nav'] = AppUtil.get_nav(nav=nav, url='adults', app=app[0])
     AppUtil.set_last_page(app[0], request.get_full_path())
     args['earnings_pages'] = AppUtil.get_earnings_pages('adults')
+    args['skip'] = AppUtil.skip_household_income(app[0])
     earnings_sources = EarningSource.sources.all()
 
     earnings = []
@@ -594,6 +595,7 @@ def review(request):
     app = AppUtil.get_by_user(user=request.user)
     _children = Child.children.filter(application=app[0])
     _adults = Adult.adults.filter(application=app[0])
+    adult_skip = AppUtil.skip_household_income(app[0])
     total_adults_earnings = 0
     for adult in _adults:
         total_adults_earnings += adult.get_total_earning()
@@ -607,13 +609,13 @@ def review(request):
         issues.append("Number of children found is less than the "
                       "total number of children mentioned during the creation of the application.")
 
-    if not app[0].assistance_program and not app[0].app_for_foster_child and not _adults.exists():
+    if not adult_skip and not _adults.exists():
         issues.append("Household Adults information could not be found.")
-    elif not app[0].assistance_program  and not app[0].app_for_foster_child and _adults.count() < app[0].total_adults:
+    elif not adult_skip and _adults.count() < app[0].total_adults:
         issues.append("Number of adults found is less than the "
                       "total number of adults mentioned during the creation of the application.")
 
-    if not app[0].assistance_program  and not app[0].app_for_foster_child and total_adults_earnings <= 0:
+    if not adult_skip and total_adults_earnings <= 0:
         issues.append("Total household adults' earnings can't be zero.")
 
     if not app[0].contact_form_complete:
@@ -621,6 +623,7 @@ def review(request):
 
     args['children'] = _children
     args['adults'] = _adults
+    args['adult_skip'] = adult_skip
     args['issues'] = issues
     args['nav'] = AppUtil.get_nav(nav=nav, url='review', app=app[0])
     args['progress'] = AppUtil.get_app_progress(app=app[0])
@@ -726,6 +729,7 @@ def admin_application_view(request, application_id):
 
     args['children'] = _children
     args['percent'] = AppUtil.get_app_progress(app)
+    args['adult_skip'] = AppUtil.skip_household_income(app)
     args['adults'] = _adults
     args['child_earnings_pages'] = AppUtil.get_earnings_pages('children')
     earnings_sources = EarningSource.sources.all()

@@ -31,6 +31,11 @@ class AppUtil(object):
 
     @classmethod
     def get_earnings_pages(self, entity):
+        """
+        returns and array of earnings pages for Adult or Child
+        :param entity:
+        :return:
+        """
         p = EarningsPage.objects.get(name=entity)
         e = []
         while p.next.name != entity:
@@ -41,6 +46,11 @@ class AppUtil(object):
 
     @classmethod
     def get_app_progress(self, app):
+        """
+        Calculates the percentage of overall application progress
+        :param app:
+        :return:
+        """
         completed_steps = 0
         if app.assistance_program or app.app_for_foster_child:
             total_steps = 2
@@ -75,6 +85,13 @@ class AppUtil(object):
 
     @classmethod
     def get_nav(cls, nav, url, app):
+        """
+        Returns data in form of array to build the top navigation
+        :param nav:
+        :param url:
+        :param app:
+        :return:
+        """
         t = []
         if app.assistance_program:
             nav['assistance']['display'] = True
@@ -92,3 +109,23 @@ class AppUtil(object):
         s = sorted(t, key=lambda k:k['position'])
         return s
 
+    @classmethod
+    def skip_household_income(cls, app):
+        """
+        This method determines if the applicant can skip the adult and household income sections
+        :param app:
+        :return:
+        """
+        skip = False
+
+        if app.assistance_program:
+            skip = True
+        else:
+            children = Child.children.filter(application=app)
+            for child in children:
+                if child.is_head_start_participant or child.foster_child or child.hmr:
+                    skip = True
+                else:
+                    skip = False
+
+        return skip

@@ -38,7 +38,7 @@
                     {% if child.is_head_start_participant %}<li>Head Start Participant</li> {% endif %}
                     {% if child.hmr %}<li>Homeless, Migrant or Runaway</li> {% endif %}
                 </ul>
-            <div class="clearfix"></div>
+                {% if not child.application.assistance_program and not child.foster_child and not child.hmr and not child.is_head_start_participant %}
                 <div class="earnings-div" id="child-earnings-{{ child.id }}">
                     <ul>
                         {% for page in child_earnings_pages %}
@@ -59,6 +59,7 @@
                         {% endfor %}
                     </ul>
                 </div>
+                {% endif %}
                 <div class="clearfix"></div>
             </div>
         {% endfor %}
@@ -69,7 +70,7 @@
 
     <fieldset class="app-section">
         <legend>Household Adults</legend>
-        {% if adults %}
+        {% if not adult_skip and adults %}
             {% for adult in adults %}
                 <div class="adult-row">
                     <span class="adult-name">{{ forloop.counter }}. {{ adult.first_name }} {{ adult.last_name }}</span>
@@ -105,7 +106,11 @@
                 </div>
             {% endfor %}
         {% else %}
-            <p>No household adults information found.</p>
+            {% if adult_skip %}
+                <p>No household adults information required</p>
+            {% else %}
+                <p>Household adults information not found</p>
+            {% endif %}
         {% endif %}
     </fieldset>
 
