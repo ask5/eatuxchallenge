@@ -50,7 +50,6 @@ class AssistanceProgramForm(ModelForm):
 
 
 class CreateApplicatinForm(ModelForm):
-    statements = forms.BooleanField()
 
     class Meta:
         model = Application

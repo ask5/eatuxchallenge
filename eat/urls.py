@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^register', views.register, name='register'),
     url(r'^login', views.login_view, name="login"),
     url(r'^logout', views.logout_view, name="logout"),
+    url(r'^app/statements', views.statements, name='statements'),
     url(r'^app/welcome', views.application_welcome_back, name='application_welcome_back'),
     url(r'^app/create', views.application_create, name='application_create'),
     url(r'^app/review', views.review, name='review'),

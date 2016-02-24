@@ -28,7 +28,7 @@ def register(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('application_create')
+                    return redirect('statements')
     else:
         form = RegistrationForm()
     result = dict()
@@ -69,7 +69,7 @@ def login_view(request):
                         args['app'] = app[0]
                         result = redirect('application_welcome_back')
                     else:
-                        result = redirect('application_create')
+                        result = redirect('statements')
             else:
                 msg['error'] = "Account is disabled."
                 result = render(request, "eat/login.html", msg)
@@ -77,6 +77,16 @@ def login_view(request):
             msg['error'] = "Incorrect Username or Password"
             result = render(request, "eat/login.html", msg)
     return result
+
+
+@login_required
+def statements(request):
+    """
+    renders the USDA Non-discrimination Statement and Use of Information Statement
+    :param request:
+    :return:
+    """
+    return render(request, "eat/user/application/statements.html")
 
 
 @login_required

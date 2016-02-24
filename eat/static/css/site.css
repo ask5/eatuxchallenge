@@ -64,10 +64,7 @@ h3{
 }
 
 .statements{
-    height: 400px;
-    overflow-y: auto;
-    background-color: #f8f8f8;
-    padding: 1em;
+    padding: 2em;
 }
 
 

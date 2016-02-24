@@ -1,40 +1,6 @@
-{% load navigation %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% load staticfiles %}
-    <title>E.A.T {% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://code.cdn.mozilla.net/fonts/fira.css">
-    <link rel="stylesheet" href="/static/css/site.css">
-    {% block css %}{% endblock %}
-</head>
-<body role="document" class="application">
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">
-                Application for Free and Reduced Price School Meals
-            </a>
-        </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#">Welcome {{ user.first_name }}!</a>
-                </li>
-                <li>
-                    <a href="{% url 'eat.views.logout_view' %}">
-                        <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout
-                    </a>
-                </li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div>
-</nav>
-<div class="container">
+{% extends "eat/user/application/base.html" %}
+{% load staticfiles %}
+{% block application_container %}
     <div class="jumbotron">
         <h2 class="welcome">{{ user.first_name }}, Welcome Back!</h2>
         <h4>We have all your information saved, we can start where you left off.</h4>
@@ -50,7 +16,4 @@
             </p>
         </form>
     </div>
-</div>
-</body>
-</html>
-
+{% endblock %}
