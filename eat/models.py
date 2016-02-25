@@ -214,6 +214,12 @@ class Child(models.Model):
                                        null=True)
     other_income_frequency = models.ForeignKey(PayFrequency, blank=True, null=True,
                                                related_name='other_income_frequency')
+    ethnicity = models.ForeignKey(Ethnicity, blank=True, null=True)
+    is_american_indian = models.NullBooleanField(verbose_name='Is American Indian or Alaskan Native')
+    is_asian = models.NullBooleanField(verbose_name='Is Asian')
+    is_black = models.NullBooleanField(verbose_name='Is Black or African American')
+    is_hawaiian = models.NullBooleanField(verbose_name='Is Hawaiian or Other Pacific Islander')
+    is_white = models.NullBooleanField(verbose_name='Is White')
 
     def get_total_earning(self):
         t = 0

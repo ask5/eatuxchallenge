@@ -1,5 +1,14 @@
 {% extends "eat/user/application/base.html" %}
 {% load staticfiles %}
+{% block css %}
+    <style>
+        #id_ethnicity{
+            margin: 0;
+            padding: 0;
+            list-style: outside none none;
+        }
+    </style>
+{% endblock %}
 {% block application_content_main %}
     <fieldset>
     {% if child.id %}
@@ -35,53 +44,90 @@
         </div>
         {{ form.last_name.errors }}
     </div>
+    </fieldset>
+    <fieldset>
     <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-9">
+        <label for="{{ form.last_name.id_for_label }}" class="col-sm-3 control-label">
+            This child is</label>
+        <div class="col-sm-9">
             <div class="checkbox">
                 <label>
-                    {{ form.is_student }} this child a Student.
+                    {{ form.is_student }} Student
                 </label>
-            </div>
-            {{ form.is_student.errors }}
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-9">
-            <div class="checkbox">
                 <label>
-                    {{ form.foster_child }} this a Foster Child.
+                    {{ form.foster_child }} Foster Child&nbsp;&nbsp;
                 </label>
-                {{ form.foster_child.errors }}
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-9">
-            <div class="checkbox">
                 <label>
-                    {{ form.is_head_start_participant }} this child is Head Start participant.
+                    {{ form.is_head_start_participant }} Head Start participant&nbsp;&nbsp;
                 </label>
-            </div>
-            {{ form.is_head_start_participant.errors }}
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-9">
-            <div class="checkbox">
                 <label>
-                    {{ form.hmr }} this child is Homeless, Migrant or Runaway.
+                    {{ form.hmr }} Homeless, Migrant or Runaway.
                 </label>
             </div>
-            {{ form.hmr.errors }}
+            <br>
+            <em>Check all options applicable to this child</em>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-9">
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a class="btn btn-default" role="button" href="{% url 'children' %}">Cancel</a>
-        </div>
+
     </div>
     </fieldset>
+    <fieldset>
+        <legend>Race & Ethnicity</legend>
+        <p style="padding:0.5em">
+            We are required to ask for information about your child’s race and ethnicity. This information is important
+            and helps to make sure we are fully serving our community.
+            Responding to this section is optional and does not
+            affect your children’s eligibility for free or reduced price meals.
+        </p>
+        <div class="row">
+            <div class="col-lg-6">
+                <fieldset>
+                    <strong>Ethnicity</strong>
+                    <div class="radio">
+                        {{ form.ethnicity }}
+                    </div>
+                </fieldset>
+            </div>
+            <div class="col-lg-6">
+                <fieldset>
+                    <strong>Race (check one or more)</strong>
+                    <div class="checkbox">
+                        <label>
+                            {{ form.is_american_indian }} American Indian or Alaskan Native.
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            {{ form.is_asian }} Asian.
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            {{ form.is_black }} Black or African American.
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            {{ form.is_hawaiian }} Native Hawaiian or Other Pacific Islander.
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            {{ form.is_white }} White.
+                        </label>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </fieldset>
+    <hr>
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <div class="pull-right">
+                <button type="submit" name="save" id="save" class="btn btn-primary">Save</button>
+                <a class="btn btn-default" role="button" href="{% url 'children' %}">Cancel</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block application_bottom_nav_wrapper %}

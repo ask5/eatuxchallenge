@@ -210,8 +210,6 @@ def add_child(request):
                 child = form.save(commit=False)
                 child.application = app[0]
                 child.save()
-                #if app[0].app_for_foster_child:
-                #    return redirect('children')
 
                 if app[0].assistance_program or child.foster_child or child.hmr or child.is_head_start_participant:
                     return redirect('children')
@@ -554,32 +552,57 @@ def contact(request):
     args = dict()
     app = AppUtil.get_by_user(user=request.user)
     if request.method == 'POST':
+        form = ContactForm(request.POST, instance=app[0])
+        if form.is_valid():
+            form.save()
+            return redirect('signature')
+    else:
+         form = ContactForm(instance=app[0])
+    args['form'] = form
+    args['app'] = app[0]
+    args['nav'] = AppUtil.get_nav(nav=nav, url='contact', app=app[0])
+    args['adult_skip'] = AppUtil.skip_household_income(app[0])
+    args['progress'] = AppUtil.get_app_progress(app=app[0])
+    AppUtil.set_last_page(app[0], request.get_full_path())
+    return render(request, "eat/user/application/contact.html", args)
+
+
+@login_required
+def signature(request):
+    """
+    Signature
+    :param request:
+    :return:
+    """
+    args = dict()
+    app = AppUtil.get_by_user(user=request.user)
+    if request.method == 'POST':
         app[0].contact_form_complete = False
         app[0].save()
 
         # skip social security number if the household receives assistance or the application is being made for
         # foster child
         if app[0].assistance_program or app[0].app_for_foster_child:
-            form = ContactFormWithOutSSN(request.POST, instance=app[0])
+            form = SignatureFormWithoutSSN(request.POST, instance=app[0])
         else:
-            form = ContactForm(request.POST, instance=app[0])
+            form = SignatureForm(request.POST, instance=app[0])
 
         if form.is_valid():
             _app = form.save(commit=False)
             _app.contact_form_complete = True
             _app.save()
-            return redirect('race')
+            return redirect('review')
     else:
         if app[0].assistance_program or app[0].app_for_foster_child:
-            form = ContactFormWithOutSSN(instance=app[0])
+            form = SignatureFormWithoutSSN(instance=app[0])
         else:
-            form = ContactForm(instance=app[0])
+            form = SignatureForm(instance=app[0])
     args['form'] = form
     args['app'] = app[0]
-    args['nav'] = AppUtil.get_nav(nav=nav, url='contact', app=app[0])
+    args['nav'] = AppUtil.get_nav(nav=nav, url='signature', app=app[0])
     args['progress'] = AppUtil.get_app_progress(app=app[0])
     AppUtil.set_last_page(app[0], request.get_full_path())
-    return render(request, "eat/user/application/contact.html", args)
+    return render(request, "eat/user/application/signature.html", args)
 
 
 @login_required

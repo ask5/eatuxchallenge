@@ -123,16 +123,26 @@ class RaceForm(ModelForm):
 
 class AddChildForm(ModelForm):
 
+    ethnicity = forms.ModelChoiceField(queryset=Ethnicity.objects.all(), label="Ethnicity",
+                                       widget=forms.RadioSelect, required=False, empty_label=None)
+
     class Meta:
         model = Child
         fields = ['first_name', 'middle_name', 'last_name', 'is_student', 'foster_child', 'hmr',
-                  'is_head_start_participant']
+                  'is_head_start_participant',
+                  'ethnicity', 'is_american_indian', 'is_asian', 'is_black', 'is_hawaiian', 'is_white'
+                  ]
         exclude = ("application",)
         widgets = {
             'is_student': forms.CheckboxInput,
             'foster_child': forms.CheckboxInput,
             'hmr': forms.CheckboxInput,
-            'is_head_start_participant': forms.CheckboxInput
+            'is_head_start_participant': forms.CheckboxInput,
+            'is_american_indian': forms.CheckboxInput,
+            'is_asian': forms.CheckboxInput,
+            'is_black': forms.CheckboxInput,
+            'is_hawaiian': forms.CheckboxInput,
+            'is_white': forms.CheckboxInput
         }
         labels = {
             'is_student': "Is this child a student?",
@@ -166,6 +176,35 @@ class EarningsForm(forms.Form):
 
 class ContactForm(ModelForm):
 
+    class Meta:
+        model = Application
+        fields = ('street_address', 'apt', 'city', 'state', 'zip', 'phone', 'email',
+                  'first_name', 'last_name')
+
+    def clean(self):
+        cleaned_data = super(ContactForm, self).clean()
+        fname = cleaned_data.get("first_name")
+        lname = cleaned_data.get("last_name")
+        street_address = cleaned_data.get("street_address")
+        city = cleaned_data.get("city")
+        state = cleaned_data.get("state")
+        zip = cleaned_data.get("zip")
+        errors = []
+
+        if fname == '' or lname == '':
+            errors.append(forms.ValidationError("Enter both first and last name"))
+
+        if street_address == '' or city == '' or state == '' or zip == '':
+            errors.append(forms.ValidationError("Enter complete address"))
+
+        if errors:
+            raise forms.ValidationError(errors)
+        else:
+            return cleaned_data
+
+
+class SignatureForm(ModelForm):
+
     todays_date = forms.DateField(('%m/%d/%Y',), label='Today''s Date', required=True,
         widget=forms.DateTimeInput(format='%m/%d/%Y', attrs={
             'class':'input',
@@ -176,30 +215,23 @@ class ContactForm(ModelForm):
 
     class Meta:
         model = Application
-        fields = ('street_address', 'apt', 'city', 'state', 'zip', 'phone', 'email',
-                  'first_name', 'last_name', 'signature', 'ssn_four_digit', 'no_ssn', 'todays_date')
+        fields = ('signature', 'todays_date', 'ssn_four_digit', 'no_ssn')
 
         widgets = {
             'todays_date': forms.DateInput(format='%m/%d/%Y')
         }
 
     def clean(self):
-        cleaned_data = super(ContactForm, self).clean()
-        fname = cleaned_data.get("first_name")
-        lname = cleaned_data.get("last_name")
-        street_address = cleaned_data.get("street_address")
+        cleaned_data = super(SignatureForm, self).clean()
         signature = cleaned_data.get("signature")
-        city = cleaned_data.get("city")
-        state = cleaned_data.get("state")
-        zip = cleaned_data.get("zip")
         tdate = cleaned_data.get("todays_date")
         errors = []
 
-        if fname == '' or lname == '':
-            errors.append(forms.ValidationError("Enter both first and last name"))
+        if signature == '':
+            errors.append(forms.ValidationError("Signature cannot be blank"))
 
-        if street_address == '' or city == '' or state == '' or zip == '':
-            errors.append(forms.ValidationError("Enter complete address"))
+        if tdate == '':
+            errors.append(forms.ValidationError("Enter valid date"))
 
         if not self.cleaned_data['no_ssn'] and not self.cleaned_data['ssn_four_digit']:
             errors.append(forms.ValidationError("Enter last 4 digits of your Social Security Number"))
@@ -211,19 +243,13 @@ class ContactForm(ModelForm):
             errors.append(forms.ValidationError("Uncheck the 'I don't have SSN#' box OR "
                                                 "erase the value in the Last 4 digits of SSN# box. Both can't be true"))
 
-        if signature == '':
-            errors.append(forms.ValidationError("Signature cannot be blank"))
-
-        if tdate == '':
-            errors.append(forms.ValidationError("Enter valid date"))
-
         if errors:
             raise forms.ValidationError(errors)
         else:
             return cleaned_data
 
 
-class ContactFormWithOutSSN(ModelForm):
+class SignatureFormWithoutSSN(ModelForm):
 
     todays_date = forms.DateField(('%m/%d/%Y',), label='Today''s Date', required=True,
         widget=forms.DateTimeInput(format='%m/%d/%Y', attrs={
@@ -235,30 +261,17 @@ class ContactFormWithOutSSN(ModelForm):
 
     class Meta:
         model = Application
-        fields = ('street_address', 'apt', 'city', 'state', 'zip', 'phone', 'email',
-                  'first_name', 'last_name', 'signature', 'todays_date')
+        fields = ('signature', 'todays_date')
 
         widgets = {
             'todays_date': forms.DateInput(format='%m/%d/%Y')
         }
 
     def clean(self):
-        cleaned_data = super(ContactFormWithOutSSN, self).clean()
-        fname = cleaned_data.get("first_name")
-        lname = cleaned_data.get("last_name")
-        street_address = cleaned_data.get("street_address")
+        cleaned_data = super(SignatureFormWithoutSSN, self).clean()
         signature = cleaned_data.get("signature")
-        city = cleaned_data.get("city")
-        state = cleaned_data.get("state")
-        zip = cleaned_data.get("zip")
         tdate = cleaned_data.get("todays_date")
         errors = []
-
-        if fname == '' or lname == '':
-            errors.append(forms.ValidationError("Enter both first and last name"))
-
-        if street_address == '' or city == '' or state == '' or zip == '':
-            errors.append(forms.ValidationError("Enter complete address"))
 
         if signature == '':
             errors.append(forms.ValidationError("Signature cannot be blank"))

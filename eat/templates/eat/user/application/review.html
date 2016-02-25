@@ -154,49 +154,36 @@
                 </address>
             </td>
         </tr>
-        <tr>
-            <th>Signature</th>
-            <td>{{ app.signature|default_if_none:"" }}</td>
-        </tr>
-        <tr>
-            <th>Date Completed</th>
-            <td>{{ app.todays_date|default_if_none:"" }}</td>
-        </tr>
-        <tr>
-            <th>Last 4 digits of SSN</th>
-            <td>{{ app.ssn_four_digit|default_if_none:"" }}</td>
-        </tr>
-    </table>
-    </fieldset>
-    <fieldset class="app-section">
-        <legend>Ethnicity & Race</legend>
-        <table class="table table-condensed">
-        <tr>
-            <th>Ethnicity</th>
-            <td>{{ app.ethnicity|default_if_none:"" }}</td>
-        </tr>
-        <tr>
-            <th>Race</th>
-            <td>
-                <ul class="race">
-                {% if app.is_american_indian %}<li>American Indian or Alaskan Native</li>{% endif %}
-                {% if app.is_asian %}<li>Asian</li>{% endif %}
-                {% if app.is_black %}<li>African American</li>{% endif %}
-                {% if app.is_hawaiian %}<li>Hawaiian or Other Pacific Islander</li>{% endif %}
-                {% if app.is_white %}<li>White</li>{% endif %}
-                </ul>
-            </td>
-        </tr>
     </table>
     </fieldset>
 
+    <fieldset class="app-section">
+        <legend>Signature</legend>
+        <table class="table table-condensed">
+            <tr>
+                <th>SSN</th>
+                <td colspan="3">
+                    <span>XXX-XX-{{ app.ssn_four_digit|default_if_none:"XXXX" }}</span>
+                    {% if app.no_ssn %}
+                        <span>I don't have SSN#</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Signature</th>
+                <td>{{ app.signature|default_if_none:"" }}</td>
+                <th>Date</th>
+                <td>{{ app.todays_date|default_if_none:"" }}</td>
+            </tr>
+        </table>
+    </fieldset>
 {% endblock %}
 
 {% block application_content_right %}
     <div class="panel panel-warning">
         <div class="panel-heading">
             <h3 class="panel-title"><span class="glyphicon glyphicon-warning-sign"></span> Danger Zone</h3>
-        <div>
+        </div>
         <div class="panel-body">
             Click below if you want to delete the application and start over<br><br>
             <a class="btn btn-danger" role="button" href="{% url 'start_over' %}">Start Over</a>

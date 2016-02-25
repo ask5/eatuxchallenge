@@ -27,9 +27,9 @@ nav = {
         'display': True,
         'position': 4
     },
-    'race': {
-        'caption': 'Ethnicity & Race',
-        'url': 'race',
+    'signature': {
+        'caption': 'Signature',
+        'url': 'signature',
         'current': False,
         'display': True,
         'position': 5

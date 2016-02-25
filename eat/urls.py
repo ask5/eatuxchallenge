@@ -95,8 +95,9 @@ urlpatterns = [
     url(r'^app/adults/(?P<adult_id>[0-9a-z-]+)/cash_gifts', views.adult_earnings, name='cash_gifts'),
 
 
-    #Contacts
+    #Misc
     url(r'^app/contact', views.contact, name='contact'),
+    url(r'^app/signature', views.signature, name='signature'),
     url(r'^app/race', views.race, name='race'),
 
     #Admin
