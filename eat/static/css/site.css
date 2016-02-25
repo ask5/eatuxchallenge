@@ -184,12 +184,12 @@ ol.breadcrumb > li.active a {
     padding-bottom: 0.5em;
 }
 
-ul.child-info{
-    float: left;
+.child-info{
     padding: 0;
-    margin-left: 1em;
     font-size: 90%;
     color: #777777;
+    margin-bottom: 0;
+    margin-left: 1em;
 }
 
 ul.child-info li{
@@ -201,10 +201,10 @@ ul.child-info li:before{
 }
 
 ul.child-info li:first-child:before {
-    content: '(';
+    content: '';
 }
 ul.child-info li:last-child:after {
-    content: ')';
+    content: '';
 }
 
 .app-section{

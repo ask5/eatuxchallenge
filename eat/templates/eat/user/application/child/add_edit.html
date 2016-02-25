@@ -48,7 +48,8 @@
     <fieldset>
     <div class="form-group">
         <label for="{{ form.last_name.id_for_label }}" class="col-sm-3 control-label">
-            This child is</label>
+            This child is:
+        </label>
         <div class="col-sm-9">
             <div class="checkbox">
                 <label>
@@ -64,10 +65,8 @@
                     {{ form.hmr }} Homeless, Migrant or Runaway.
                 </label>
             </div>
-            <br>
-            <em>Check all options applicable to this child</em>
+            <br><small>Check all applicable</small>
         </div>
-
     </div>
     </fieldset>
     <fieldset>
@@ -89,7 +88,7 @@
             </div>
             <div class="col-lg-6">
                 <fieldset>
-                    <strong>Race (check one or more)</strong>
+                    <strong>Race (check all applicable)</strong>
                     <div class="checkbox">
                         <label>
                             {{ form.is_american_indian }} American Indian or Alaskan Native.

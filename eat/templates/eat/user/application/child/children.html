@@ -25,6 +25,7 @@
                     {{ child.first_name }} {% if child.middle_name %}
                         {{ child.middle_name }}{% endif %} {{ child.last_name }}
                 </span>
+                <div class="clearfix"></div>
                 <ul class="child-info">
                     {% if child.is_student %}
                         <li>Student</li> {% endif %}
@@ -35,7 +36,16 @@
                     {% if child.hmr %}
                         <li>Homeless, Migrant or Runaway</li> {% endif %}
                 </ul>
+                {% if child.ethnicity %}<span class="child-info">{{ child.ethnicity }}</span>{% endif %}
+                <ul class="child-info">
+                {% if child.is_american_indian %}<li>American Indian or Alaskan Native</li>{% endif %}
+                {% if child.is_asian %}<li>Asian</li>{% endif %}
+                {% if child.is_black %}<li>African American</li>{% endif %}
+                {% if child.is_hawaiian %}<li>Hawaiian or Other Pacific Islander</li>{% endif %}
+                {% if child.is_white %}<li>White</li>{% endif %}
+                </ul>
                 {% if not child.application.assistance_program and not child.foster_child and not child.hmr and not child.is_head_start_participant %}
+                    <br>
                     <a class="earnings-dropdown-label" role="button" data-toggle="collapse"
                        href="#collapseExample-{{ child.id }}"
                        aria-expanded="false" aria-controls="collapseExample">
