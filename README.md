@@ -2,18 +2,6 @@
 
 This is my entry for the [E.A.T. School Lunch UX Challenge](http://lunchux.devpost.com/)
 
-## How to use
-
-Start an application [http://kaulgud.webfactional.com/eat/](http://kaulgud.webfactional.com/eat/)
-
-Admin Interface [http://kaulgud.webfactional.com/eat/admin/dashboard](http://kaulgud.webfactional.com/eat/admin/dashboard)
-
-
-Username: admin
-
-Password: lunch123
-
-
 ## Technologies used
 
 ### Python Django (Frontend)
