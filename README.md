@@ -35,7 +35,7 @@ Django has an awesome tutorial on how to get started [https://www.djangoproject.
 
 2. For return users provide the ability to jump right to the place where they left
 
-	If a users logs out of the system for any reason, a way to remind them where they were when they left and take them back to that point.
+	If a users logs out of the system and comes back later a way to remind them where they were when they left and take them back to that point.
 
 3. Contextual help tips
 
