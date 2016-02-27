@@ -22,6 +22,10 @@ Django is a robust [Python Web framework](https://www.djangoproject.com) that en
 ### SQLite (Backend)
 [SQLite](https://www.sqlite.org/) is free opensource, self-contained, serverless, zero-configuration, transactional SQL database engine. SQLite is the most widely deployed database engine in the world. In this website it holds all the user and application data. As per the SQLite documentation its pretty robust however for applications like this where the number of records could grow very large, its recomemded to use a powefull RDBMS like Oracle or SQL Server, thankfully in Django it's pretty easy to switch databases.
 
+#### Installing Django
+Django has an awesome tutorial on how to get started [https://www.djangoproject.com/start/](https://www.djangoproject.com/start/)
+
+
 ## Design considerations for better user experience
 
 1. Registration and Login
