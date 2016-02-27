@@ -2,7 +2,16 @@
 
 This is my entry for the [E.A.T. School Lunch UX Challenge](http://lunchux.devpost.com/)
 
-## Technology
+## How to use
+
+Creating a application [http://kaulgud.webfactional.com/eat/](http://kaulgud.webfactional.com/eat/)
+
+Admin Interface [http://kaulgud.webfactional.com/eat/](http://kaulgud.webfactional.com/eat/admin/dashboard)
+Username: admin
+Password: lunch123
+
+
+## Technologies used
 
 ### Python Django (Frontend)
 Django is a robust [Python Web framework](https://www.djangoproject.com) that encourages rapid development and clean, pragmatic design. It takes care of much of the hassle of Web development, so you can focus on writing your app without needing to reinvent the wheel. It’s *free, open source, fast, secure and exceedingly scalable*.
