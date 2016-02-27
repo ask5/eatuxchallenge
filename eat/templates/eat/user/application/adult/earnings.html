@@ -31,13 +31,22 @@
     {% else %}
         <a class="btn btn-default" role="button" href="{% url "adults" %}">Back</a>
     {% endif %}
-    <button type="submit" class="btn btn-default pull-right">
+    <button type="submit" class="btn btn-primary pull-right">
         {% if direct %}
             Save
         {% else %}
             Save & Continue
         {% endif %}
     </button>
+    {% if not direct %}
+        {% if next_page.page_arg %}
+            <a class="btn btn-default pull-right" style="width:70px; margin-right: 1em;"
+               role="button" href="{% url next_page.name adult_id=adult_id %}">No</a>
+        {% else %}
+            <a class="btn btn-default pull-right"
+               style="width:70px; margin-right: 1em;" role="button" href="{% url next_page.name %}">No</a>
+        {% endif %}
+    {% endif %}
 {% endblock %}
 
 

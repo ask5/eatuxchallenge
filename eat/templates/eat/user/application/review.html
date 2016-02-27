@@ -60,11 +60,6 @@
                 {% if child.is_white %}<li>White</li>{% endif %}
                 </ul>
                     {% if not child.application.assistance_program and not child.foster_child and not child.hmr and not child.is_head_start_participant %}
-                    <br>
-                    <a class="earnings-dropdown-label" role="button" data-toggle="collapse" href="#child-earnings-{{ child.id }}"
-                       aria-expanded="true" aria-controls="child-earnings-{{ child.id }}">
-                        Earnings <span class="caret"></span>
-                    </a>
                     <div class="earnings-div" id="child-earnings-{{ child.id }}">
                         <ul>
                             {% for page in child_earnings_pages %}
@@ -79,7 +74,7 @@
                                     </span>
                                     <a class="btn btn-default pull-right"
                                        href="{% url page.name  child_id=child.id %}">
-                                        Revisit
+                                        Change
                                     </a>
                                 </span>
                                     <div class="clearfix"></div>
@@ -100,11 +95,7 @@
             {% for adult in adults %}
                 <div class="adult-row">
                     <span class="adult-name">{{ forloop.counter }}. {{ adult.first_name }} {{ adult.last_name }}</span>
-                    <a class="earnings-dropdown-label" role="button" data-toggle="collapse"
-                       href="#adult-earnings-{{ adult.id }}"
-                       aria-expanded="true" aria-controls="adult-earnings-{{ adult.id }}">
-                        Earnings <span class="caret"></span>
-                    </a>
+                    <div class="clearfix"></div>
                     <div class="earnings-div" id="adult-earnings-{{ adult.id }}">
                         <ul>
                             {% for source in adult_earnings_pages %}

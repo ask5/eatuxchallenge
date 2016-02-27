@@ -43,13 +43,7 @@
                 {% if child.is_white %}<li>White</li>{% endif %}
                 </ul>
                 {% if not child.application.assistance_program and not child.foster_child and not child.hmr and not child.is_head_start_participant %}
-                    <br>
-                    <a class="earnings-dropdown-label" role="button" data-toggle="collapse"
-                       href="#collapseExample-{{ child.id }}"
-                       aria-expanded="false" aria-controls="collapseExample">
-                        Earnings <span class="caret"></span>
-                    </a>
-                    <div class="earnings-div collapse" id="collapseExample-{{ child.id }}">
+                    <div class="earnings-div" id="collapseExample-{{ child.id }}">
                         <ul>
                             {% for page in earnings_pages %}
                                 <li class="stripped">
