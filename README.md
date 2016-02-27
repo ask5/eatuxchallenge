@@ -10,6 +10,7 @@ Admin Interface [http://kaulgud.webfactional.com/eat/](http://kaulgud.webfaction
 
 
 Username: admin
+
 Password: lunch123
 
 
