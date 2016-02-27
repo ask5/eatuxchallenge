@@ -43,4 +43,4 @@ Django has an awesome tutorial on how to get started [https://www.djangoproject.
 
 4. Review Page
 
-	Display the complete application on a single page, so that the user can glance over all the inforamtion entered by them  quickly.
+	Create a separate page to display the complete application, so that the user can glance over all the inforamtion entered by them  quickly.
