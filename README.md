@@ -41,4 +41,6 @@ Django has an awesome tutorial on how to get started [https://www.djangoproject.
 
 	Show help tips related to the current page instead of having an exhaustive set of instructions on a single page. Users will read help tips shown right where they need them.  
 
+4. Review Page
 
+	Display the complete application on a single page, so that the user can glance over all the inforamtion entered by them  quickly.
