@@ -6,7 +6,7 @@ This is my entry for the [E.A.T. School Lunch UX Challenge](http://lunchux.devpo
 
 Start an application [http://kaulgud.webfactional.com/eat/](http://kaulgud.webfactional.com/eat/)
 
-Admin Interface [http://kaulgud.webfactional.com/eat/](http://kaulgud.webfactional.com/eat/admin/dashboard)
+Admin Interface [http://kaulgud.webfactional.com/eat/admin/dashboard](http://kaulgud.webfactional.com/eat/admin/dashboard)
 
 
 Username: admin
