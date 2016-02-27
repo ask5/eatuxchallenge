@@ -9,13 +9,11 @@
     {% if not app.app_for_foster_child %}
         <a class="btn btn-primary pull-right" role="button" href="{% url 'add_child' %}">Add a Child</a>
         <div class="clearfix"></div>
-        <hr>
     {% elif total_children == 0 %}
         <a class="btn btn-primary pull-right" role="button" href="{% url 'add_child' %}">Add a Child</a>
         <div class="clearfix"></div>
-        <hr>
     {% endif %}
-
+    <hr>
     {% if children %}
         {% for child in children %}
             <div class="child-row">
@@ -77,6 +75,11 @@
                 <div class="clearfix"></div>
             </div>
         {% endfor %}
+    {% else %}
+        <p>
+            Please furnish details about children in the household.
+            Click "Add a Child" button to add details about a child.
+        </p>
     {% endif %}
 {% endblock %}
 

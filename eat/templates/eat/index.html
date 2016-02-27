@@ -4,49 +4,65 @@
     <div class="row">
         <div class="col-lg-7">
             <div>
-                <h2>Welcome to the National School Lunch Program!</h2>
+                <h2>National School Lunch Program</h2>
                 <p>
-                    The National School Lunch Program is a federally assisted meal program operating in public and nonprofit
-                    private schools and residential child care institutions. It provides nutritionally balanced, low-cost or
-                    free lunches to children each school day. The program was established under the National School Lunch
+                    The National School Lunch Program is a federally assisted meal program operating in public and
+                    nonprofit
+                    private schools and residential child care institutions. It provides nutritionally balanced,
+                    low-cost or
+                    free lunches to children each school day. The program was established under the National School
+                    Lunch
                     Act, signed by President Harry Truman in 1946.
                 </p>
                 <p>
-                    <img width="655px" src="/static/img/nslp.png" />
+                    <img width="655px" src="/static/img/lunch.jpg"/>
+                    <small><a target="_blank"
+                              href="https://www.flickr.com/photos/usdagov/16076267243/in/photolist-quB5ar-dbyCMQ-dbyCE5-dbyz2U-dbyAq4-dbyAAG-azaFr4-ayDLQt-ayDBDM-azdkqs-ayDwZT-azdjC5-azdiz1-d6WUE1-azdjqN-ayGtUs-azaFDT-azdiCy-ayGyfS-ayGxpb-ayDEGr-azaEm6-ayGnzq-ayGgyw-dbyzKG-dbyBVS-aAXT2o-ayDUmM-azdiYU-ayGBDN-ayGvRd-ayDFwg-qAsDNM-ayGesq-ayGb5u-azdkiG-azaFWi-8Jyj8j-ayDXnt-BgCACZ-cwemgd-dbyARN-C6JERM-BEvopc-pMxPy3-cZDR2w-s7c1hM-nxDDGr-dbyB7d-dbyDqA">Photo
+                        Credit</a></small>
                 </p>
                 <p>
-                    Cafeteria is the nexus of school social life – a place to make friends finish up last night’s homework,
+                    Cafeteria is the nexus of school social life – a place to make friends finish up last night’s
+                    homework,
                     refuel for recess, and play tic-tac-toe with your pizza toppings. But for many of America’s
-                    schoolchildren, the cafeteria also serves a more essential function – it’s where they receive half or
+                    schoolchildren, the cafeteria also serves a more essential function – it’s where they receive half
+                    or
                     more of their daily nutrition.
                 </p>
                 <p>
-                    An overwhelming majority of America’s school children—roughly 50 million elementary and secondary school
-                    students—attend institutions that participate in the U.S. Department of Agriculture’s (USDA) school meal
-                    programs. Most consume school meals on a regular basis. In total, about 100,000 schools and institutions
-                    serve more than five billion meals through the National School Lunch Program (NSLP) and two billion via
+                    An overwhelming majority of America’s school children—roughly 50 million elementary and secondary
+                    school
+                    students—attend institutions that participate in the U.S. Department of Agriculture’s (USDA) school
+                    meal
+                    programs. Most consume school meals on a regular basis. In total, about 100,000 schools and
+                    institutions
+                    serve more than five billion meals through the National School Lunch Program (NSLP) and two billion
+                    via
                     the School Breakfast Program (SBP) to America’s children each school year.
                 </p>
             </div>
         </div>
-        <div class="col-lg-5" >
+        <div class="col-lg-5">
             <div class="panel panel-default login-box" style="background-image: url('/static/img/cream_dust.png')">
                 <div class="panel-body">
                     <p>
-                        You can apply for <strong>Free and Reduced Price School Meals</strong> benefits through this completely online and
+                        You can apply for <strong>Free and Reduced Price School Meals</strong> benefits through this
+                        completely online and
                         user friendly application form. Click the "Start New Application" button if you are a
                         first time visitor.
                     </p>
                     <hr>
-                    <a class="btn btn-primary" role="button" href="{% url 'eat.views.register' %}">Start New Application</a>
-                    <a class="btn btn-primary" role="button" href="{% url 'eat.views.login_view' %}">Open Existing Application</a>
+                    <a class="btn btn-primary" role="button" href="{% url 'eat.views.register' %}">Start New
+                        Application</a>
+                    <a class="btn btn-primary" role="button" href="{% url 'eat.views.login_view' %}">Open Existing
+                        Application</a>
                 </div>
             </div>
 
-            <div  class="panel panel-default login-box" style="background-image: url('/static/img/cream_dust.png')">
+            <div class="panel panel-default login-box" style="background-image: url('/static/img/cream_dust.png')">
                 <div class="panel-body">
                     <p>Click the Admin dashboard button to access the export functionality</p>
-                    <strong><a class="btn btn-primary" href="{% url "admin_dashboard" %}">Admin Dashboard</a></strong><br><br>
+                    <strong><a class="btn btn-primary" href="{% url "admin_dashboard" %}">Admin
+                        Dashboard</a></strong><br><br>
                     <strong>Username:</strong> admin<br>
                     <strong>Password:</strong> lunch123
                 </div>

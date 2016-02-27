@@ -383,6 +383,7 @@ def adults(request):
     args['earnings_pages'] = AppUtil.get_earnings_pages('adults')
     args['skip'] = AppUtil.skip_household_income(app[0])
     earnings_sources = EarningSource.sources.all()
+    args['all_adults_entered'] = AppUtil.are_all_adults_entered(app=app[0])
 
     earnings = []
     for source in earnings_sources:

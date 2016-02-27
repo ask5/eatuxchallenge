@@ -124,7 +124,8 @@ class RaceForm(ModelForm):
 class AddChildForm(ModelForm):
 
     ethnicity = forms.ModelChoiceField(queryset=Ethnicity.objects.all(), label="Ethnicity",
-                                       widget=forms.RadioSelect, required=False, empty_label=None)
+                                       widget=forms.RadioSelect, required=False,
+                                       empty_label="I don't wish to furnish this information")
 
     class Meta:
         model = Child

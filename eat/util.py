@@ -26,8 +26,18 @@ class AppUtil(object):
 
     @classmethod
     def all_adults_entered(cls, app):
-        app.all_adults_entered = True
-        app.save()
+        adults = Adult.adults.filter(application=app)
+        if adults.count() >= app.total_adults:
+            app.all_adults_entered = True
+            app.save()
+
+    @classmethod
+    def are_all_adults_entered(cls, app):
+        adults = Adult.adults.filter(application=app)
+        if adults.count() >= app.total_adults:
+            return True
+        else:
+            return False
 
     @classmethod
     def get_earnings_pages(self, entity):

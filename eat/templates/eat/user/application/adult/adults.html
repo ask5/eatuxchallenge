@@ -52,6 +52,11 @@
                     <div class="clearfix"></div>
                 </div>
             {% endfor %}
+        {% else %}
+            <p>
+                Please furnish details about adults in the household.
+                Click "Add a Adult" button to add details about an Adult.
+            </p>
         {% endif %}
     {% else %}
         <div>
@@ -65,7 +70,7 @@
     <a class="btn btn-default pull-left" role="button"
        href="{% url 'children' %}">Back</a>
 
-    {% if app.all_adults_entered or skip %}
+    {% if all_adults_entered or skip %}
         <a class="btn btn-default pull-right" role="button"
            href="{% url 'contact' %}">Continue</a>
     {% else %}
