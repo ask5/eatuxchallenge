@@ -108,11 +108,8 @@ def application_create(request):
             # if household participates in assistance program then redirect to the case number page
             if application.assistance_program:
                 return redirect('participate')
-            # if the application is being made for only a foster child goto Add Child
-            elif not application.assistance_program and application.app_for_foster_child:
-                return redirect('add_child')
             else:
-                return redirect('children')
+                return redirect('add_child')
     else:
         form = CreateApplicatinForm(initial={ "assistance_program": None, 'app_for_foster_child': None })
 
@@ -159,10 +156,7 @@ def assistance_program_participate(request):
             if Adult.adults.filter(application=app).exists():
                 Adult.adults.filter(application=app).delete()
 
-            if _app.app_for_foster_child:
-                return redirect('add_child')
-            else:
-                return redirect('children')
+            return redirect('add_child')
     else:
         form = AssistanceProgramForm(instance=app[0])
 
@@ -220,6 +214,7 @@ def add_child(request):
     else:
         form = AddChildForm(initial={"foster_child": app[0].app_for_foster_child })
     args['form'] = form
+    args['count'] = Child.children.filter(application=app[0]).count() + 1
     args['progress'] = AppUtil.get_app_progress(app=app[0])
     args['nav'] = AppUtil.get_nav(nav=nav, url='children', app=app[0])
     return render(request, "eat/user/application/child/add_edit.html", args)
