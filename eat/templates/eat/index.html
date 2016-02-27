@@ -30,8 +30,7 @@
             </div>
         </div>
         <div class="col-lg-5" >
-            <div class="panel panel-default login-box" data-spy="affix" data-offset-top="0"
-                 style="background-image: url('/static/img/cream_dust.png')">
+            <div class="panel panel-default login-box" style="background-image: url('/static/img/cream_dust.png')">
                 <div class="panel-body">
                     <p>
                         You can apply for <strong>Free and Reduced Price School Meals</strong> benefits through this completely online and
@@ -41,6 +40,15 @@
                     <hr>
                     <a class="btn btn-primary" role="button" href="{% url 'eat.views.register' %}">Start New Application</a>
                     <a class="btn btn-primary" role="button" href="{% url 'eat.views.login_view' %}">Open Existing Application</a>
+                </div>
+            </div>
+
+            <div  class="panel panel-default login-box" style="background-image: url('/static/img/cream_dust.png')">
+                <div class="panel-body">
+                    <p>Click the Admin dashboard button to access the export functionality</p>
+                    <strong><a class="btn btn-primary" href="{% url "admin_dashboard" %}">Admin Dashboard</a></strong><br><br>
+                    <strong>Username:</strong> admin<br>
+                    <strong>Password:</strong> lunch123
                 </div>
             </div>
         </div>

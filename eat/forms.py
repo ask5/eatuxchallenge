@@ -168,7 +168,7 @@ class EarningsForm(forms.Form):
 
     def clean_frequency(self):
         if self.cleaned_data['earning'] is not None and self.cleaned_data['earning'] != 0\
-                and self.cleaned_data['frequency'] == "":
+                and self.cleaned_data['frequency'] == None:
             raise forms.ValidationError("Please specify how often you get the earnings")
         else:
             return self.cleaned_data['frequency']
