@@ -4,10 +4,13 @@ This is my entry for the [E.A.T. School Lunch UX Challenge](http://lunchux.devpo
 
 ## How to use
 
-Creating a application [http://kaulgud.webfactional.com/eat/](http://kaulgud.webfactional.com/eat/)
+Start an application [http://kaulgud.webfactional.com/eat/](http://kaulgud.webfactional.com/eat/)
 
 Admin Interface [http://kaulgud.webfactional.com/eat/](http://kaulgud.webfactional.com/eat/admin/dashboard)
+
+
 Username: admin
+
 Password: lunch123
 
 
