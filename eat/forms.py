@@ -21,7 +21,6 @@ class RegistrationForm(UserCreationForm):
         self.fields['password2'].error_messages = { 'required': 'Retype the password for confirmation' }
         self.fields['email'].label = "Email"
 
-
     def clean_email(self):
         e = self.cleaned_data['email']
         if e == '':

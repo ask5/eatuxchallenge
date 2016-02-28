@@ -132,7 +132,7 @@ def application_welcome_back(request):
         if app[0].last_page:
             result = redirect(app[0].last_page)
         else:
-            result = redirect('assistance_program')
+            result = redirect('application_create')
 
     return result
 
