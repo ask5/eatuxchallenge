@@ -118,9 +118,9 @@
             ]);
 
             var applications_options = {
-                legend: { position: "none" }
+                title: 'Applications'
             };
-            var applications_chart = new google.visualization.ColumnChart(document.getElementById('applications_chart'));
+            var applications_chart = new google.visualization.PieChart(document.getElementById('applications_chart'));
             applications_chart.draw(applications_data, applications_options);
 
 
@@ -135,7 +135,6 @@
 
             var children_options = {
                 title: 'Children',
-                pieHole: 0.4,
                 legend: { position: "none" }
             };
             var children_chart = new google.visualization.ColumnChart(document.getElementById('children_chart'));
